@@ -1,0 +1,132 @@
+header
+	position relative
+	width 100%
+	z-index 1
+	li
+		display block
+		text-align center
+		padding 10px 0px
+		text-transform uppercase
+		color darkgreen
+		a
+			color lime
+		@media $desktop-up
+			display inline
+			margin-left 25px
+			text-transform unset
+	.primary-nav
+		margin-top -200%
+		transition .6s ease-in-out
+	.primary-nav.open
+		margin-top 0px
+		transition .6s ease-in-out
+		background-color $color-primary
+		.logo-placeholder
+			display none
+			@media $desktop-up
+				display inline-block
+				img
+					max-width 125px
+		.nav-right-list
+			display block
+			@media $desktop-up
+				display inline-block
+		.nav-login
+			@media $desktop-up
+				display inline-block
+				float right
+				.profile-dropdown
+					float left
+					overflow hidden
+					.profile-dropdown-link
+						font-size 16px
+						border none
+						color white
+						padding 14px 16px
+						background-color inherit
+						font-family inherit
+						margin 0
+					.profile-dropdown-content
+						display none
+						position absolute
+						background-color yellow
+						min-width 160px
+						box-shadow 0px 8px 16px 0px
+						z-index 1
+						a
+							float none
+							color magenta
+							padding 12px 16px
+							text-decoration none
+							display block
+							text-align left
+							&:hover
+								background-color cyan
+					&:hover
+						.profile-dropdown-link
+							background-color violet
+						.profile-dropdown-content
+							display block
+				a
+					&:hover
+						background-color lightblue
+	.secondary-nav
+		margin-top -200%
+		transition .6s ease-in-out
+	.secondary-nav.open
+		margin-top 0px
+		transition .6s ease-in-out
+		background-color $color-secondary
+		.secondary-nav-list
+			@media $desktop-up
+				padding 15px 0px
+				text-align right
+#nav-cusion
+	@media $desktop-up
+		margin-bottom 160px
+.mobile-button-section
+	display block
+	background-color $color-primary
+	padding 15px 0px
+	min-height 70px
+	@media $desktop-up
+		display none
+
+/*	Hamburger Button Styles */
+#btn-nav-menu
+	width 40px
+	height 35px
+	position absolute
+	transform rotate(0deg)
+	transition .5s ease-in-out
+	cursor pointer
+	right 15px
+#btn-nav-menu span
+	display block
+	position absolute
+	height 6px
+	width 100%
+	background $color-secondary
+	border-radius 2px
+	opacity 1
+	left 0
+	transform rotate(0deg)
+	transition .25s ease-in-out
+#btn-nav-menu span:nth-child(1)
+	top 0px
+#btn-nav-menu span:nth-child(2), #btn-nav-menu span:nth-child(3)
+	top 15px
+#btn-nav-menu span:nth-child(4)
+	top 30px
+#btn-nav-menu.open span:nth-child(1)
+	top 18px
+	width 0%
+	left 50%
+#btn-nav-menu.open span:nth-child(2)
+	transform rotate(45deg)
+#btn-nav-menu.open span:nth-child(3)
+	transform rotate(-45deg)
+#btn-nav-menu.open span:nth-child(4)
+	top 18px
+	width 0%
+	left 50%

@@ -1,0 +1,64 @@
+.clearfix
+    &::after
+        display block
+        content ""
+        clear both
+.device
+.device:after
+.device:before
+    display block
+
+.device
+    position fixed
+    bottom 0
+    left 0
+    z-index 99999
+    padding 10px
+    background #000
+    color #fff
+    font-size 12px
+    font-weight 700
+    line-height 1.3
+    text-transform uppercase
+
+.device:after
+    @media $tablet-down
+        content "tablet \2193"
+    @media $phone-down
+        content "phone \2193"
+    @media $tablet-up
+        content "tablet \2191"
+    @media $desktop-up
+        content "desktop \2191"
+    @media $desktop-large-up
+        content "desktop-large \2191"
+
+@media all and (-webkit-min-device-pixel-ratio:1.5)
+    .device
+        padding 10px 5px 3px 8px
+
+        &:before
+            content 'retina'
+            font-size 7px
+            font-weight 700
+            letter-spacing 7.5px
+            line-height 1.1
+            color red
+
+// bootstrap responsive image additions
+.img-responsive
+	width 100%
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+.visuallyhidden
+	border 0
+	clip rect(0 0 0 0)
+	height 1px
+	margin -1px
+	overflow hidden
+	padding 0
+	position absolute
+	width 1px
+	opacity 0.1

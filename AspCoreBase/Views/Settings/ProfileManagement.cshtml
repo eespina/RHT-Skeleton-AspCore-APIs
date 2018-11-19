@@ -1,0 +1,60 @@
+@model LoginViewModel
+@{
+	ViewData["Title"] = "ProfileManagement";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section>
+	<div class="container">
+		<h2>ProfileManagement for Settings</h2>
+		<h4>Need a <strong>SIDE MENU</strong> to mimic the following Sections:</h4>
+		<p>shows all sections for being able to modify user profile content. (Angular) Each section would respond to a template and have their own html file. (@@Razor) Would have only 1 'View' and 'Controller'</p>
+		<article>
+			<ul>
+				<li>
+					<strong>Profile Picture</strong>
+					<br /><span style="margin-left:25px;">This should update the upper right hand area that has a hoverable feature showing more options (including 'Sign Out')</span>
+				</li>
+				<li>
+					<strong>Password Change</strong>
+					<br /><span style="margin-left:25px;">opens 'old', 'new', and 'new confirmed (repeated)' text boxes to change password</span>
+				</li>
+			</ul>
+		</article>
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+		<h4>Change Password</h4>
+		<article>
+			<form method="post">
+				<div asp-validation-summary="ModelOnly"></div>
+				<div class="form-group">
+					<label asp-for="Username">Username</label>
+					<input asp-for="Username" class="form-control" />
+					<span asp-validation-for="Username"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="Password">Password</label>
+					<input asp-for="Password" type="password" class="form-control" />
+					<span asp-validation-for="Password"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="ChangedCredentialString">New Password</label>
+					<input asp-for="ChangedCredentialString" type="password" class="form-control" />
+					<span asp-validation-for="ChangedCredentialString"></span>
+				</div>
+				<div class="form-group">
+					<input asp-for="RememberMe" type="checkbox" class="checkbox-inline" />
+					<label asp-for="RememberMe">Remember Me?</label>
+					<span asp-validation-for="RememberMe" class="text-warning"></span>
+				</div>
+				<div class="form-group">
+					<input value="Login " type="submit" class="btn btn-success" />
+				</div>
+			</form>
+		</article>
+	</div>
+</section>

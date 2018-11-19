@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TypeScriptToolsVersion>2.6</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Views\UserMgmt\**" />
+    <Compile Remove="wwwroot\js\**" />
+    <Compile Remove="wwwroot\ts\**" />
+    <Content Remove="Views\UserMgmt\**" />
+    <Content Remove="wwwroot\js\**" />
+    <Content Remove="wwwroot\ts\**" />
+    <EmbeddedResource Remove="Views\UserMgmt\**" />
+    <EmbeddedResource Remove="wwwroot\js\**" />
+    <EmbeddedResource Remove="wwwroot\ts\**" />
+    <None Remove="Views\UserMgmt\**" />
+    <None Remove="wwwroot\js\**" />
+    <None Remove="wwwroot\ts\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Controllers\UserMgmtController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
+  </ItemGroup>
+</Project>
