@@ -1,5 +1,5 @@
 # RHT-eVillage-Admin
-Owners Portal for eVillage Saas product
+Owners Portal for eVillage Saas product. TEMPORARILY on hold while creation of the MVC .NET Core version (with Views) is being created. Eventually material will transfer to this version.
 
 # Setting Up
 
