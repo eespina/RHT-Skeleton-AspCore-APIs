@@ -1,14 +1,33 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-//using System.Web.Http;
+using AspCoreBase.Services.Interfaces;
+using AspCoreBase.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AspCoreBase.Controllers
 {
-	public class ExamplesController// : ApiController
+	public class ExamplesController : ControllerBase
 	{
+		IUserService userService;
+		IPropertyService propertyService;
+		IMailService mailService;
+		private readonly ILogger<ExamplesController> logger;
+
+		public ExamplesController(IUserService UserService, ILogger<ExamplesController> logger, IPropertyService propertyService, IMailService mailService)
+		{
+			this.userService = UserService;
+			this.logger = logger;
+			this.propertyService = propertyService;
+			this.mailService = mailService;
+		}
+
+		public async Task<IEnumerable<UserViewModel>> Index()
+		{
+			var users = await userService.FindUsers();
+			return users;
+		}
+
 		//public IEnumerable<Example> Get()
 		//{
 		//	using (var exampleEntities = new ExampleDbEntities())
