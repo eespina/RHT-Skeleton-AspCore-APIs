@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace AspCoreBase.Controllers
 {
-	public class ExamplesController : ControllerBase
+	//[Produces("application/json")]
+	[Route("api/[controller]")]
+	//[ApiController]
+	public class ExamplesController : Controller
 	{
 		IUserService userService;
 		IPropertyService propertyService;
@@ -22,6 +25,8 @@ namespace AspCoreBase.Controllers
 			this.mailService = mailService;
 		}
 
+		[HttpGet]
+		[ProducesResponseType(404)]
 		public async Task<IEnumerable<UserViewModel>> Index()
 		{
 			var users = await userService.FindUsers();
