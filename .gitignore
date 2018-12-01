@@ -110,3 +110,6 @@ private-config.json
 node_modules/
 packages/
 .vs/
+AspCoreBase/AspCoreBase_O.csproj
+AngularFrontEnd/src/css/main.concat.css
+AngularFrontEnd/src/js/scripts.concat.js
