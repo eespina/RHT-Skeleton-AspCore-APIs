@@ -34,7 +34,15 @@ namespace AspCoreApiBase
             //services.AddScoped<IMailService, MailService>();  //heavier with the service being elongated for a longer period
             //services.AddSingleton<IMailService, MailService>();   // heaviest as it will be sustained in the application for the entirety of the application running
 
-            services.AddCors();
+            //services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
 
             //Configure Identity. IdentityRole = in case we want to configure roles, its a type of data that can store info about a user,
             //but we can derive IdentityRole to have our own role class (but leaving it as IdentityRole for now)
@@ -110,9 +118,10 @@ namespace AspCoreApiBase
                 app.UseExceptionHandler("/discrepancy");  //for non-developement environments, will show a friendlier error page
             }
 
-            // Shows UseCors with CorsPolicyBuilder.
-            app.UseCors(builder =>
-               builder.WithOrigins("http://localhost:62761"));
+            //// Shows UseCors with CorsPolicyBuilder.
+            //app.UseCors(builder =>
+            //   builder.WithOrigins("http://localhost:62761"));
+            app.UseCors("CorsPolicy");
 
             //When the web server comes up, we're going to tell it to add the service of 'serving static files' as something that is allowed to do
             //default behaviour is to ONLY serve files from the 'wwwroot' directory where, for security reasons

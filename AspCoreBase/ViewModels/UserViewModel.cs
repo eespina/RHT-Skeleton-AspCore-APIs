@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using AspCoreBase.Data.Entities;
 
 namespace AspCoreBase.ViewModels
 {
