@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using AspCoreBase.Services.Interfaces;
+using Microsoft.Extensions.Logging;
+using AspCoreBase.ViewModels;
 
 namespace AspCoreApiBase.Controllers
 {
@@ -10,11 +13,36 @@ namespace AspCoreApiBase.Controllers
     [ApiController]
     public class Examples : Controller
     {
+        IUserService userService;
+        IPropertyService propertyService;
+        IMailService mailService;
+        private readonly ILogger<Examples> logger;
+
+        public Examples(IUserService UserService, ILogger<Examples> logger, IPropertyService propertyService, IMailService mailService)
+        {
+            this.userService = UserService;
+            this.logger = logger;
+            this.propertyService = propertyService;
+            this.mailService = mailService;
+        }
+
+        //[HttpGet]
+        //[ProducesResponseType(404)]
+        //public async Task<IEnumerable<UserViewModel>> Index()
+        //{
+        //    var users = await userService.FindUsers();
+        //    return users;
+        //}
+
         // GET: api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()//public IEnumerable<string> Get()
+        //public ActionResult<IEnumerable<UserViewModel>> Get()//public IEnumerable<string> Get()
+        public async Task<IEnumerable<UserViewModel>> Get()//public IEnumerable<string> Get()
         {
-            return new string[] { "Example1", "Example2" };
+            //var returnList = new string[] { "Example1", "Example2" };
+            var returnList = await userService.FindUsers();
+
+            return returnList;
         }
 
         // GET api/values/5

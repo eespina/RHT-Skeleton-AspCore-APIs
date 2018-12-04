@@ -1,31 +1,99 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AspCoreBase.Data;
+using AspCoreBase.Data.Entities.Authority;
+using AspCoreBase.Services;
+using AspCoreBase.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace AspCoreApiBase
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private readonly IConfiguration config;
+        private readonly IHostingEnvironment environment;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
+        {
+            config = configuration;
+            this.environment = environment;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            /*  Examples of Service implementation  */
+            //services.AddTransient<IMailService, MailService>();   //light-weight and used only when needed
+            //services.AddScoped<IMailService, MailService>();  //heavier with the service being elongated for a longer period
+            //services.AddSingleton<IMailService, MailService>();   // heaviest as it will be sustained in the application for the entirety of the application running
+
+            services.AddCors();
+
+            //Configure Identity. IdentityRole = in case we want to configure roles, its a type of data that can store info about a user,
+            //but we can derive IdentityRole to have our own role class (but leaving it as IdentityRole for now)
+            services.AddIdentity<AuthorityUser, IdentityRole>(cfg =>
+            {   //this part of the configuration allows us to make decision about different parts of the system
+                cfg.User.RequireUniqueEmail = true;//avoids duplicate emails since it should be a unique identification material anyway
+                cfg.Password.RequireDigit = true;
+                cfg.Password.RequireUppercase = true;
+                cfg.Password.RequireLowercase = true;
+
+            }).AddEntityFrameworkStores<AuthorityDbContext>();   //add this to specify where the data shuld be coming from. We want to explicitly say what type of context to use internally in Identity when it wants to get at objects stored in the Database.
+
+            //by default, when you add Identity, you are supporting authentication based on cookies. Here we are now defining two kinds of authenitcation that we're going to support
+            // once implemented,
+            services.AddAuthentication()
+                .AddCookie()
+                .AddJwtBearer(cfg =>
+                {//we need to tell this method about the bearer token that is created in 'CreateToken' method of Account Controller
+                 //need to set up the token validation parameters
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = config["Tokens:Issuer"],
+                        ValidAudience = config["Tokens:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Tokens:Key"]))
+                    };
+                });
+
+            //creating and configuring the database provider using this AspCoreBaseDbContext
+            services.AddDbContext<VillageDbContext>(cfg =>
+            {
+                cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseConnectionString"));
+            });
+
+            services.AddDbContext<AuthorityDbContext>(cfg =>
+            {
+                cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseAuthorityConnectionString"));
+            });
+
+            services.AddAutoMapper();
+
+            #region SERVICES
+            //example of Service using Dependency inject such that, when it is to be used, the 'services' logic will handle how to create it's 'MailService'
+            //example using scoped because the repository should be shared within one scope, usually a request. this way they are not getting constrcuted over and over again
+            services.AddScoped<IVillageDbRepository, VillageDbRepository>();
+            services.AddScoped<IAuthorityDbRepository, AuthorityDbRepository>();
+            services.AddTransient<IAuthenticateService, AuthenticateService>();
+            services.AddTransient<IMailService, MailService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPropertyService, PropertyService>(); // Add IAspCoreBaseDbRepository as a service people can use, but use as the implementation AspCoreBaseDbRepository. perhaps useful in testing
+            #endregion
+
+            // adds all the services that the subsystem requires to run ASP.NET MVC and would get rid of an 'IServiceCollection.AddMvc' error
+            services.AddMvc(opt =>
+            {
+                if (environment.IsProduction())
+                {
+                    opt.Filters.Add(new RequireHttpsAttribute());  //  it can also be used inside Controllers or Actions to require https on only certain controllers or actions. This applies it to EVERYWHERE on the site
+                }
+            }).AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +109,10 @@ namespace AspCoreApiBase
             {
                 app.UseExceptionHandler("/discrepancy");  //for non-developement environments, will show a friendlier error page
             }
+
+            // Shows UseCors with CorsPolicyBuilder.
+            app.UseCors(builder =>
+               builder.WithOrigins("http://localhost:62761"));
 
             //When the web server comes up, we're going to tell it to add the service of 'serving static files' as something that is allowed to do
             //default behaviour is to ONLY serve files from the 'wwwroot' directory where, for security reasons
@@ -65,6 +137,7 @@ namespace AspCoreApiBase
                 //      This is the DEFAULT behavior setting(s)
                 config.MapRoute("Default",
                     "{controller}/{action}/{id?}", //the '?' means that the part of the URL is OPTIONAL
+                    //May want to switch DEFAULTs to some controller that tests everything on start up and then notifies someone/something when it is erroneous
                     new { controller = "Values", Action = "Get" });
             });
 

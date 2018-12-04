@@ -1,10 +1,18 @@
 ﻿export interface IExample {
-    exampleId: number;
-    exampleString: string;
-    exampleNumber: number;
-    optionalExampleProperty?: string;
 
-    //getExampleNumber(exampleNumber: number): number;
+    emailString: string;
+    firstNameString: string;
+    lastNameString: string;
+    UserNameString: string;
+    createDate: Date;
+    isActiveBoolean: Boolean;
+
+    exampleId: number;
+    //exampleString: string;
+    //exampleNumber: number;
+    //optionalExampleProperty?: string;
+
+    ////getExampleNumber(exampleNumber: number): number;
 }
 
 //export class Example implements IExample {

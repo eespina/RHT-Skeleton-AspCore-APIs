@@ -36,11 +36,11 @@ export class ExampleListComponent {
     }
 
     getTotalExamplesOneCount(): number {
-        return this.examples.filter(e => e.exampleString === 'One').length;
+        return this.examples.filter(e => e.UserNameString === 'One').length;
     }
 
     getTotalExamplesLessThanOneCount(): number {
-        return this.examples.filter(e => e.exampleString === 'Zero').length;
+        return this.examples.filter(e => e.UserNameString === 'Zero').length;
     }
 
     onExampleCountRadioButtonChange(selectedRadioButtonValue: string): void {
