@@ -1,13 +1,13 @@
 ﻿export interface IExample {
 
-    emailString: string;
-    firstNameString: string;
-    lastNameString: string;
-    UserNameString: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
     createDate: Date;
-    isActiveBoolean: Boolean;
+    isActive: Boolean;
 
-    exampleId: number;
+    //exampleId: number;
     //exampleString: string;
     //exampleNumber: number;
     //optionalExampleProperty?: string;
