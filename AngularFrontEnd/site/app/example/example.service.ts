@@ -13,13 +13,13 @@ export class ExampleService {
     constructor(private _http: Http) { }
 
     getExamples(): Observable<IExample[]> {
-        return this._http.get('http://localhost:42917/examples')
+        return this._http.get('http://localhost:53465/api/examples')
             .map((response: Response) => <IExample[]>response.json())
             .catch(this.handleError);
     }
 
     getExampleById(exId: string): Observable<IExample> {
-        return this._http.get('http://localhost:42917/examples/' + exId)
+        return this._http.get('http://localhost:53465/api/examples/' + exId)
             .map((response: Response) => <IExample>response.json())
             .catch(this.handleError);
     }
@@ -32,7 +32,7 @@ export class ExampleService {
 
     ////Promise technique
     //getExampleById(exId: string): Promise<IExample> {
-    //    return this._http.get('http://localhost:42917/examples/' + exId)
+    //    return this._http.get('http://localhost:42917/api/examples/' + exId)
     //        .map((response: Response) => <IExample>response.json())
     //        .toPromise()
     //        .catch(this.handlePromiseError);
