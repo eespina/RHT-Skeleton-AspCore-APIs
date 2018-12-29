@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace AspCoreApiBase.Controllers
 {
     [Route("api/[controller]")]
-    //[ApiController]
+    [ApiController]
     public class ExamplesController : Controller
     {
         IUserService userService;
@@ -36,7 +36,7 @@ namespace AspCoreApiBase.Controllers
         //}
 
         // GET: api/values
-        [HttpGet, Authorize]
+        [HttpGet]//[HttpGet, Authorize]
         //public ActionResult<IEnumerable<UserViewModel>> Get()//public IEnumerable<string> Get()
         public async Task<IEnumerable<UserViewModel>> Get()//public IEnumerable<string> Get()
         {
