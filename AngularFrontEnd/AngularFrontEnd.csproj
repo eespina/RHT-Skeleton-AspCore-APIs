@@ -85,6 +85,8 @@
     <Content Include="site\app\example\exampleList.component.html" />
     <Content Include="site\app\example\exampleList.component.js" />
     <Content Include="site\app\example\exampleSingleton.service.js" />
+    <Content Include="site\app\login\login.component.html" />
+    <Content Include="site\app\register\register.component.html" />
     <Content Include="site\app\user\login.component.html" />
     <Content Include="site\index.html" />
     <Content Include="site\styles.css" />
@@ -142,6 +144,8 @@
     <TypeScriptCompile Include="site\app\example\exampleList.component.ts" />
     <TypeScriptCompile Include="site\app\example\exampleSingleton.service.ts" />
     <TypeScriptCompile Include="site\app\home\home.component.ts" />
+    <TypeScriptCompile Include="site\app\login\login.component.ts" />
+    <TypeScriptCompile Include="site\app\register\register.component.ts" />
     <TypeScriptCompile Include="site\app\shared\preloader.service.ts" />
     <TypeScriptCompile Include="site\app\user\auth-route-guard.service.ts" />
     <TypeScriptCompile Include="site\app\shared\pageNotFound.component.ts" />

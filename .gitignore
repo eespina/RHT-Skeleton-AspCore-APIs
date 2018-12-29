@@ -92,10 +92,10 @@ dist/
 package-lock.json
 static/src/css
 static/src/js/vendor
-**/static/src/css/_main-styl.scss
-**/static/src/css/main.concat.css
-**/static/src/js/scripts.concat.js
-**/static/src/scripts.concat.js
+**/src/css/_main-styl.scss
+**/src/css/main.concat.css
+**/src/js/scripts.concat.js
+**/src/scripts.concat.js
 ####################
 # .Net Core #
 ####################
@@ -110,6 +110,3 @@ private-config.json
 node_modules/
 packages/
 .vs/
-AspCoreBase/AspCoreBase_O.csproj
-AngularFrontEnd/src/css/main.concat.css
-AngularFrontEnd/src/js/scripts.concat.js

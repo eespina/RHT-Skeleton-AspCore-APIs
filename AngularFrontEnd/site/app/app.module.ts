@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { ExampleListComponent } from './example/exampleList.component';
+//import { RegisterComponent } from './register/register.component';
+//import { LoginComponent } from './login/login.component';
 import { ExampleComponent } from './example/example.component';
 import { ExampleCountComponent } from './example/exampleCount.component';
 import { HttpModule } from '@angular/http';
@@ -25,6 +27,8 @@ import { AppRoutingModule } from './app.module.routing';
         ExampleListComponent,
         ExampleCountComponent,
         HomeComponent,
+        //LoginComponent,
+        //RegisterComponent,
         PageNotFoundComponent,
         ExampleComponent],
     bootstrap: [

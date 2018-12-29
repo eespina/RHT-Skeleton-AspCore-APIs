@@ -6,23 +6,6 @@ function mobileNavigationHandler() {
     btnMobileHamburger = document.getElementById('btn-nav-menu');
     divPrimaryNav = document.getElementsByClassName('primary-nav')[0];
     divSecondaryNav = document.getElementsByClassName('secondary-nav')[0];
-
-    //if (!isDesktop()) {
-    //    btnMobileHamburger.classList.remove('open');
-    //    divPrimaryNav.classList.remove('open');
-    //    divSecondaryNav.classList.remove('open');
-    //    btnMobileHamburger.addEventListener('click', function (e) {
-    //        btnMobileHamburger.classList.toggle('open');
-    //        divPrimaryNav.classList.toggle('open');
-    //        divSecondaryNav.classList.toggle('open');
-    //    }, false);
-    //} else {
-    //    if (!btnMobileHamburger.classList.contains('open')) {
-    //        btnMobileHamburger.className += ' open';
-    //        divPrimaryNav.className += ' open';
-    //        divSecondaryNav.className += ' open';
-    //    }
-    //}
 }
 
 function initiateClassList() {
@@ -44,10 +27,10 @@ function initiateClassList() {
     }
 }
 
-function readyHeader() {
-    mobileNavigationHandler();
-    addEvent(window, "resize", function (event) {
-        mobileNavigationHandler();
-    });
-    initiateClassList();
+function readyHeader() {//UNCOMMENT this WHEN mobile, responsive pages are needed
+    //mobileNavigationHandler();
+    //addEvent(window, "resize", function (event) {
+    //    mobileNavigationHandler();
+    //});
+    //initiateClassList();
 }
