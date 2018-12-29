@@ -70,6 +70,25 @@ namespace AspCoreApiBase
                     };
                 });
 
+            ////-ANOTHER version found on the internet that will NOT be used
+            ////Firstly, we register the JWT authentication middleware by calling the method AddAuthentication on the ISerivceCollectioninterface.
+            ////Next, we specify the authentication scheme JwtBearerDefaults.AuthenticationScheme. We also provide some parameters that will be used while validating JWT
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //.AddJwtBearer(options =>
+            //{
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuer = true,    //The issuer is the actual server that created the token
+            //        ValidateAudience = true,  //The receiver of the token is a valid recipient
+            //        ValidateLifetime = true,  //The token has not expired 
+            //        ValidateIssuerSigningKey = true,  //The signing key is valid and is trusted by the server 
+
+            //        ValidIssuer = "http://localhost:5000",
+            //        ValidAudience = "http://localhost:5000",
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+            //    };
+            //});
+
             //creating and configuring the database provider using this AspCoreBaseDbContext
             services.AddDbContext<VillageDbContext>(cfg =>
             {

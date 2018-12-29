@@ -6,19 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using AspCoreBase.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using AspCoreBase.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspCoreApiBase.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class Examples : Controller
+    //[ApiController]
+    public class ExamplesController : Controller
     {
         IUserService userService;
         IPropertyService propertyService;
         IMailService mailService;
-        private readonly ILogger<Examples> logger;
+        private readonly ILogger<ExamplesController> logger;
 
-        public Examples(IUserService UserService, ILogger<Examples> logger, IPropertyService propertyService, IMailService mailService)
+        public ExamplesController(IUserService UserService, ILogger<ExamplesController> logger, IPropertyService propertyService, IMailService mailService)
         {
             this.userService = UserService;
             this.logger = logger;
@@ -35,7 +36,7 @@ namespace AspCoreApiBase.Controllers
         //}
 
         // GET: api/values
-        [HttpGet]
+        [HttpGet, Authorize]
         //public ActionResult<IEnumerable<UserViewModel>> Get()//public IEnumerable<string> Get()
         public async Task<IEnumerable<UserViewModel>> Get()//public IEnumerable<string> Get()
         {
