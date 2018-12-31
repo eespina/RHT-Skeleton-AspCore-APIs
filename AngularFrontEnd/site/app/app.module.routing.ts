@@ -1,6 +1,8 @@
 ﻿import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes, Event, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './shared/pageNotFound.component';
 import { ExampleComponent } from './example/example.component';
 import { ExampleListComponent } from './example/exampleList.component';
@@ -12,11 +14,13 @@ import { AuthService } from './user/auth.service';
     imports: [
         RouterModule.forRoot([
             { path: 'home', component: HomeComponent },
+            { path: 'register', component: RegisterComponent },
+            { path: 'login', component: LoginComponent },
             {
                 path: 'examples',
                 component: ExampleListComponent,
                 //data: { preload: true },    // used for PreloaderService
-                //canActivate: [AuthGuard]  //Loading this currently gives PageNotFound page
+                canActivate: [AuthGuard]  //Loading this currently gives PageNotFound page
             },//, loadChildren: 'app/examples/example.module#ExampleModule' }, //AFTER refactoring to Feature Modules, use this to implement, if desired, Lazy Loading of Features in the future (ALSO, remove the 'path' attribute in the Feature Module's @ngModule RouterModule.forChild([ { path: [HERE] } ]).. should actually leave ONLY the Children (but outside the 'children' attrubite (so, should have curlybrace-separated array of path routes afterward)))
             { path: 'examples/:exampleId', component: ExampleComponent, canActivate: [AuthGuard] },
             { path: '', redirectTo: '/home', pathMatch: 'full' },

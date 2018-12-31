@@ -33,17 +33,13 @@ namespace AspCoreApiBase.Controllers
             }
             try
             {
-                var result = await authenticateService.PasswordSign(model);
-                if (result != null)
+                tokenHandler = await authenticateService.CreateToken(model);
+                if (tokenHandler != null)
                 {
-                    if (result.Succeeded)
-                    {
-                        tokenHandler = await authenticateService.CreateToken(model);
-                        return Ok(tokenHandler);
-                    }
+                    return Ok(tokenHandler);
                 }
 
-                return Ok();
+                return NoContent();
             }
             catch (System.Exception)
             {

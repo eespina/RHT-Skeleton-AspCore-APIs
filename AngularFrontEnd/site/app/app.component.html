@@ -12,8 +12,12 @@
                 <!--<li routerActive="bootstrap-mimic-active"><a routerLink="[{ outlets: { secondaryExampleRouterOutlet: ['Another-Link-Parameters-Array-specifying-secondary-path'] } }]">Home</a></li>--><!-- This uses the example below. this syntax, here, should be implemented as such elsewhere (SHOULD USE CODE INSTEAD)-->
             </ul>
             <ul class="navbar-nav">
-                <li routerActive="bootstrap-mimic-active"><a routerLink="/login" routerLinkActive="active">Home</a></li>
-                <li routerActive="bootstrap-mimic-active"><a routerLink="/register" routerLinkActive="active">Examples</a></li><!--[routerLinkActiveOptions]="{ exact: true }" use this on only 1 li to eliminate multile ACTIVE class'd attributes-->
+                <li routerActive="bootstrap-mimic-active" class="navbar-item">
+                    <a routerLink="/register" routerLinkActive="active">Register</a>
+                </li><!--[routerLinkActiveOptions]="{ exact: true }" use this on only 1 li to eliminate multile ACTIVE class'd attributes-->
+                <li routerActive="bootstrap-mimic-active" class="navbar-item">
+                    <a routerLink="/login" routerLinkActive="active">Login</a>
+                </li>
                 <!--<li routerActive="bootstrap-mimic-active"><a routerLink="[{ outlets: { secondaryExampleRouterOutlet: ['Another-Link-Parameters-Array-specifying-secondary-path'] } }]">Home</a></li>--><!-- This uses the example below. this syntax, here, should be implemented as such elsewhere (SHOULD USE CODE INSTEAD)-->
             </ul>
         </div>

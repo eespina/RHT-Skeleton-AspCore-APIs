@@ -16,7 +16,7 @@ export class LoginComponent {
         if (loginForm && loginForm.valid) {
             let userName = loginForm.form.value.userName;
             let password = loginForm.form.value.password;
-            this.authService.login(userName, password);
+            //this.authService.login(userName, password);
 
             if (this.authService.redirectUrl) {
                 this.router.navigateByUrl(this.authService.redirectUrl);
