@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router'
 import { IUser } from './user';
-
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+import { Response } from '@angular/http';   //Http, 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -17,25 +17,27 @@ export class AuthService {
     registeringUser: IUser;
     redirectUrl: string;
 
-    constructor(private _http: Http, private _router: Router) { }   //, private messageService: MessageService) { }
+    constructor(private _http: HttpClient, private _router: Router) { }   //, private messageService: MessageService) { }
 
     registerUser(registeringUser): Observable<IUser> {
         let registrationResponse = this._http.post(this._registerUrl, registeringUser)
-            .map((response: Response) => <IUser>response.json())
+            //.map((response: Response) => <IUser>response.json())  //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>.
+            //You no longer need to call the '.map' function above yourself.
             .catch(this.handleError);
         return registrationResponse
     }
 
     loginUser(loginUser): Observable<IUser> {
         let loginResponse = this._http.post(this._loginUrl, loginUser)
-            .map((response: Response) => <IUser>response.json())
+            //.map((response: Response) => <IUser>response.json())  //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>.
+            //You no longer need to call the '.map' function above yourself.
             .catch(this.handleError);
         return loginResponse;
     }
 
     logoutUser() {
         localStorage.removeItem('token')
-        this._router.navigate(['/events'])
+        this._router.navigate(['/login'])
     }
 
     getToken() {

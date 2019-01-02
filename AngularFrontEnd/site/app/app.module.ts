@@ -8,7 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { ExampleComponent } from './example/example.component';
 import { ExampleCountComponent } from './example/exampleCount.component';
 import { HttpModule } from '@angular/http';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';  //HttpClientModule
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';  //HttpClientModule
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './shared/pageNotFound.component';
 import { ExampleService } from './example/example.service';
@@ -20,9 +20,9 @@ import { TokenInterceptorService } from './user/token-interceptor.service';
 
 @NgModule({
     imports: [
+        HttpClientModule,
         BrowserModule,
         FormsModule,
-        //HttpClientModule,
         HttpModule,
         AppRoutingModule
         //InMemoryWebApiModule.forRoot()
@@ -47,6 +47,7 @@ import { TokenInterceptorService } from './user/token-interceptor.service';
         {
             provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true
         }
+        //, { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
     ]
 })
 export class AppModule { }
