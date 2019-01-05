@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { ExampleListComponent } from './example/exampleList.component';
 import { RegisterComponent } from './user/register.component';
 import { LoginComponent } from './user/login.component';
+import { HeaderComponent } from './shared/header.component';
+import { FooterComponent } from './shared/footer.component';
 import { ExampleComponent } from './example/example.component';
 import { ExampleCountComponent } from './example/exampleCount.component';
 import { HttpModule } from '@angular/http';
@@ -33,6 +35,8 @@ import { TokenInterceptorService } from './user/token-interceptor.service';
         ExampleCountComponent,
         HomeComponent,
         LoginComponent,
+        HeaderComponent,
+        FooterComponent,
         RegisterComponent,
         PageNotFoundComponent,
         ExampleComponent],

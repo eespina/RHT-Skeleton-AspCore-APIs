@@ -17,7 +17,10 @@ export class AuthService {
     registeringUser: IUser;
     redirectUrl: string;
 
-    constructor(private _http: HttpClient, private _router: Router) { }   //, private messageService: MessageService) { }
+    constructor(private _http: HttpClient, private _router: Router) //, private messageService: MessageService)
+    {
+        localStorage.removeItem('token')
+    }
 
     registerUser(registeringUser): Observable<IUser> {
         let registrationResponse = this._http.post(this._registerUrl, registeringUser)

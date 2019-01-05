@@ -10,8 +10,7 @@ import { IUser } from '../user/user';
 export class LoginComponent implements OnInit {
 
     loginUserInfo: IUser = { username: '', password: '' } as IUser;
-
-    constructor(private _auth: AuthService, private _router: Router) { }
+    constructor(private _auth: AuthService, private _router: Router){}
 
     ngOnInit() { }
 
@@ -20,6 +19,7 @@ export class LoginComponent implements OnInit {
             .subscribe(
             res => {
                 localStorage.setItem('token', res.token)
+                document.getElementById('loginLogoutPlaceholder').innerText = "Log Out";
                 this._router.navigate(['/home'])
             },
             err => {

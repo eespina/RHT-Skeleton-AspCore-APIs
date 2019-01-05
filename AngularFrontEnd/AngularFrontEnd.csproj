@@ -85,6 +85,8 @@
     <Content Include="site\app\example\exampleList.component.html" />
     <Content Include="site\app\example\exampleList.component.js" />
     <Content Include="site\app\example\exampleSingleton.service.js" />
+    <Content Include="site\app\shared\footer.component.html" />
+    <Content Include="site\app\shared\header.component.html" />
     <Content Include="site\app\user\login.component.html" />
     <Content Include="site\app\user\login.component.js" />
     <Content Include="site\app\user\register.component.html" />
@@ -147,6 +149,8 @@
     <TypeScriptCompile Include="site\app\example\exampleList.component.ts" />
     <TypeScriptCompile Include="site\app\example\exampleSingleton.service.ts" />
     <TypeScriptCompile Include="site\app\home\home.component.ts" />
+    <TypeScriptCompile Include="site\app\shared\footer.component.ts" />
+    <TypeScriptCompile Include="site\app\shared\header.component.ts" />
     <TypeScriptCompile Include="site\app\user\login.component.ts" />
     <TypeScriptCompile Include="site\app\user\register.component.ts" />
     <TypeScriptCompile Include="site\app\shared\preloader.service.ts" />
