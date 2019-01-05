@@ -1,4 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { IExample } from './example';
 import { Http, Response } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
@@ -11,7 +12,7 @@ import 'rxjs/add/Observable/throw';
 @Injectable()
 export class ExampleService {
 
-    constructor(private _http: HttpClient) { }
+    constructor(private _http: HttpClient, private router: Router) { }
 
     getExamples(): Observable<IExample[]> {
         return this._http.get('http://localhost:53465/api/examples')
@@ -30,6 +31,9 @@ export class ExampleService {
     handleError(error: Response) {
         //Change this to pass the exception to some logging service
         console.error(error.status + ' - ' + error.statusText);
+        if (error && error.status == 401) {
+            this.router.navigateByUrl('../user/login'); //TODO - fix this, 'router' is always being "underfined"
+        }
         return Observable.throw(error);
     }
 
