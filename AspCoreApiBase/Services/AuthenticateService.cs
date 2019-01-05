@@ -68,76 +68,79 @@ namespace AspCoreBase.Services
 		{
 			var user = await userManager.FindByNameAsync(model.Username);   //userManager needs to be initialized in the Constructor
 
-			//figure out if the login actually works
-			var result = await signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-			//var result = signInManager.PasswordSignInAsync();   //This signs in the user with a cookie, THIS IS NOT WHAT WE WANT, hence it is commented out
+            if (user != null)
+            {
+                //figure out if the login actually works
+                var result = await signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+                //var result = signInManager.PasswordSignInAsync();   //This signs in the user with a cookie, THIS IS NOT WHAT WE WANT, hence it is commented out
 
-			//Create The token
-			if (result.Succeeded)
-			{
-				try
-				{
-                    //// claims are a set of properties with well known values in them that can be stored in the token and used buy the client or when its passed back to the server
-                    //var claims = new System.Collections.Generic.List<Claim>
-                    //{
-                    //    new Claim(ClaimTypes.Name, user.UserName),
-                    //    new Claim(ClaimTypes.Role, "SuperAuthorizedPerson")
-                    //};
-                    #region CLAIMS UNUSED VERSION
-                    //var claims = new[]
-                    //{
-                    //                   //JwtRegisteredClaimNames is a 'type' that contains names used by the token where 'Sub', as an example, is the name of the subject
-                    //                   new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
-                    //                   //, new Claim(JwtRegisteredClaimNames.Email, user.Email)
-                    //                   //'jti' is a unique string thats representative of each token
-                    //                   , new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                    //                   //this is going to be the username of the user and is mapped to the identity inside the User object every Controller (and View)
-                    //                       //this way, our token will contain enough information to tie together the current user in the API to the actual AspCoreBaseUser that we need for the relational model
-                    //                   , new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
-
-                    //                   //You can also take the standard user claims that are in the system and append them here, and they'd be added into the token
-                    //                       // but JSON web tokens are complex as it has a few moving pieces that are important (too much for the tutorial)
-                    //                   };
-                    #endregion
-
-                    //var tokenKey = config["Tokens:Key"];
-
-                    // The 'key' is the secret used to encrypt the token
-                    // This will be used when we read in the token as a request is made, as well
-                    //as when we are generating the token so we know how to read/write the token
-                    //parts of the token are encrypted and some parts are NOT
-                    //information about the individuals or individual claims can be read without decrypting the token
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Tokens:Key"]));
-					var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-					var token = new JwtSecurityToken(
-						config["Tokens:Issuer"],
-						config["Tokens:Audience"],
-                        //claims,
-                        expires: DateTime.UtcNow.AddMinutes(20),
-						signingCredentials: creds
-						);
-
-					var results = new TokenHandleViewModel()
-					{
-						Token = new JwtSecurityTokenHandler().WriteToken(token),    // 'writeToken' returns an actual string
-						Expiration = token.ValidTo  // returns an actual expiration time
-
-						// also need to create the issuer and audience., this is done in the config file
-					};
-
-					// empty quote becaseu we do NOT actually have a source for this resources,
-					//were actually going to want to write a new object, which will be called 'results'
-					return results;
-				}
-				catch (Exception ex)
+                //Create The token
+                if (result.Succeeded)
                 {
-                    //throw new InvalidOperationException($"Cannot create Token {ex}"); //TODO - LOG
-                    return null;
-				}
-			}//END - if (result.Succeeded)
+                    try
+                    {
+                        //// claims are a set of properties with well known values in them that can be stored in the token and used buy the client or when its passed back to the server
+                        //var claims = new System.Collections.Generic.List<Claim>
+                        //{
+                        //    new Claim(ClaimTypes.Name, user.UserName),
+                        //    new Claim(ClaimTypes.Role, "SuperAuthorizedPerson")
+                        //};
+                        #region CLAIMS UNUSED VERSION
+                        //var claims = new[]
+                        //{
+                        //                   //JwtRegisteredClaimNames is a 'type' that contains names used by the token where 'Sub', as an example, is the name of the subject
+                        //                   new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
+                        //                   //, new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                        //                   //'jti' is a unique string thats representative of each token
+                        //                   , new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                        //                   //this is going to be the username of the user and is mapped to the identity inside the User object every Controller (and View)
+                        //                       //this way, our token will contain enough information to tie together the current user in the API to the actual AspCoreBaseUser that we need for the relational model
+                        //                   , new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
 
-			return null;
+                        //                   //You can also take the standard user claims that are in the system and append them here, and they'd be added into the token
+                        //                       // but JSON web tokens are complex as it has a few moving pieces that are important (too much for the tutorial)
+                        //                   };
+                        #endregion
+
+                        //var tokenKey = config["Tokens:Key"];
+
+                        // The 'key' is the secret used to encrypt the token
+                        // This will be used when we read in the token as a request is made, as well
+                        //as when we are generating the token so we know how to read/write the token
+                        //parts of the token are encrypted and some parts are NOT
+                        //information about the individuals or individual claims can be read without decrypting the token
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Tokens:Key"]));
+                        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                        var token = new JwtSecurityToken(
+                            config["Tokens:Issuer"],
+                            config["Tokens:Audience"],
+                            //claims,
+                            expires: DateTime.UtcNow.AddMinutes(20),
+                            signingCredentials: creds
+                            );
+
+                        var results = new TokenHandleViewModel()
+                        {
+                            Token = new JwtSecurityTokenHandler().WriteToken(token),    // 'writeToken' returns an actual string
+                            Expiration = token.ValidTo  // returns an actual expiration time
+
+                            // also need to create the issuer and audience., this is done in the config file
+                        };
+
+                        // empty quote becaseu we do NOT actually have a source for this resources,
+                        //were actually going to want to write a new object, which will be called 'results'
+                        return results;
+                    }
+                    catch (Exception ex)
+                    {
+                        //throw new InvalidOperationException($"Cannot create Token {ex}"); //TODO - LOG
+                        return null;
+                    }
+                }//END - if (result.Succeeded)
+            }
+
+			return null;    //No User found Or Password incorrect
 		}
 
         ///// <summary>

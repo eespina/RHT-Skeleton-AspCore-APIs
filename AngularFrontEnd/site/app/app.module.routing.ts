@@ -1,8 +1,8 @@
 ﻿import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes, Event, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './user/register.component';
+import { LoginComponent } from './user/login.component';
 import { PageNotFoundComponent } from './shared/pageNotFound.component';
 import { ExampleComponent } from './example/example.component';
 import { ExampleListComponent } from './example/exampleList.component';

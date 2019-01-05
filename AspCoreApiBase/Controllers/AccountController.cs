@@ -43,9 +43,9 @@ namespace AspCoreApiBase.Controllers
 
                 return Unauthorized();
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.ToString());
             }
         }
 
