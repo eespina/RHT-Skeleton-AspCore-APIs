@@ -117,9 +117,6 @@ sup {
   zoom: 1;
   zoom: 1;
 }
-a:not([href]):not([tabindex]) {
-  color: #fff;
-}
 .btn {
   font-size: 20px;
   line-height: 1.4;
@@ -574,6 +571,10 @@ header li {
   top: 18px;
   width: 0;
   left: 50%;
+}
+#loginLogoutPlaceholder {
+  cursor: pointer;
+  color: #777;
 }
 .clearfix::after {
   display: block;

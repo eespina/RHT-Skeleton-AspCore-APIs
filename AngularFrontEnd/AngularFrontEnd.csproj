@@ -85,7 +85,12 @@
     <Content Include="site\app\example\exampleList.component.html" />
     <Content Include="site\app\example\exampleList.component.js" />
     <Content Include="site\app\example\exampleSingleton.service.js" />
+    <Content Include="site\app\shared\footer.component.html" />
+    <Content Include="site\app\shared\header.component.html" />
     <Content Include="site\app\user\login.component.html" />
+    <Content Include="site\app\user\login.component.js" />
+    <Content Include="site\app\user\register.component.html" />
+    <Content Include="site\app\user\register.component.js" />
     <Content Include="site\index.html" />
     <Content Include="site\styles.css" />
     <Content Include="site\systemjs-angular-loader.js" />
@@ -117,6 +122,8 @@
     <Content Include="src\styl\_footer.styl" />
     <Content Include="src\styl\_header.styl" />
     <None Include="packages.config" />
+    <Content Include="site\app\user\register.component.js.map" />
+    <Content Include="site\app\user\login.component.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -142,11 +149,15 @@
     <TypeScriptCompile Include="site\app\example\exampleList.component.ts" />
     <TypeScriptCompile Include="site\app\example\exampleSingleton.service.ts" />
     <TypeScriptCompile Include="site\app\home\home.component.ts" />
+    <TypeScriptCompile Include="site\app\shared\footer.component.ts" />
+    <TypeScriptCompile Include="site\app\shared\header.component.ts" />
+    <TypeScriptCompile Include="site\app\user\login.component.ts" />
+    <TypeScriptCompile Include="site\app\user\register.component.ts" />
     <TypeScriptCompile Include="site\app\shared\preloader.service.ts" />
     <TypeScriptCompile Include="site\app\user\auth-route-guard.service.ts" />
     <TypeScriptCompile Include="site\app\shared\pageNotFound.component.ts" />
     <TypeScriptCompile Include="site\app\user\auth.service.ts" />
-    <TypeScriptCompile Include="site\app\user\login.component.ts" />
+    <TypeScriptCompile Include="site\app\user\token-interceptor.service.ts" />
     <TypeScriptCompile Include="site\app\user\user.module.ts" />
     <TypeScriptCompile Include="site\app\user\user.ts" />
     <TypeScriptCompile Include="site\main.ts" />

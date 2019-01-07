@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
     selector: 'app-main-body',
     templateUrl: './app.component.html'
 })
-export class AppComponent { pageHeader = 'Jumpstart Skeleton'; }
+export class AppComponent { pageHeader = 'Jumpstart Skeleton - PAGE HEADER'; }
