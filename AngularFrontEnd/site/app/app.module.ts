@@ -51,7 +51,6 @@ import { TokenInterceptorService } from './user/token-interceptor.service';
         {
             provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true
         }
-        //, { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
     ]
 })
 export class AppModule { }
