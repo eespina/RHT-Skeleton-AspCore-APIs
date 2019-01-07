@@ -9,7 +9,8 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         console.log('In canActivate: ' + state.url);
-        return this.checkLoggedIn(state.url);
+        let isLoggedInAlready = this.checkLoggedIn(state.url);
+        return isLoggedInAlready;
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
@@ -23,7 +24,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     }
 
     checkLoggedIn(url: string): boolean {
-        if (this.authService.isLoggedIn()) {
+        if (this.authService.loggedIn()) {
             return true;
         }
 

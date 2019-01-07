@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using AspCoreBase.Services.Interfaces;
-using Microsoft.Extensions.Logging;
+﻿using AspCoreBase.Services.Interfaces;
 using AspCoreBase.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AspCoreApiBase.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class Examples : Controller
+    public class ExamplesController : Controller
     {
         IUserService userService;
         IPropertyService propertyService;
         IMailService mailService;
-        private readonly ILogger<Examples> logger;
+        private readonly ILogger<ExamplesController> logger;
 
-        public Examples(IUserService UserService, ILogger<Examples> logger, IPropertyService propertyService, IMailService mailService)
+        public ExamplesController(IUserService UserService, ILogger<ExamplesController> logger, IPropertyService propertyService, IMailService mailService)
         {
             this.userService = UserService;
             this.logger = logger;
@@ -26,17 +26,7 @@ namespace AspCoreApiBase.Controllers
             this.mailService = mailService;
         }
 
-        //[HttpGet]
-        //[ProducesResponseType(404)]
-        //public async Task<IEnumerable<UserViewModel>> Index()
-        //{
-        //    var users = await userService.FindUsers();
-        //    return users;
-        //}
-
-        // GET: api/values
-        [HttpGet]
-        //public ActionResult<IEnumerable<UserViewModel>> Get()//public IEnumerable<string> Get()
+        [HttpGet, Authorize]
         public async Task<IEnumerable<UserViewModel>> Get()//public IEnumerable<string> Get()
         {
             //var returnList = new string[] { "Example1", "Example2" };
