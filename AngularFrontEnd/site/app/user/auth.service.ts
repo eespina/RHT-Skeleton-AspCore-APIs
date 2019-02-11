@@ -16,27 +16,31 @@ export class AuthService {
 
     registeringUser: IUser;
     redirectUrl: string;
+    isSessionLoggedIn: boolean;
 
-    constructor(private _http: HttpClient, private _router: Router) { } //, private messageService: MessageService)
+    constructor(private _http: HttpClient, private _router: Router) {   //, private messageService: MessageService)
+        this.isSessionLoggedIn = false;
+    }
 
     registerUser(registeringUser): Observable<IUser> {
         let registrationResponse = this._http.post(this._registerUrl, registeringUser)
             //.map((response: Response) => <IUser>response.json())  //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>.
             //You no longer need to call the '.map' function above yourself.
-            .catch(this.handleError);
-        return registrationResponse
+            .catch(error => this.handleError(error));
+        return registrationResponse;
     }
 
     loginUser(loginUser): Observable<IUser> {
         let loginResponse = this._http.post(this._loginUrl, loginUser)
             //.map((response: Response) => <IUser>response.json())  //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>.
             //You no longer need to call the '.map' function above yourself.
-            .catch(this.handleError);
+            .catch(error => this.handleError(error));
         return loginResponse;
     }
 
     logoutUser() {
         localStorage.removeItem('token')
+        this.isSessionLoggedIn = false
         this._router.navigate(['/login'])
     }
 
@@ -45,12 +49,15 @@ export class AuthService {
     }
 
     loggedIn() {
-        return !!localStorage.getItem('token')
+        return (!!localStorage.getItem('token') && this.isSessionLoggedIn)
     }
 
     handleError(error: Response) {
         //Change this to pass the exception to some logging service
         console.error(error);
+        if (error && error.status == 401) {
+            this.logoutUser();
+        }
         return Observable.throw(error);
     }
 }

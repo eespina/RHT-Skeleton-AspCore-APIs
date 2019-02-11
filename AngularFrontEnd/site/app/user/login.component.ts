@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
 
                 //TODO - do something here to let the user Know the Username/Password is INVALID for some reason
             });
+        this._auth.isSessionLoggedIn = true;
     }
 
 }
