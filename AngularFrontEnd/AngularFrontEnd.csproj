@@ -75,22 +75,14 @@
     <Content Include=".jshintrc" />
     <Content Include="site\app\app.component.html" />
     <Content Include="site\app\example\example.component.html" />
-    <Content Include="site\app\example\example.component.js" />
-    <Content Include="site\app\example\example.js" />
-    <Content Include="site\app\example\example.service.js" />
     <Content Include="site\app\example\exampleCount.component.css" />
     <Content Include="site\app\example\exampleCount.component.html" />
-    <Content Include="site\app\example\exampleCount.component.js" />
     <Content Include="site\app\example\exampleList.component.css" />
     <Content Include="site\app\example\exampleList.component.html" />
-    <Content Include="site\app\example\exampleList.component.js" />
-    <Content Include="site\app\example\exampleSingleton.service.js" />
     <Content Include="site\app\shared\footer.component.html" />
     <Content Include="site\app\shared\header.component.html" />
     <Content Include="site\app\user\login.component.html" />
-    <Content Include="site\app\user\login.component.js" />
     <Content Include="site\app\user\register.component.html" />
-    <Content Include="site\app\user\register.component.js" />
     <Content Include="site\index.html" />
     <Content Include="site\styles.css" />
     <Content Include="site\systemjs-angular-loader.js" />
@@ -101,12 +93,6 @@
     <Content Include="src\js\header.js" />
     <Content Include="src\js\main.js" />
     <Content Include="tslint.json" />
-    <Content Include="site\app\example\example.component.js.map" />
-    <Content Include="site\app\example\example.js.map" />
-    <Content Include="site\app\example\example.service.js.map" />
-    <Content Include="site\app\example\exampleCount.component.js.map" />
-    <Content Include="site\app\example\exampleList.component.js.map" />
-    <Content Include="site\app\example\exampleSingleton.service.js.map" />
     <Content Include="site\tsconfig.json" />
     <Content Include="src\css\_main-styl.scss" />
     <Content Include="src\sass\main.scss" />
@@ -122,8 +108,6 @@
     <Content Include="src\styl\_footer.styl" />
     <Content Include="src\styl\_header.styl" />
     <None Include="packages.config" />
-    <Content Include="site\app\user\register.component.js.map" />
-    <Content Include="site\app\user\login.component.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
