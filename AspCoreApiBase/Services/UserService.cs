@@ -32,18 +32,18 @@ namespace AspCoreBase.Services
 			this.userManager = userManager;
 		}
 
-		public async Task<IEnumerable<UserViewModel>> FindUsers()
+		public async Task<IEnumerable<OwnerViewModel>> FindUsers()
 		{
 			var users = await villageDbRepository.GetVillageUserOwners();
 			if (users.Any())
 			{
-				var villageUsersMapped = mapper.Map<IEnumerable<OwnerUser>, IEnumerable<UserViewModel>>(users);
+				var villageUsersMapped = mapper.Map<IEnumerable<OwnerUser>, IEnumerable<OwnerViewModel>>(users);
 				return villageUsersMapped;
 			}
 			return null;
 		}
 
-		public async Task<UserViewModel> CreateNewUser(UserViewModel userViewModel, System.Security.Claims.ClaimsPrincipal currentUser)
+		public async Task<OwnerViewModel> CreateNewUser(OwnerViewModel userViewModel, System.Security.Claims.ClaimsPrincipal currentUser)
 		{
 			try
 			{
@@ -141,7 +141,7 @@ namespace AspCoreBase.Services
 			return new string(chars.ToArray());
 		}
 
-		private async Task<bool> CreateVillageUser(UserViewModel user)
+		private async Task<bool> CreateVillageUser(OwnerViewModel user)
 		{
 			try
 			{
@@ -161,7 +161,7 @@ namespace AspCoreBase.Services
 			return false;
 		}
 
-		private async Task<bool> CreateOwnerUser(UserViewModel user)
+		private async Task<bool> CreateOwnerUser(OwnerViewModel user)
 		{
 			try
 			{
@@ -190,7 +190,7 @@ namespace AspCoreBase.Services
 			}
 		}
 
-		private async Task<bool> CreateAdminUser(UserViewModel user)
+		private async Task<bool> CreateAdminUser(OwnerViewModel user)
 		{
 			try
 			{

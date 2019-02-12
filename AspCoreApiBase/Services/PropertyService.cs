@@ -79,7 +79,7 @@ namespace AspCoreBase.Services
 			}
 		}
 
-		public async Task<bool> CreatePropertyUserConnection(UserViewModel user)
+		public async Task<bool> CreatePropertyUserConnection(OwnerViewModel user)
 		{
 			//get the property with the existing 'u' UserViewModel
 			var property = await GetProperty(user.PropertyName);

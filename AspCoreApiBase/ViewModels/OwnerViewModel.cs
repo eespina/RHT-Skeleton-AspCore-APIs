@@ -4,7 +4,7 @@ using AspCoreBase.Data.Entities;
 
 namespace AspCoreBase.ViewModels
 {
-	public class UserViewModel
+	public class OwnerViewModel
 	{
 		public Guid UserId { get; set; }
 

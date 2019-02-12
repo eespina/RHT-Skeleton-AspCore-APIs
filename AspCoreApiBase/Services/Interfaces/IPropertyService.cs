@@ -7,6 +7,6 @@ namespace AspCoreBase.Services.Interfaces
 	public interface IPropertyService
 	{
 		Task<IEnumerable<PropertyViewModel>> GetProperties();
-		Task<bool> CreatePropertyUserConnection(UserViewModel u);
+		Task<bool> CreatePropertyUserConnection(OwnerViewModel u);
 	}
 }

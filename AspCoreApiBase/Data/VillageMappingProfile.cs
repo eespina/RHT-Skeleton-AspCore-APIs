@@ -8,10 +8,10 @@ namespace AspCoreBase.Data
 	{
 		public VillageProfile()
 		{
-			CreateMap<OwnerUser, UserViewModel>()
+			CreateMap<OwnerUser, OwnerViewModel>()
 				.ForMember(o => o.Email, ex => ex.MapFrom(o => o.Email))
 				.ReverseMap();
-			CreateMap<AdminUser, UserViewModel>()
+			CreateMap<AdminUser, OwnerViewModel>()
 				.ForMember(o => o.Email, ex => ex.MapFrom(o => o.Email))
 				.ReverseMap();
 		}
