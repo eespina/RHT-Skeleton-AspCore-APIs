@@ -9,14 +9,16 @@ import { Router } from '@angular/router'
 export class HeaderComponent implements OnInit {
     constructor(private _auth: AuthService, private _router: Router) { }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     loginOrOutUser() {
         if (this._auth.loggedIn()) {
             this._auth.logoutUser();
             document.getElementById('loginLogoutPlaceholder').innerText = "Log In";
         } else {
-            this._router.navigate(['/login'])
+            if (this._router) {
+                this._router.navigate(['/login']);
+            }
         }
     }
 }
