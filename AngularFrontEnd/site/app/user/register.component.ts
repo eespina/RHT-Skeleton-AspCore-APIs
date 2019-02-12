@@ -9,7 +9,7 @@ import { IUser } from '../user/user';
 })
 export class RegisterComponent implements OnInit {
 
-    registeringUser: IUser = { username: '', password: '' } as IUser;
+    registeringUser: IUser = { firstName: '', lastName: '', username: '', password: '' } as IUser;
     constructor(private _auth: AuthService, private _router: Router) { }
 
     ngOnInit() { }

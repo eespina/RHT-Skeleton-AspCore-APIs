@@ -8,7 +8,6 @@ import { IUser } from '../user/user';
     templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
-
     loginUserInfo: IUser = { username: '', password: '' } as IUser;
     constructor(private _auth: AuthService, private _router: Router){}
 
@@ -29,5 +28,4 @@ export class LoginComponent implements OnInit {
             });
         this._auth.isSessionLoggedIn = true;
     }
-
 }

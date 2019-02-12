@@ -67,7 +67,7 @@ namespace AspCoreBase.Services
 						//var temporaryCredentials = randomTemporaryCredentialsGeneration();	//TODO - RESTORE THIS when email Invitiations Services are in order
 
 						//CREATE Village Authority User
-						result = await authorityUser.CreateAsync(user, userViewModel.ChosenCredentials);
+						result = await authorityUser.CreateAsync(user, userViewModel.Password);
 
 						if (result != IdentityResult.Success)
 						{
