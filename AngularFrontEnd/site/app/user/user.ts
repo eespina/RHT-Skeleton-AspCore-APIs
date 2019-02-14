@@ -1,15 +1,20 @@
 export interface IUser {
     id: number;
-    username: string;
-    isAdmin: boolean;
-    token: string;
-    password: string;
-
-    email: string;
     firstName: string;
     lastName: string;
-    createDate: Date;
-    isActive: Boolean;
+    email: string;
+    username: string;
+    password: string;
+    userType: IUserType;
+
+    isAdmin: boolean;
+    token: string;
+    isActive: boolean;
+}
+
+export interface IUserType {
+    id: number;
+    name: string;
 }
 
 //export class User implements IUser {

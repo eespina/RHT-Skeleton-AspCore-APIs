@@ -9,7 +9,10 @@ import { IUser } from '../user/user';
 })
 export class RegisterComponent implements OnInit {
 
-    registeringUser: IUser = { firstName: '', lastName: '', username: '', password: '' } as IUser;
+    registeringUser: IUser = {  //for whatever reason, this not being here (initialized) would error out and complain at runtime
+        firstName: '', lastName: '', username: '', password: '', email: '', isActive: true, userType: { id: 0, name: '' }, id: 0, isAdmin: false, token: ''
+    } as IUser;
+
     constructor(private _auth: AuthService, private _router: Router) { }
 
     ngOnInit() { }

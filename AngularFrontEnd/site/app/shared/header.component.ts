@@ -15,10 +15,9 @@ export class HeaderComponent implements OnInit {
         if (this._auth.loggedIn()) {
             this._auth.logoutUser();
             document.getElementById('loginLogoutPlaceholder').innerText = "Log In";
-        } else {
-            if (this._router) {
-                this._router.navigate(['/login']);
-            }
+        }
+        if (this._router) {
+            this._router.navigate(['/login']);
         }
     }
 }

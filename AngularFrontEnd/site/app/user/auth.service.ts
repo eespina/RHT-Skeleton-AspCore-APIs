@@ -13,9 +13,11 @@ import 'rxjs/add/Observable/throw';
 export class AuthService {
     private _registerUrl = "http://localhost:53465/api/RegisterOwner";
     private _loginUrl = "http://localhost:53465/account/login";
+    private _logoutUrl = "http://localhost:53465/account/logout";
 
     registeringUser: IUser;
     redirectUrl: string;
+    loggedInUser: IUser;
     isSessionLoggedIn: boolean;
 
     constructor(private _http: HttpClient, private _router: Router) {   //, private messageService: MessageService)
@@ -31,6 +33,7 @@ export class AuthService {
     }
 
     loginUser(loginUser): Observable<IUser> {
+        this.loggedInUser = loginUser;
         let loginResponse = this._http.post(this._loginUrl, loginUser)
             //.map((response: Response) => <IUser>response.json())  //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>.
             //You no longer need to call the '.map' function above yourself.
@@ -38,9 +41,19 @@ export class AuthService {
         return loginResponse;
     }
 
-    logoutUser() {
+    logoutUser(): Observable<IUser> {
+        let loginResponse = this._http.post(this._logoutUrl, this.loggedInUser)
+            //.map((response: Response) => <IUser>response.json())  //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>.
+            //You no longer need to call the '.map' function above yourself.
+            .catch(error => this.handleError(error));
+        this.logoutUserLocal();
+        return loginResponse;
+    }
+
+    logoutUserLocal() {
         localStorage.removeItem('token')
         this.isSessionLoggedIn = false
+
         this._router.navigate(['/login'])
     }
 
@@ -56,7 +69,7 @@ export class AuthService {
         //Change this to pass the exception to some logging service
         console.error(error);
         if (error && error.status == 401) {
-            this.logoutUser();
+            this.logoutUserLocal();
         }
         return Observable.throw(error);
     }

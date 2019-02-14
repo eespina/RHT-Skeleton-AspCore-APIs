@@ -26,6 +26,7 @@ namespace AspCoreBase.ViewModels
 		[RegularExpression("^((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)).+$", ErrorMessage = "Password must contain All qualifying characters")]
 		public string Password { get; set; }
 
+        [Required]
         public UserType UserType { get; set; }    //NEEDED in Admin Portal only
 
         public string TypeNumber { get; set; }
@@ -42,14 +43,10 @@ namespace AspCoreBase.ViewModels
 		public Guid PropertyId { get; set; }
 		public string TemporaryCredentials { get; set; }
 
-		[Required]
-		public Guid CreatedBy { get; set; }
-		[Required]
-		public DateTime CreatedDate { get; set; }
-		[Required]
-		public Guid ModifiedBy { get; set; }
-		[Required]
-		public DateTime ModifiedDate { get; set; }
+        public Guid CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public Guid ModifiedBy { get; set; }
+        public DateTime ModifiedDate { get; set; }
 	}
 
 	public class UserType

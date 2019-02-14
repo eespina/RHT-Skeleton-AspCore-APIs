@@ -59,36 +59,36 @@ namespace AspCoreApiBase.Controllers
             return NoContent();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> RegisterUser([FromBody] OwnerViewModel model)
-        //{
-        //    TokenHandleViewModel tokenHandler;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    try
-        //    {
-        //        var currentLoggedInUser = HttpContext.User;
-        //        if (currentLoggedInUser != null)
-        //        {
-        //            OwnerViewModel newlyCreatedUser = null;// userService.CreateNewUser(model, currentLoggedInUser);
-        //            if (newlyCreatedUser != null)
-        //            {
-        //                tokenHandler = await authenticateService.CreateToken(new LoginViewModel { Password = model.ChosenCredentials, Username = model.UserName });
-        //                if (tokenHandler != null)
-        //                {
-        //                    return Ok(tokenHandler);
-        //                }
-        //            }
-        //        }
+        [HttpPost, Authorize]
+        public async Task<IActionResult> RegisterUser([FromBody] OwnerViewModel model)
+        {
+            TokenHandleViewModel tokenHandler;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var currentLoggedInUser = HttpContext.User;
+                if (currentLoggedInUser != null)
+                {
+                    OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model, currentLoggedInUser);
+                    if (newlyCreatedUser != null)
+                    {
+                        tokenHandler = await authenticateService.CreateToken(new LoginViewModel { Password = model.Password, Username = model.UserName });
+                        if (tokenHandler != null)
+                        {
+                            return Ok(tokenHandler);
+                        }
+                    }
+                }
 
-        //        return Unauthorized();
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        return BadRequest(ex.ToString());
-        //    }
-        //}
+                return Unauthorized();
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }
