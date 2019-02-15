@@ -11,7 +11,7 @@ import 'rxjs/add/Observable/throw';
 
 @Injectable()
 export class AuthService {
-    private _registerUrl = "http://localhost:53465/api/RegisterOwner";
+    private _registerUrl = "http://localhost:53465/account/registeruser";
     private _loginUrl = "http://localhost:53465/account/login";
     private _logoutUrl = "http://localhost:53465/account/logout";
 

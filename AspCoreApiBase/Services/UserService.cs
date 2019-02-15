@@ -47,7 +47,12 @@ namespace AspCoreBase.Services
 		{
 			try
 			{
-				var adminUserId = currentUser.Identities.First().Claims.First(i => i.Type.Split('/').Last() == "nameidentifier").Value;
+				var adminUser = currentUser.Identities.First().Claims.First(i => i.Type.Split('/').Last() == "nameidentifier");
+                string adminUserId = string.Empty;
+                if (adminUser != null)
+                {
+                    adminUserId = adminUser.Value;
+                }
 
 				if (await authorityUser.FindByIdAsync(adminUserId) != null)
 				{

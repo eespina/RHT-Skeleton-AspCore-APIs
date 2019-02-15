@@ -51,7 +51,7 @@ namespace AspCoreApiBase.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Logout(LoginViewModel model)
         {
             await authenticateService.SignOutAsync();
@@ -80,6 +80,10 @@ namespace AspCoreApiBase.Controllers
                         {
                             return Ok(tokenHandler);
                         }
+                    }
+                    else
+                    {
+                        return NotFound("USER NOT CREATED");
                     }
                 }
 
