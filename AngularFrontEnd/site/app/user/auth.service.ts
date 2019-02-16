@@ -46,30 +46,30 @@ export class AuthService {
             //.map((response: Response) => <IUser>response.json())  //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>.
             //You no longer need to call the '.map' function above yourself.
             .catch(error => this.handleError(error));
-        this.logoutUserLocal();
         return loginResponse;
     }
 
-    logoutUserLocal() {
-        localStorage.removeItem('token')
-        this.isSessionLoggedIn = false
-
-        this._router.navigate(['/login'])
+    logoutUserLocal(isRedirect) {
+        localStorage.removeItem('token');
+        this.isSessionLoggedIn = false;
+        if (isRedirect) {
+            this._router.navigate(['/login']);
+        }
     }
 
     getToken() {
-        return localStorage.getItem('token')
+        return localStorage.getItem('token');
     }
 
     loggedIn() {
-        return (!!localStorage.getItem('token') && this.isSessionLoggedIn)
+        return (!!localStorage.getItem('token') && this.isSessionLoggedIn);
     }
 
     handleError(error: Response) {
         //Change this to pass the exception to some logging service
         console.error(error);
         if (error && error.status == 401) {
-            this.logoutUserLocal();
+            this.logoutUserLocal(true);
         }
         return Observable.throw(error);
     }

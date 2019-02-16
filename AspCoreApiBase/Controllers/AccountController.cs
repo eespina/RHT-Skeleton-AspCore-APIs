@@ -51,8 +51,8 @@ namespace AspCoreApiBase.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout(LoginViewModel model)
+        [HttpPost, Authorize]
+        public async Task<IActionResult> Logout([FromBody] LoginViewModel model)
         {
             await authenticateService.SignOutAsync();
 
