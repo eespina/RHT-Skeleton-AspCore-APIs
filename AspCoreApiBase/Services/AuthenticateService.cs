@@ -14,59 +14,64 @@ using System.Threading.Tasks;
 
 namespace AspCoreBase.Services
 {
-	public class AuthenticateService : IAuthenticateService
-	{
-		private readonly ILogger<AuthenticateService> logger;
-		private readonly SignInManager<AuthorityUser> signInManager;    // Need this service to Login/Logout
-		private readonly UserManager<AuthorityUser> userManager; //useful when dealing with TOKENS in cross-application security or client/server separation
-		private readonly IConfiguration config;
+    public class AuthenticateService : IAuthenticateService
+    {
+        private readonly ILogger<AuthenticateService> logger;
+        private readonly SignInManager<AuthorityUser> signInManager;    // Need this service to Login/Logout
+        private readonly UserManager<AuthorityUser> userManager; //useful when dealing with TOKENS in cross-application security or client/server separation
+        private readonly IConfiguration config;
 
-		public AuthenticateService(ILogger<AuthenticateService> logger, UserManager<AuthorityUser> userManager, SignInManager<AuthorityUser> signInManager, IConfiguration config)
-		{
-			this.logger = logger;
-			this.signInManager = signInManager;
-			this.config = config;
-			this.userManager = userManager;
-		}
+        public AuthenticateService(ILogger<AuthenticateService> logger, UserManager<AuthorityUser> userManager, SignInManager<AuthorityUser> signInManager, IConfiguration config)
+        {
+            this.logger = logger;
+            this.signInManager = signInManager;
+            this.config = config;
+            this.userManager = userManager;
+        }
 
-		public async Task<SignInResult> PasswordSign(LoginViewModel model)
-		{
-			try
-			{
-				var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
-				return result;
-			}
-			catch (Exception ex)
-			{
-				logger.LogError("ERROR using SignInManager to Sign in - " + ex);
-				return null;
-			}
+        public async Task<SignInResult> PasswordSign(LoginViewModel model)
+        {
+            try
+            {
+                var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("ERROR using SignInManager to Sign in - " + ex);
+                return null;
+            }
 
-		}
+        }
 
 
-		public async Task<bool> SignOutAsync()
-		{
-			try
-			{
-				await signInManager.SignOutAsync();
-				return true;
-			}
-			catch (Exception ex)
-			{
-				logger.LogError("ERROR Signing Out - " + ex.ToString());
-				return false;
-			}
-		}
+        public async Task<bool> SignOutAsync()
+        {
+            try
+            {
+                await signInManager.SignOutAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("ERROR Signing Out - " + ex.ToString());
+                return false;
+            }
+        }
 
-		/// <summary>
-		/// I believe this is useful for Token use when the Client is NOT attached to this project/solution. This uses TOKENS cor cross-pplication security
-		/// </summary>
-		/// <param name="model">LoginViewModel</param>
-		/// <returns>TokenHandleViewModel that contains a string token and its expiration date/time</returns>
-		public async Task<TokenHandleViewModel> CreateToken(LoginViewModel model)
-		{
-			var user = await userManager.FindByNameAsync(model.Username);   //userManager needs to be initialized in the Constructor
+        /// <summary>
+        /// I believe this is useful for Token use when the Client is NOT attached to this project/solution. This uses TOKENS cor cross-pplication security
+        /// </summary>
+        /// <param name="model">LoginViewModel</param>
+        /// <returns>TokenHandleViewModel that contains a string token and its expiration date/time</returns>
+        public async Task<OwnerViewModel> CreateToken(LoginViewModel model)
+        {
+            var user = await userManager.FindByNameAsync(model.Username);   //userManager needs to be initialized in the Constructor
+            OwnerViewModel ownerViewModel = new OwnerViewModel()
+            {
+                UserName = model.Username,
+                Email = user.Email
+            };
 
             if (user != null)
             {
@@ -120,17 +125,16 @@ namespace AspCoreBase.Services
                             signingCredentials: creds
                             );
 
-                        var results = new TokenHandleViewModel()
+                        ownerViewModel.tokenHandleViewModel = new TokenHandleViewModel()
                         {
                             Token = new JwtSecurityTokenHandler().WriteToken(token),    // 'writeToken' returns an actual string
                             Expiration = token.ValidTo  // returns an actual expiration time
-
                             // also need to create the issuer and audience., this is done in the config file
                         };
 
                         // empty quote becaseu we do NOT actually have a source for this resources,
                         //were actually going to want to write a new object, which will be called 'results'
-                        return results;
+                        return ownerViewModel;
                     }
                     catch (Exception ex)
                     {
@@ -140,8 +144,8 @@ namespace AspCoreBase.Services
                 }//END - if (result.Succeeded)
             }
 
-			return null;    //No User found Or Password incorrect
-		}
+            return null;    //No User found Or Password incorrect
+        }
 
         ///// <summary>
         ///// In some cases, you might need to validate tokens without using the JwtBearer middleware. Using the middleware should always be the first choice,
@@ -197,58 +201,58 @@ namespace AspCoreBase.Services
         //}
 
         public async Task<bool> ChangeCredentialsAsync(LoginViewModel model)
-		{
-			try
-			{
-				var locallyAuthenticateUser = await PasswordSign(model);
-				if (locallyAuthenticateUser != null)
-				{
-					if (locallyAuthenticateUser.Succeeded)
-					{
-						var currentUser = userManager.Users.First(u => u.UserName == model.Username);
-						if (currentUser != null)
-						{
-							var removeCurrentCredentials = await userManager.RemovePasswordAsync(currentUser);
-							if (removeCurrentCredentials.Succeeded)
-							{
-								removeCurrentCredentials = await userManager.AddPasswordAsync(currentUser, model.ChangedCredentialString);
-								if (removeCurrentCredentials.Succeeded)
-								{
-									return true;
-								}
-								else
-								{
-									logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Unable to Add Current Users New Credentials.");
-								}
-							}
-							else
-							{
-								logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Unable to Remove Current Users Credentials.");
-							}
+        {
+            try
+            {
+                var locallyAuthenticateUser = await PasswordSign(model);
+                if (locallyAuthenticateUser != null)
+                {
+                    if (locallyAuthenticateUser.Succeeded)
+                    {
+                        var currentUser = userManager.Users.First(u => u.UserName == model.Username);
+                        if (currentUser != null)
+                        {
+                            var removeCurrentCredentials = await userManager.RemovePasswordAsync(currentUser);
+                            if (removeCurrentCredentials.Succeeded)
+                            {
+                                removeCurrentCredentials = await userManager.AddPasswordAsync(currentUser, model.ChangedCredentialString);
+                                if (removeCurrentCredentials.Succeeded)
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Unable to Add Current Users New Credentials.");
+                                }
+                            }
+                            else
+                            {
+                                logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Unable to Remove Current Users Credentials.");
+                            }
 
-							logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - ChangePasswordAsync method did not work.");
-						}
-						else
-						{
-							logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - userManager.Users did not contain the Current User.");
-						}
-					}
-					else
-					{
-						logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Authentication attempt Failed. Credentials may be incorrect");
-					}
-				}
-				else
-				{
-					logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Authentication attempt Failed. Resulting attempt returned NULL for variable currentUser");
-				}
-			}
-			catch (Exception ex)
-			{
-				logger.LogWarning("ERROR inside SettingsController.ProfileManagement.HttpPost - User Credential Changing ERROR : " + ex);
-			}
-			return false;
-		}
+                            logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - ChangePasswordAsync method did not work.");
+                        }
+                        else
+                        {
+                            logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - userManager.Users did not contain the Current User.");
+                        }
+                    }
+                    else
+                    {
+                        logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Authentication attempt Failed. Credentials may be incorrect");
+                    }
+                }
+                else
+                {
+                    logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Authentication attempt Failed. Resulting attempt returned NULL for variable currentUser");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning("ERROR inside SettingsController.ProfileManagement.HttpPost - User Credential Changing ERROR : " + ex);
+            }
+            return false;
+        }
 
-	}
+    }
 }

@@ -8,7 +8,7 @@ namespace AspCoreBase.Services.Interfaces
 	{
 		Task<SignInResult> PasswordSign(LoginViewModel model);
 		Task<bool> SignOutAsync();
-		Task<TokenHandleViewModel> CreateToken(LoginViewModel model);
+		Task<OwnerViewModel> CreateToken(LoginViewModel model);
 		Task<bool> ChangeCredentialsAsync(LoginViewModel model);
 	}
 }
