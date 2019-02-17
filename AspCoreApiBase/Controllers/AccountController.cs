@@ -1,12 +1,10 @@
-﻿using AspCoreBase.Services.Interfaces;
+﻿using AspCoreBase.Data.Entities.Authority;
+using AspCoreBase.Services.Interfaces;
 using AspCoreBase.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AspCoreApiBase.Controllers
@@ -30,17 +28,18 @@ namespace AspCoreApiBase.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            TokenHandleViewModel tokenHandler;
+            OwnerViewModel loggedInUser;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             try
             {
-                tokenHandler = await authenticateService.CreateToken(model);
-                if (tokenHandler != null)
+                loggedInUser = await authenticateService.CreateToken(model);
+                if (loggedInUser != null)
                 {
-                    return Ok(tokenHandler);
+                    loggedInUser.Password = string.Empty;
+                    return Ok(loggedInUser);
                 }
 
                 return Unauthorized();
@@ -62,29 +61,20 @@ namespace AspCoreApiBase.Controllers
         [HttpPost, Authorize]
         public async Task<IActionResult> RegisterUser([FromBody] OwnerViewModel model)
         {
-            TokenHandleViewModel tokenHandler;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             try
             {
-                var currentLoggedInUser = HttpContext.User;
-                if (currentLoggedInUser != null)
+                OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model);
+                if (newlyCreatedUser != null)
                 {
-                    OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model, currentLoggedInUser);
-                    if (newlyCreatedUser != null)
-                    {
-                        tokenHandler = await authenticateService.CreateToken(new LoginViewModel { Password = model.Password, Username = model.UserName });
-                        if (tokenHandler != null)
-                        {
-                            return Ok(tokenHandler);
-                        }
-                    }
-                    else
-                    {
-                        return NotFound("USER NOT CREATED");
-                    }
+                    return Ok(newlyCreatedUser);    //TODO - switch this to include a property that notifies the caller (Front End) that the user has been created
+                }
+                else
+                {
+                    return NotFound("USER NOT CREATED");
                 }
 
                 return Unauthorized();

@@ -1,3 +1,4 @@
+using AspCoreApiBase.ViewModels;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -27,13 +28,12 @@ namespace AspCoreBase.ViewModels
 		public string Password { get; set; }
 
         [Required]
-        public UserType UserType { get; set; }    //NEEDED in Admin Portal only
+        public UserTypeViewModel UserType { get; set; }    //NEEDED in Admin Portal only
 
-        public string TypeNumber { get; set; }
+        public Guid CurrentAdministeringUser { get; set; }  //this should be null and replaced in the Admin portal
+        public string AdministeringUserEmail { get; set; }  //Used mainly fro REGISTRATION of users (trying to get 'User' Claims, but unsucessful)
 
-		public Guid CurrentAdministeringUser { get; set; }  //this should be null and replaced in the Admin portal
-
-		[MaxLength(1000, ErrorMessage = "Notes are Too Long!")]
+        [MaxLength(1000, ErrorMessage = "Notes are Too Long!")]
 		public string Notes { get; set; }
 		[Required]
 		public bool IsActive { get; set; }
@@ -47,11 +47,6 @@ namespace AspCoreBase.ViewModels
         public DateTime CreatedDate { get; set; }
         public Guid ModifiedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
-	}
-
-	public class UserType
-	{
-		public int Id { get; set; }
-		public string Name { get; set; }
-	}
+        public TokenHandleViewModel tokenHandleViewModel { get; set; }
+    }
 }

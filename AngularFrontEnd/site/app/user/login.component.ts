@@ -18,9 +18,11 @@ export class LoginComponent implements OnInit {
             this._auth.loginUser(this.loginUserInfo)
                 .subscribe(
                 res => {
-                    localStorage.setItem('token', res.token)
+                    localStorage.setItem('token', res.tokenHandleViewModel.token)
                     document.getElementById('loginLogoutPlaceholder').innerText = "Log Out";
-                    this._router.navigate(['/home'])
+                    this._router.navigate(['/home']);
+                    this._auth.loggedInUser.email = res.email;
+                    this._auth.loggedInUser.tokenHandleViewModel = res.tokenHandleViewModel;
                 },
                 err => {
                     localStorage.removeItem('token')//probably wont have a token anyway, but whatever.

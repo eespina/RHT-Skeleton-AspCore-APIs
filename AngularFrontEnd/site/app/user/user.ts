@@ -6,15 +6,22 @@ export interface IUser {
     username: string;
     password: string;
     userType: IUserType;
+    administeringUserEmail: string
+    tokenHandleViewModel: ITokenInfo;
 
     isAdmin: boolean;
-    token: string;
     isActive: boolean;
+
 }
 
 export interface IUserType {
     id: number;
     name: string;
+}
+
+export interface ITokenInfo {
+    token: string;
+    expiration: string;
 }
 
 //export class User implements IUser {

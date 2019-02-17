@@ -15,7 +15,6 @@ export class AuthService {
     private _loginUrl = "http://localhost:53465/account/login";
     private _logoutUrl = "http://localhost:53465/account/logout";
 
-    registeringUser: IUser;
     redirectUrl: string;
     loggedInUser: IUser;
     isSessionLoggedIn: boolean;
@@ -29,15 +28,17 @@ export class AuthService {
             //.map((response: Response) => <IUser>response.json())  //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>.
             //You no longer need to call the '.map' function above yourself.
             .catch(error => this.handleError(error));
+        this.loggedInUser = registeringUser;
         return registrationResponse;
     }
 
     loginUser(loginUser): Observable<IUser> {
-        this.loggedInUser = loginUser;
         let loginResponse = this._http.post(this._loginUrl, loginUser)
             //.map((response: Response) => <IUser>response.json())  //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>.
             //You no longer need to call the '.map' function above yourself.
             .catch(error => this.handleError(error));
+        this.loggedInUser = loginUser;
+        //this.loggedInUser.email = loginResponse.;
         return loginResponse;
     }
 
@@ -50,6 +51,7 @@ export class AuthService {
     }
 
     logoutUserLocal(isRedirect) {
+        this.loggedInUser = undefined;
         localStorage.removeItem('token');
         this.isSessionLoggedIn = false;
         if (isRedirect) {

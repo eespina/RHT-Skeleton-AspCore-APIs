@@ -7,6 +7,6 @@ namespace AspCoreBase.Services.Interfaces
 	public interface IUserService
 	{
 		Task<IEnumerable<OwnerViewModel>> FindUsers();
-		Task<OwnerViewModel> CreateNewUser(OwnerViewModel userOwnerViewModel, System.Security.Claims.ClaimsPrincipal registeringUserInfo);
+		Task<OwnerViewModel> CreateNewUser(OwnerViewModel userOwnerViewModel);
 	}
 }
