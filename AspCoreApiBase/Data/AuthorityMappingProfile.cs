@@ -8,7 +8,7 @@ namespace AspCoreBase.Data
 	{
 		public AuthorityProfile()
 		{
-			CreateMap<OwnerUser, UserViewModel>()
+			CreateMap<OwnerUser, OwnerViewModel>()
 				.ReverseMap();
 		}
 	}

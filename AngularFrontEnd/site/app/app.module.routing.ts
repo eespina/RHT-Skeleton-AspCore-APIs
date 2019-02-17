@@ -14,17 +14,19 @@ import { AuthService } from './user/auth.service';
     imports: [
         RouterModule.forRoot([
             { path: 'home', component: HomeComponent },
-            { path: 'register', component: RegisterComponent },
+            {
+                path: 'register', component: RegisterComponent, canActivate: [AuthGuard]  //Loading this currently gives PageNotFound page
+            },
             { path: 'login', component: LoginComponent },
             {
-                path: 'examples',
-                component: ExampleListComponent,
-                //data: { preload: true },    // used for PreloaderService
-                canActivate: [AuthGuard]  //Loading this currently gives PageNotFound page
-            },//, loadChildren: 'app/examples/example.module#ExampleModule' }, //AFTER refactoring to Feature Modules, use this to implement, if desired, Lazy Loading of Features in the future (ALSO, remove the 'path' attribute in the Feature Module's @ngModule RouterModule.forChild([ { path: [HERE] } ]).. should actually leave ONLY the Children (but outside the 'children' attrubite (so, should have curlybrace-separated array of path routes afterward)))
+                path: 'examples', component: ExampleListComponent, canActivate: [AuthGuard] //data: { preload: true } (used for PreloaderService),
+            },
             { path: 'examples/:exampleId', component: ExampleComponent, canActivate: [AuthGuard] },
             { path: '', redirectTo: '/home', pathMatch: 'full' },
             { path: '**', component: PageNotFoundComponent }    //Precedence matters, use this last as a'Catch All' route
+            //, loadChildren: 'app/examples/example.module#ExampleModule' }, //AFTER refactoring to Feature Modules, use this to implement, if desired,
+                    //Lazy Loading of Features in the future(ALSO, remove the 'path' attribute in the Feature Module's @ngModule RouterModule.forChild([ { path: [HERE] } ])..
+                    //should actually leave ONLY the Children(but outside the 'children' attrubite(so, should have curlybrace - separated array of path routes afterward)))
         ])
             // add ALL options together (i.e. preloadingStrategy AND enableTracing)
         //, { enableTracing: true }) //enables NavigationStart, RoutesRecognized, NavigationEnd, NavigationCanceled, NavigationError which all can then be seen in the console

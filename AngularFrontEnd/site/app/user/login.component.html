@@ -10,14 +10,17 @@
                 <div class="card-body">
                     <form class="form">
                         <div class="form-group">
-                            <label for="uname1">Username</label>
-                            <input type="text" class="form-control rounded-0" [(ngModel)]="loginUserInfo.username" name="username" placeholder="place holder text" required>
+                            <label for="loginUserName">Username</label>
+                            <input type="text" class="form-control rounded-0" [(ngModel)]="loginUserInfo.username" name="username" placeholder="Enter username" (keyup.enter)="loginUser()" required>
+                            <label class="lbl-error" id="usernameError">Username May Not Be Blank</label>
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" class="form-control rounded-0" [(ngModel)]="loginUserInfo.password" name="password" required>
+                            <input type="password" class="form-control rounded-0" [(ngModel)]="loginUserInfo.password" name="password" placeholder="Enter password" (keyup.enter)="loginUser()" required>
+                            <label class="lbl-error" id="passwordError">Password May Not Be Blank</label>
                         </div>
                         <button type="button" (click)="loginUser()" class="btn btn-success float-right">Login</button>
+                        <label class="lbl-error" id="serverError">The Username and/or Password is not valid.</label>
                     </form>
                 </div>
                 <!--/card-block-->

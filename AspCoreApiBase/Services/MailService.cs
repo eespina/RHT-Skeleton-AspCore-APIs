@@ -25,7 +25,7 @@ namespace AspCoreBase.Services
 			this.villageDbRepository = repository;
 		}
 
-		public async Task<bool> SaveEmailComposition(UserViewModel user, System.Security.Claims.ClaimsPrincipal currentUser)
+		public async Task<bool> SaveEmailComposition(OwnerViewModel user, System.Security.Claims.ClaimsPrincipal currentUser)
 		{
 			var adminUserId = currentUser.Identities.First().Claims.First(i => i.Type.Split('/').Last() == "nameidentifier").Value;
 

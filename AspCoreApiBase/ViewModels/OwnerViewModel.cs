@@ -1,10 +1,10 @@
+using AspCoreApiBase.ViewModels;
 using System;
 using System.ComponentModel.DataAnnotations;
-using AspCoreBase.Data.Entities;
 
 namespace AspCoreBase.ViewModels
 {
-	public class UserViewModel
+    public class OwnerViewModel
 	{
 		public Guid UserId { get; set; }
 
@@ -25,15 +25,15 @@ namespace AspCoreBase.ViewModels
 		[Required]
 		[StringLength(18, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
 		[RegularExpression("^((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)).+$", ErrorMessage = "Password must contain All qualifying characters")]
-		public string ChosenCredentials { get; set; }
+		public string Password { get; set; }
 
-		public UserType UserType { get; set; }
+        [Required]
+        public UserTypeViewModel UserType { get; set; }    //NEEDED in Admin Portal only
 
-		public string TypeNumber { get; set; }
+        public Guid CurrentAdministeringUser { get; set; }  //this should be null and replaced in the Admin portal
+        public string AdministeringUserEmail { get; set; }  //Used mainly fro REGISTRATION of users (trying to get 'User' Claims, but unsucessful)
 
-		public Guid CurrentAdministeringUser { get; set; }
-
-		[MaxLength(1000, ErrorMessage = "Notes are Too Long!")]
+        [MaxLength(1000, ErrorMessage = "Notes are Too Long!")]
 		public string Notes { get; set; }
 		[Required]
 		public bool IsActive { get; set; }
@@ -43,19 +43,10 @@ namespace AspCoreBase.ViewModels
 		public Guid PropertyId { get; set; }
 		public string TemporaryCredentials { get; set; }
 
-		[Required]
-		public Guid CreatedBy { get; set; }
-		[Required]
-		public DateTime CreatedDate { get; set; }
-		[Required]
-		public Guid ModifiedBy { get; set; }
-		[Required]
-		public DateTime ModifiedDate { get; set; }
-	}
-
-	public class UserType
-	{
-		public int Id { get; set; }
-		public string Name { get; set; }
-	}
+        public Guid CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public Guid ModifiedBy { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public TokenHandleViewModel tokenHandleViewModel { get; set; }
+    }
 }

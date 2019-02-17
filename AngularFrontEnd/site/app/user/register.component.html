@@ -2,7 +2,6 @@
     <div class="row">
         <div class="col-md-6 mx-auto">
             <span class="anchor" id="formLogin"></span>
-
             <!-- form card login -->
             <div class="card rounded-0">
                 <div class="card-header">
@@ -11,22 +10,34 @@
                 <div class="card-body">
                     <form class="form">
                         <div class="form-group">
-                            <label for="uname1">Username</label>
-                            <input type="text" [(ngModel)]="registeringUser.username" name="username" class="form-control rounded-0" placeholder="place holder text" required>
+                            <label for="registerUserFirstName">First Name</label>
+                            <input type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.firstName" name="firstname" placeholder="place holder text" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerUserLastName">Last Name</label>
+                            <input type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.lastName" name="lastname" placeholder="place holder text" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerUserName">UserName</label>
+                            <input type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.username" name="username" placeholder="place holder text" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.email" name="email" placeholder="place holder text" required>
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" [(ngModel)]="registeringUser.password" name="password" class="form-control rounded-0" required>
+                            <input type="password" class="form-control rounded-0" [(ngModel)]="registeringUser.password" name="password" required>
                         </div>
+
                         <button type="button" (click)="registerUser()" class="btn btn-primary float-right">Register</button>
+                        <label class="lbl-error" id="lblResult">Error Occurred</label>
                     </form>
                 </div>
                 <!--/card-block-->
             </div>
             <!-- /form card login -->
-
         </div>
-
 
     </div>
 </div>
