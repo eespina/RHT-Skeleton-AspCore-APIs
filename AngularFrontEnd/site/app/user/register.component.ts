@@ -10,8 +10,8 @@ import { IUser } from '../user/user';
 export class RegisterComponent implements OnInit {
 
     registeringUser: IUser = {  //for whatever reason, this not being here (initialized) would error out and complain at runtime
-        firstName: 'thirdFirstName', lastName: 'thirdLastName', username: 'thirdusername', password: 'P@ssw0rd', administeringUserEmail: '',
-        email: 'thirdusername@email.com', isActive: true, userType: { id: 2, name: 'JustAnotherTest' }, id: 0, isAdmin: false, tokenHandleViewModel: { expiration: '', token: '' }
+        firstName: '', lastName: '', username: '', password: '', administeringUserEmail: '',
+        email: '', isActive: true, userType: { id: 0, name: '' }, id: 0, isAdmin: false, tokenHandleViewModel: { expiration: '', token: '' }
     } as IUser;
 
     constructor(private _auth: AuthService, private _router: Router) { }
@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
     ngOnInit() { }
 
     registerUser() {
-        this.registeringUser.userType = { id: 2, name:'JustAnotherRegistrationTest'};   //TODO - delete the 'name' property (OR, think of something else it would be useful for)
+        this.registeringUser.userType = { id: 2, name:''};   //TODO - delete the 'name' property (OR, think of something else it would be useful for)
         this.registeringUser.administeringUserEmail = this._auth.loggedInUser.email;
         this.registeringUser.tokenHandleViewModel = this._auth.loggedInUser.tokenHandleViewModel;
         this._auth.registerUser(this.registeringUser)

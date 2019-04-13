@@ -1,6 +1,15 @@
-<nav class="navbar- navbar-expand-lg navbar-dark bg-dark">
-    <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
+<header>
+    <div id="mobile-button-section">
+        <div id="btn-nav-menu">
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+    <div id="primary-nav">
+        <div class="name-description">
+            <h1>Enrico Espina</h1>
+            <p> - Combat Ninja <i style="font-family: times;">(ret.)</i></p>
+        </div>
+        <ul class="nav-right-list">
             <li routerActive="bootstrap-mimic-active" class="navbar-item">
                 <a routerLink="/home" routerLinkActive="active" class="navbar-link">Home</a>
             </li>
@@ -8,15 +17,13 @@
                 <a routerLink="/examples" routerLinkActive="active" class="navbar-link">Examples</a><!--[routerLinkActiveOptions]="{ exact: true }" use this on only 1 li to eliminate multile ACTIVE class'd attributes-->
             </li>
             <!--<li routerActive="bootstrap-mimic-active"><a routerLink="[{ outlets: { secondaryExampleRouterOutlet: ['Another-Link-Parameters-Array-specifying-secondary-path'] } }]">Home</a></li>--><!-- This uses the example below. this syntax, here, should be implemented as such elsewhere (SHOULD USE CODE INSTEAD)-->
-        </ul>
-        <ul class="navbar-nav">
             <li routerActive="bootstrap-mimic-active" class="navbar-item">
                 <a routerLink="/register" routerLinkActive="active">Register</a>
-            </li><!--[routerLinkActiveOptions]="{ exact: true }" use this on only 1 li to eliminate multile ACTIVE class'd attributes-->
+            </li>
+            <!--[routerLinkActiveOptions]="{ exact: true }" use this on only 1 li to eliminate multile ACTIVE class'd attributes-->
             <li routerActive="bootstrap-mimic-active" class="navbar-item">
                 <a id="loginLogoutPlaceholder" (click)="loginOrOutUser()">Login</a>
             </li>
-            <!--<li routerActive="bootstrap-mimic-active"><a routerLink="[{ outlets: { secondaryExampleRouterOutlet: ['Another-Link-Parameters-Array-specifying-secondary-path'] } }]">Home</a></li>--><!-- This uses the example below. this syntax, here, should be implemented as such elsewhere (SHOULD USE CODE INSTEAD)-->
         </ul>
     </div>
-</nav>
+</header>

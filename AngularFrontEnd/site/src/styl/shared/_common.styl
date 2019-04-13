@@ -60,6 +60,14 @@
 	.container.no-container-tablet-down
 		max-width 100%
 
+.hide
+	display none
+
+/* Animation Helpers */
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes slideInFromLeft { 0% { transform: translateX(-1200px); } 100% { transform: translateX(0); } }
+@keyframes slideInFromRight { 0% { transform: translateX(1200px); } 100% { transform: translateX(0); } }
+
 .lbl-error
 	color red
 	visibility hidden
