@@ -17,10 +17,14 @@ html
 	// momentum scrolling for iOS
 	overflow-y scroll /* has to be scroll, not auto */
 	-webkit-overflow-scrolling touch
+	overflow scroll
+	overflow-x hidden
 
 	// proper font weight and smoothing rendering
 	-webkit-font-smoothing antialiased
 	-moz-osx-font-smoothing grayscale
+	::-webkit-scrollbar
+		width 0px
 d
 	// ie scroll bar overlay
 	-ms-overflow-style scrollbar
@@ -31,7 +35,6 @@ d
 	only screen and ( min-resolution: 1.25dppx)
 		-webkit-font-smoothing subpixel-antialiased
 		-moz-osx-font-smoothing grayscale
-
 body
 	margin 0
 	padding 0
@@ -43,16 +46,17 @@ body
 	overflow hidden
 	height 100%
 	width 100%
-
 p
-	font-size 18px
-	line-height 2
-
+	font-size 14px
+	letter-spacing 1px
+	color $color-off-white
+	@media $tablet-up
+		font-size 18px
 a
 	text-decoration none
 	font-size 18px
 	line-height 1.56
-
+	letter-spacing 1px
 ul
 ol
 	color $color-gray-medium
@@ -60,7 +64,7 @@ ol
 	margin 0
 
 iframe
-	display block // remove whitespace under iframe
+	display block
 
 select
 	-moz-appearance none
@@ -71,17 +75,15 @@ select
 
 section
 	0
-
+h1, h2
+	letter-spacing 1px
+	color $color-off-white
 h1
-	color $color-primary
 	font-size 48px
-	margin-bottom 30px
 h2
-	color $color-primary
-	font-size 40px
-
-	@media $tablet-up
-		font-size 40px
+	font-size 42px
+	@media $desktop-up
+		font-size 117px
 
 h3
 	color $color-gray-dark
@@ -114,7 +116,6 @@ sup
 	opacity .5
 	zoom 1
 
-/*	bootstrap overrides
+/*	bootstrap overrides */
 a:not([href]):not([tabindex])
 	color $color-white
-	END bootstrap overrides */

@@ -1,0 +1,79 @@
+#home
+	.home-hero
+		position relative
+		height 100vh
+		width 100%
+		padding 0px 25px
+		.hero-bg-img
+			background url('/static/assets/images/dark-bg-full-me.jpg') no-repeat fixed
+			position absolute
+			top -40px
+			left -40px
+			right -40px
+			bottom -40px
+			background-color black
+			filter blur(6px)
+			z-index -1
+			background-size 100%
+			@media $desktop-up
+				filter blur(17px)
+		.main-center-text
+			text-align center
+			position absolute
+			top 49%
+			opacity 0
+			animation fadeIn ease-in 1
+			animation-fill-mode forwards
+			animation-duration 4.13s
+			@media $tablet-up
+				left 25%
+				top 60%
+			@media $desktop-up
+				top 25%
+	.home-about
+		padding 0px 25px
+		background-color $color-primary
+		text-align center
+		height 35vh
+		.home-about-bg-img
+			display none
+			background url('/static/assets/images/me-png-actual.png') no-repeat
+			position absolute
+			background-position 42% 100%
+			background-size 14%
+			height inherit
+			width 100%
+			animation slideInFromRight 2s forwards
+			@media $tablet-up
+				height inherit
+				background-position 52% 91%
+			@media $desktop-up
+				height inherit
+				background-position 69% 40%
+		@media $tablet-up
+			background-color $color-primary
+			background-size 42%
+			padding 25px 0px
+			margin-top 0px
+			height 42vh
+		@media $desktop-up
+			background-size 20%
+			background-position 82% 60%
+		.home-content
+			display none
+			margin-top 20px
+			animation slideInFromLeft 3s forwards
+			h2
+				color $color-black
+				margin-bottom 25px
+				font-size 20px
+				@media $tablet-up
+					font-size 30px
+				@media $desktop-up
+					font-size 42px
+			p
+				color $color-black
+			@media $tablet-up
+				margin-top 25px
+			@media $desktop-up
+				margin-top 142px
