@@ -10,7 +10,9 @@ Owners Portal for eVillage Saas product. TEMPORARILY on hold while creation of t
 	- If there is an error concerning an 'UnhandledPromiseRejectionWarning', try typing 'gulp' again to retry the gulp process
 	
 	- Open Visual Studio and build the solution
-	- In Visual Studio, set the AngularFroenEnd's Start page as 'index.html'
+	- In Visual Studio, set the AngularFrontEnd's Start page as 'index.html'
 	- Not that a token must be presented for accessing areas that require authorization/permission
 	
 	- Ensure your database connections are correct and that they are Running
+	
+	- For helpful debugging and to run both projects at the same time, go to the Visual Studio properties on teh Solution level and choose "Multiple startup projects"
