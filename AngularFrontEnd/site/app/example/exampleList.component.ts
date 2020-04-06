@@ -11,7 +11,7 @@ import { ExampleSingletonService } from './exampleSingleton.service';
 export class ExampleListComponent {
     examples: IExample[];
     selectedExampleCountRadioButton: string = 'All';
-    statusMessgae: string = 'Loading Data. One Moment Please ...';
+    statusMessage: string = 'Loading Data. One Moment Please ...';
 
     constructor(private _exampleService: ExampleService, private _exampleSingletonService: ExampleSingletonService) { }
 
@@ -27,7 +27,7 @@ export class ExampleListComponent {
         this._exampleService.getExamples()
             .subscribe((data) => this.examples = data,
             (error) => {
-                this.statusMessgae = 'Problem with the Service, Please Try Again Soon';
+                this.statusMessage = 'Problem with the Service, Please Try Again Soon';
             });
     }
 
@@ -35,10 +35,12 @@ export class ExampleListComponent {
         return this.examples.length;
     }
 
+    //Change these examples to align with the actual data.. we're comparing username but theres not a proper match with the actual data
     getTotalExamplesOneCount(): number {
         return this.examples.filter(e => e.userName === 'One').length;
     }
 
+    //Change these examples to align with the actual data.. we're comparing username but theres not a proper match with the actual data
     getTotalExamplesLessThanOneCount(): number {
         return this.examples.filter(e => e.userName === 'Zero').length;
     }

@@ -11,6 +11,8 @@ Owners Portal for eVillage Saas product. TEMPORARILY on hold while creation of t
 	
 	- Open Visual Studio and build the solution
 	- In Visual Studio, set the AngularFroenEnd's Start page as 'index.html'
-	- Not that a token must be presented for accessing areas that require authorization/permission
+	- Note that a token must be presented for accessing areas that require authorization/permission
 	
 	- Ensure your database connections are correct and that they are Running
+	
+	- For helpful debugging and to run both projects at the same time, go to the Visual Studio properties on the Solution level and choose "Multiple startup projects"

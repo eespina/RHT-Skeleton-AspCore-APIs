@@ -31,9 +31,23 @@ namespace AspCoreBase.Data
 				logger.LogError("ERROR inside VillageDbRepository.GetVillageUserOwners - " + ex);
 				return null;
 			}
-		}
+        }
 
-		public async Task<List<Property>> GetProperties()
+        public async Task<OwnerUser> GetVillageUserOwner(string userName)
+        {
+            try
+            {
+                var allOwnerUsers = await ctx.OwnerUser.Where(u => u.IsActive && u.UserName == userName).ToListAsync();
+                return allOwnerUsers.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("ERROR inside VillageDbRepository.GetVillageUserOwner - " + ex);
+                return null;
+            }
+        }
+
+        public async Task<List<Property>> GetProperties()
 		{
 			try
 			{

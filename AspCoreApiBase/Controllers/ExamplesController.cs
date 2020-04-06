@@ -31,15 +31,15 @@ namespace AspCoreApiBase.Controllers
         {
             //var returnList = new string[] { "Example1", "Example2" };
             var returnList = await userService.FindUsers();
-
             return returnList;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/values/[username]
+        [HttpGet("{username}")]
+        public async Task<OwnerViewModel> Get(string username)
         {
-            return "value";
+            var user = await userService.FindUser(username);
+            return user;
         }
 
         // POST api/values

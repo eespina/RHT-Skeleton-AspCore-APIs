@@ -21,7 +21,7 @@ import { AuthService } from './user/auth.service';
             {
                 path: 'examples', component: ExampleListComponent, canActivate: [AuthGuard] //data: { preload: true } (used for PreloaderService),
             },
-            { path: 'examples/:exampleId', component: ExampleComponent, canActivate: [AuthGuard] },
+            { path: 'examples/:userName', component: ExampleComponent, canActivate: [AuthGuard] },
             { path: '', redirectTo: '/home', pathMatch: 'full' },
             { path: '**', component: PageNotFoundComponent }    //Precedence matters, use this last as a'Catch All' route
             //, loadChildren: 'app/examples/example.module#ExampleModule' }, //AFTER refactoring to Feature Modules, use this to implement, if desired,

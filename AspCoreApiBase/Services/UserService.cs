@@ -44,6 +44,17 @@ namespace AspCoreBase.Services
             return null;
         }
 
+        public async Task<OwnerViewModel> FindUser(string userName)
+        {
+            var user = await villageDbRepository.GetVillageUserOwner(userName);
+            if (user != null)
+            {
+                var villageUserMapped = mapper.Map<OwnerUser, OwnerViewModel>(user);
+                return villageUserMapped;
+            }
+            return null;
+        }
+
         public async Task<OwnerViewModel> CreateNewUser(OwnerViewModel userViewModel)
         {
             try

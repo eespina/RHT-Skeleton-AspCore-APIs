@@ -19,13 +19,13 @@
                 <!--<td><a [routerLink]="['/examples/'+ example.exampleId + '/edit']">{{ example.userName }}</a></td>--><!--Alternatively, may use full URL in a single string-->
                 <!--<td><a [routerLink]="['/examples', example.exampleId]" [queryParams]="{ filterBy: 'filte', showImage: true }">{{ example.userName }}</a></td>--><!--Query Parameters example-->
                 <!--Finally, use [queryParamsHandling]="true" in an implementing element (i.e. btn-back or btn-cancel) to preserve the query parameter (would NOT implement on this html)-->
-                <td><a [routerLink]="['/examples', example.UserNameString]">{{ example.userName }}</a></td>
+                <td><a [routerLink]="['/examples', example.userName]">{{ example.userName }}</a></td>
                 <td>{{ example.firstName }}</td>
                 <td>{{ example.lastName }}</td>
             </tr>
         </ng-container>
         <tr *ngIf="!examples">
-            <td colspan="6">{{ statusMessgae }}</td>
+            <td colspan="6">{{ statusMessage }}</td>
         </tr>
         <tr *ngIf="examples && examples.length == 0">
             <td colspan="6">No Orders to Display</td>
