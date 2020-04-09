@@ -6,6 +6,7 @@
     userName: string;
     createDate: Date;
     isActive: Boolean;
+	nonExistingProperty?: string;   //This exists to show an example of possible null information
 
     //exampleId: number;
     //exampleString: string;
