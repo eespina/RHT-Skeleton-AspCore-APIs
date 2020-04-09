@@ -10,7 +10,7 @@ import { IUser } from '../user/user';
 export class RegisterComponent implements OnInit {
 
     registeringUser: IUser = {  //for whatever reason, this not being here (initialized) would error out and complain at runtime
-        firstName: '', lastName: '', username: '', password: '', administeringUserEmail: '',
+        firstName: '', lastName: '', userName: '', password: '', administeringUserEmail: '',
         email: '', isActive: true, userType: { id: 0, name: '' }, id: 0, isAdmin: false, tokenHandleViewModel: { expiration: '', token: '' }
     } as IUser;
 
@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
             .subscribe(
             res => {
                 //Place anything here useful
-                document.getElementById('lblResult').innerHTML = 'User ' + res.firstName + '' + res.lastName + ' (' + res.username + ') has been created!';
+                document.getElementById('lblResult').innerHTML = 'User ' + res.firstName + '' + res.lastName + ' (' + res.userName + ') has been created!';
                 document.getElementById('lblResult').style.visibility = 'visible';
             },
             err => {
@@ -35,6 +35,4 @@ export class RegisterComponent implements OnInit {
                 document.getElementById('lblResult').style.visibility = 'visible';
             });
     }
-
-
 }

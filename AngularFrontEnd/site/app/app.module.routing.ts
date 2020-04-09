@@ -15,7 +15,7 @@ import { AuthService } from './user/auth.service';
         RouterModule.forRoot([
             { path: 'home', component: HomeComponent },
             {
-                path: 'register', component: RegisterComponent, canActivate: [AuthGuard]  //Loading this currently gives PageNotFound page
+                path: 'register', component: RegisterComponent, canActivate: [AuthGuard]
             },
             { path: 'login', component: LoginComponent },
             {

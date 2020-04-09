@@ -8,13 +8,13 @@ import { IUser } from '../user/user';
     templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
-    loginUserInfo: IUser = { username: '', password: '' } as IUser;
+    loginUserInfo: IUser = { userName: '', password: '' } as IUser;
     constructor(private _auth: AuthService, private _router: Router) { }
 
     ngOnInit() { }
 
     loginUser() {
-        if (this.loginUserInfo.username != '' && this.loginUserInfo.password != '') {
+        if (this.loginUserInfo.userName != '' && this.loginUserInfo.password != '') {
             this._auth.loginUser(this.loginUserInfo)
                 .subscribe(
                 res => {
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
             this._auth.isSessionLoggedIn = true;
         }
 
-        if (this.loginUserInfo.username == '') {
+        if (this.loginUserInfo.userName == '') {
             document.getElementById('usernameError').style.visibility = 'visible';
             document.getElementById('serverError').style.visibility = 'hidden';
         } else {
