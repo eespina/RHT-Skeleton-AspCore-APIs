@@ -13,20 +13,20 @@
                             <label for="registerUserFirstName">First Name</label>
                             <input id="registerUserFirstName" autofocus type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.firstName" name="firstname" placeholder="place holder text" required>
                         </div>
-                        <div class="form-group" [class.has-error]="lastNameControl.invalid && lastNameControl.touched" [class.hass-success]="lastNameControl.valid"><!--create a class and replace ".has-error" since this is bootstrap, i think-->
+                        <div class="form-group" [class.has-error]="lastNameControl.invalid && lastNameControl.touched" [class.hass-success]="lastNameControl.valid"><!--REPLACE "help-block" with an actual syle class name-->
                             <label for="registerUserLastName">Last Name</label>
                             <input id="registerUserLastName" type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.lastName" name="lastname" placeholder="place holder text" #lastNameControl="ngModel" required>
                             <!--    Right now, we're just not using the #lastNameControl variable   -->
-                            <span *ngIf="lastNameControl.errors?.required && lastNameControl.touched" class="help-block">Last Name is Required</span> <!--"help-block" is probably bootsrap and needs to be replaced with proper stylings-->
-                            <!--<span *ngIf="lastNameControl.errors?.lastNameControl && lastNameControl.touched" class="help-block">Last Name is Invalid</span> THIS DOES NOT WORK, i think --> <!--"help-block" is probably bootsrap and needs to be replaced with proper stylings-->
+                            <span *ngIf="lastNameControl.errors?.required && lastNameControl.touched" class="help-block">Last Name is Required</span><!--REPLACE "help-block" with an actual syle class name-->
+                            <span *ngIf="lastNameControl.errors?.pattern && lastNameControl.touched" class="help-block">Last Name is Invalid</span><!--REPLACE "help-block" with an actual syle class name-->
                         </div>
                         <div class="form-group">
                             <label for="registerUserName">UserName</label>
                             <input id="registerUserName" type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.username" name="username" placeholder="place holder text" required>
                         </div>
                         <div class="form-group">
-                            <label for="registerEmail">Email</label>
-                            <input id="registerEmail" type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.email" name="email" placeholder="place holder text" required>
+                            <label for="registerEmail">Email</label>    <!--for pattern (below) to strict to a specific email domain, use pattern="^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(theemaildomain)\.com$"    -->
+                            <input id="registerEmail" type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.email" name="email" placeholder="place holder text" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" required>
                         </div>
                         <div class="form-group">
                             <label for="registerPassword">Password</label>
