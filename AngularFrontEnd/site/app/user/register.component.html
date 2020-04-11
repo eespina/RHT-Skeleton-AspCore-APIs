@@ -11,14 +11,14 @@
                     <form class="form" #registrationForm="ngForm">
                         <div class="form-group">
                             <label for="registerUserFirstName">First Name</label>
-                            <input id="registerUserFirstName" autofocus type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.firstName" name="firstname" placeholder="place holder text" required>
+                            <input id="registerUserFirstName" autofocus type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.firstName"
+                                   name="firstname" placeholder="place holder text"  #firstNameControl="ngModel" required>
+                            <span *ngIf="firstNameControl.errors?.required && firstNameControl.touched" class="help-block">First Name is Required</span><!--REPLACE "help-block" with an actual syle class name-->
                         </div>
                         <div class="form-group" [class.has-error]="lastNameControl.invalid && lastNameControl.touched" [class.hass-success]="lastNameControl.valid"><!--REPLACE "help-block" with an actual syle class name-->
                             <label for="registerUserLastName">Last Name</label>
                             <input id="registerUserLastName" type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.lastName" name="lastname" placeholder="place holder text" #lastNameControl="ngModel" required>
-                            <!--    Right now, we're just not using the #lastNameControl variable   -->
                             <span *ngIf="lastNameControl.errors?.required && lastNameControl.touched" class="help-block">Last Name is Required</span><!--REPLACE "help-block" with an actual syle class name-->
-                            <span *ngIf="lastNameControl.errors?.pattern && lastNameControl.touched" class="help-block">Last Name is Invalid</span><!--REPLACE "help-block" with an actual syle class name-->
                         </div>
                         <div class="form-group">
                             <label for="registerUserName">UserName</label>
@@ -26,10 +26,12 @@
                         </div>
                         <div class="form-group">
                             <label for="registerEmail">Email</label>    <!--for pattern (below) to strict to a specific email domain, use pattern="^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(theemaildomain)\.com$"    -->
-                            <input id="registerEmail" type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.email" name="email" placeholder="place holder text" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" required>
+                            <input id="registerEmail" type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.email" name="email" #emailControl="ngModel" 
+                                   placeholder="place holder text" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" required>
+                            <span *ngIf="emailControl.errors?.pattern && emailControl.touched" class="help-block">Email is Invalid</span><!--REPLACE "help-block" with an actual syle class name-->
                         </div>
                         <div class="form-group">
-                            <label for="registerPassword">Password</label>
+                            <label for="registerPassword">Password</label> <!--TODO - BIND the input below to a password Validation event on every key stroke-->
                             <input id="registerPassword" type="password" class="form-control rounded-0" [(ngModel)]="registeringUser.password" name="password" required>
                         </div>
 
