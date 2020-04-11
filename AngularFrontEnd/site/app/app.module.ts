@@ -19,7 +19,7 @@ import { AppRoutingModule } from './app.module.routing';
 import { AuthService } from './user/auth.service';
 import { AuthGuard } from './user/auth-route-guard.service';
 import { TokenInterceptorService } from './user/token-interceptor.service';
-import { ExampleListDisplayComponent } from './example/exampleList-display.component';
+import { ExampleDisplayComponent } from './example/example-display.component';
 
 @NgModule({
     imports: [
@@ -33,7 +33,7 @@ import { ExampleListDisplayComponent } from './example/exampleList-display.compo
     declarations: [
         AppComponent,
         ExampleListComponent,
-        ExampleListDisplayComponent,
+        ExampleDisplayComponent,
         ExampleCountComponent,
         HomeComponent,
         LoginComponent,

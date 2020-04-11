@@ -16,7 +16,7 @@
         <ng-container *ngFor="let example of examples">
             <tr *ngIf="selectedExampleCountRadioButton == 'All' || selectedExampleCountRadioButton == example.userName">
                 <!--    below, we want to bind to the input property inside the "ExampleListDisplayComponent" component called 'exampmles' (in straight brackets) by passing the example object of the examples set-->
-                <list-display-example [example]="example"></list-display-example> <!--Parent to Child data passing example-->
+                <list-display-example [example]="example" [exampleId]="example.email"></list-display-example> <!--Parent to Child data passing example-->
                 <!--    Styling is going to be crap, but it's just an example anyway. MOST styles'd be in Stylus (OR, some projects won't have Stylus, so just know that the Tables are in differnt html files, which causes style issues)-->
             </tr>
         </ng-container>

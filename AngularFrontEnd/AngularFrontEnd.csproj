@@ -77,8 +77,8 @@
     <Content Include="site\app\example\example.component.html" />
     <Content Include="site\app\example\exampleCount.component.css" />
     <Content Include="site\app\example\exampleCount.component.html" />
-    <Content Include="site\app\example\exampleList-display.component.html" />
-    <Content Include="site\app\example\exampleList-display.component.css" />
+    <Content Include="site\app\example\example-display.component.html" />
+    <Content Include="site\app\example\example-display.component.css" />
     <Content Include="site\app\example\exampleList.component.css" />
     <Content Include="site\app\example\exampleList.component.html" />
     <Content Include="site\app\shared\footer.component.html" />
@@ -129,7 +129,7 @@
     <TypeScriptCompile Include="site\app\example\example.service.ts" />
     <TypeScriptCompile Include="site\app\example\example.ts" />
     <TypeScriptCompile Include="site\app\example\exampleCount.component.ts" />
-    <TypeScriptCompile Include="site\app\example\exampleList-display.component.ts" />
+    <TypeScriptCompile Include="site\app\example\example-display.component.ts" />
     <TypeScriptCompile Include="site\app\example\exampleList.component.ts" />
     <TypeScriptCompile Include="site\app\example\exampleSingleton.service.ts" />
     <TypeScriptCompile Include="site\app\home\home.component.ts" />
