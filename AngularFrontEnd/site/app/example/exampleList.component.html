@@ -15,13 +15,9 @@
     <tbody>
         <ng-container *ngFor="let example of examples">
             <tr *ngIf="selectedExampleCountRadioButton == 'All' || selectedExampleCountRadioButton == example.userName">
-                <!--<td><a [routerLink]="['/examples', example.exampleId, 'edit']">{{ example.userName }}</a></td>--><!--use 'edit' when placing a url distinguishing location-->
-                <!--<td><a [routerLink]="['/examples/'+ example.exampleId + '/edit']">{{ example.userName }}</a></td>--><!--Alternatively, may use full URL in a single string-->
-                <!--<td><a [routerLink]="['/examples', example.exampleId]" [queryParams]="{ filterBy: 'filte', showImage: true }">{{ example.userName }}</a></td>--><!--Query Parameters example-->
-                <!--Finally, use [queryParamsHandling]="true" in an implementing element (i.e. btn-back or btn-cancel) to preserve the query parameter (would NOT implement on this html)-->
-                <td><a [routerLink]="['/examples', example.userName]">{{ example.userName }}</a></td>
-                <td>{{ example.firstName }}</td>
-                <td>{{ example.lastName }}</td>
+                <!--    below, we want to bind to the input property inside the "ExampleListDisplayComponent" component called 'exampmles' (in straight brackets) by passing the example object of the examples set-->
+                <list-display-example [example]="example"></list-display-example> <!--Parent to Child data passing example-->
+                <!--    Styling is going to be crap, but it's just an example anyway. MOST styles'd be in Stylus (OR, some projects won't have Stylus, so just know that the Tables are in differnt html files, which causes style issues)-->
             </tr>
         </ng-container>
         <tr *ngIf="!examples">

@@ -67,17 +67,16 @@ namespace AspCoreApiBase.Controllers
             }
             try
             {
-                OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model);
-                if (newlyCreatedUser != null)
-                {
-                    return Ok(newlyCreatedUser);    //TODO - switch this to include a property that notifies the caller (Front End) that the user has been created
-                }
-                else
-                {
-                    return NotFound("USER NOT CREATED");
-                }
-
-                return Unauthorized();
+                //OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model);
+                //if (newlyCreatedUser != null)
+                //{
+                //    return Ok(newlyCreatedUser);    //TODO - switch this to include a property that notifies the caller (Front End) that the user has been created
+                //}
+                //else
+                //{
+                //    return NotFound("USER NOT CREATED");
+                //}
+                return Ok(new OwnerViewModel {LastName = "LastNameTest", FirstName = "FirstNameTest", UserName = "UserNameTest" });
             }
             catch (System.Exception ex)
             {
