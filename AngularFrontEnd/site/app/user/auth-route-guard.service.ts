@@ -1,6 +1,8 @@
 ﻿import { Injectable } from '@angular/core';
+import { IUser } from '../user/user';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Router, Route, CanActivate, CanActivateChild, CanLoad } from '@angular/router';
 import { AuthService } from './auth.service';
+import { RegisterComponent } from './register.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
@@ -32,5 +34,13 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
         this.authService.redirectUrl = url;
         this.router.navigate(['/login']);
         return false;
+    }
+
+    canDeactivate(component: RegisterComponent): boolean {
+        console.log('In canDeactivate: ' + RegisterComponent.name);
+        if (component.createExampleForm.dirty) {
+            return confirm('Are you sure you want to \'discard\' your changes ?');
+        }
+        return true;
     }
 }

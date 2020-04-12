@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../user/auth.service';
 import { Router } from '@angular/router'
 import { IUser } from '../user/user';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'app-register',
@@ -13,6 +14,8 @@ export class RegisterComponent implements OnInit {
         firstName: '', lastName: '', userName: '', password: '', administeringUserEmail: '',
         email: '', isActive: true, userType: { id: 0, name: '' }, id: 0, isAdmin: false, tokenHandleViewModel: { expiration: '', token: '' }
     } as IUser;
+
+    @ViewChild('registrationForm') public createExampleForm: NgForm
 
     constructor(private _auth: AuthService, private _router: Router) { }
 
