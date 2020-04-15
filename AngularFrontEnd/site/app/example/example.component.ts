@@ -46,7 +46,7 @@ export class ExampleComponent implements OnInit {
     ngOnInit() {
         this._activatedRoute.paramMap.subscribe(
             params => {
-                let exCode = params.get('userName');
+                let exCode = params.get('userName');    //TODO - MAY want to switch this 'userName' parameter to use an #ID instead. It's just more conventional
                 //let qp = this._activatedRoute.snapshot.queryParams['filterBy'] || ''; //OPTIONAL query parameter receiving, use this to BIND a local variable that is used in the HTML
 
                 //may want to create ANOTHER method to seperate this logic from this .ts file

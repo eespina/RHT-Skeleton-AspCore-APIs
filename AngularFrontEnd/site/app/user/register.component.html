@@ -8,7 +8,7 @@
                     <h3 class="mb-0">Register</h3>
                 </div>
                 <div class="card-body">
-                    <form class="form" #registrationForm="ngForm">
+                    <form class="form" #registrationForm="ngForm"> <!--can reset the form in the HTML by using ' registrationForm.reset()' in the <form> element-->
                         <div class="form-group">
                             <label for="registerUserFirstName">First Name</label>
                             <input id="registerUserFirstName" autofocus type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.firstName"
@@ -35,7 +35,7 @@
                             <input id="registerPassword" type="password" class="form-control rounded-0" [(ngModel)]="registeringUser.password" name="password" required>
                         </div>
 
-                        <button type="button" (click)="registerUser()" class="btn btn-primary float-right" [disabled]="registrationForm.invalid" >Register</button>
+                        <button type="button" (click)="registerUser(registrationForm)" class="btn btn-primary float-right" [disabled]="registrationForm.invalid" >Register</button>
                         <label class="lbl-error" id="lblResult">Error Occurred</label>
                     </form>
                 </div>
