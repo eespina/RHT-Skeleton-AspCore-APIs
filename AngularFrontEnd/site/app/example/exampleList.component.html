@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        <ng-container *ngFor="let example of examples">
+        <ng-container *ngFor="let example of filteredExamples">
             <tr *ngIf="selectedExampleCountRadioButton == 'All' || selectedExampleCountRadioButton == example.userName">
                 <!--    below, we want to bind to the input property inside the "ExampleListDisplayComponent" component called 'exampmles' (in straight brackets) by passing the example object of the examples set-->
                 <list-display-example [example]="example" [exampleId]="example.email"></list-display-example> <!--Parent to Child data passing example-->
