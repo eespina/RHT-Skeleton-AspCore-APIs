@@ -60,7 +60,7 @@ export class ExampleComponent implements OnInit {
                             } else {
                                 throw (err);
                             }
-                        }, 0).delay(1000)
+                        }, 0).delay(1000)   //delay to be able to retry in a moment, after the previous one failed
                     })
                     .subscribe(
                     (exData) => {

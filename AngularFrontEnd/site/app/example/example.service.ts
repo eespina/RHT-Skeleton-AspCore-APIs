@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../user/auth.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+//import 'rxjs/add/Observable/of';    //perhaps ANOTHER way of doing a get from somewhere
 import 'rxjs/add/Observable/throw';
 //import 'rxjs/add/operator/toPromise';
 
@@ -15,10 +16,13 @@ export class ExampleService {
     constructor(private _http: HttpClient, private _router: Router, private _auth: AuthService) { }
 
     getExamples(): Observable<IExample[]> {
-        var examples = this._http.get('http://localhost:53465/api/examples')
+        var examples = this._http.get('http://localhost:53465/api/examples').delay(4130)    //delay is just used to test the loading words and css animation
             //.map((response: Response) => <IExample[]>response.json())
             //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>. You no longer need to call the '.map' function above yourself.
             .catch(error => this._auth.handleError(error));
+
+        //perhaps ANOTHER way of facilitating a get from somewhere (implements "import 'rxjs/add/Observable/of'; " from above)
+            //return Observable.of();
 
         return examples;
     }

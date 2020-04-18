@@ -27,9 +27,12 @@ import { AuthService } from './user/auth.service';
             //, loadChildren: 'app/examples/example.module#ExampleModule' }, //AFTER refactoring to Feature Modules, use this to implement, if desired,
                     //Lazy Loading of Features in the future(ALSO, remove the 'path' attribute in the Feature Module's @ngModule RouterModule.forChild([ { path: [HERE] } ])..
                     //should actually leave ONLY the Children(but outside the 'children' attrubite(so, should have curlybrace - separated array of path routes afterward)))
+
+                //Below demonstrates a part of the Resolve Guard that would provide a service to not show undesired portions of a page until loading material/data have been fetched
+            //{ path: 'nonExistantPath', component: ExampleListComponent, resolve: { exampleList: ExampleListResolveService (service that does NOT exist) }}
         ])
             // add ALL options together (i.e. preloadingStrategy AND enableTracing)
-        //, { enableTracing: true }) //enables NavigationStart, RoutesRecognized, NavigationEnd, NavigationCanceled, NavigationError which all can then be seen in the console
+        //, { enableTracing: true }) //enables NavigationStart, RoutesRecognized, NavigationEnd, NavigationCanceled, NavigationError (and more, i think) which all can then be seen in the console
             //, { preloadingStrategy: PreloaderService })    //canLoad blocks pre loading
     ],
     providers: [AuthGuard, AuthService],

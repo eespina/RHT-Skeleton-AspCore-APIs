@@ -28,6 +28,7 @@
         </tr>
     </tbody>
 </table>
+<div *ngIf="showSpinner" class="spinner"></div>
 <br />
 <div>
     Color Preference : <input type='text' [(ngModel)]='color' [style.background]='color' />
