@@ -13,6 +13,9 @@
         </tr>
     </thead>
     <tbody>
+        <!--    Accordion (or Extension Panel things) are just basically using a HIDDEN css styling class that gets added/removed toggle-based. A [hidden] property binding thing MAY exist out of the box  -->
+        <!--        Furthermore, content project (single-slot or multi-slot) may be used as transclusion to refactor the accordion so it may be used as a reusable source by any component that wishes to use it. This uses <ng-content>    -->
+        <!--        It should be nonted that the <ng-content> element can be used for any situation of reusable UI HTML elements if needed  -->
         <ng-container *ngFor="let example of filteredExamples">
             <tr *ngIf="selectedExampleCountRadioButton == 'All' || selectedExampleCountRadioButton == example.userName">
                 <!--    below, we want to bind to the input property inside the "ExampleListDisplayComponent" component called 'exampmles' (in straight brackets) by passing the example object of the examples set-->

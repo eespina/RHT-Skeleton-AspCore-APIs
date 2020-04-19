@@ -28,7 +28,8 @@ import { AuthService } from './user/auth.service';
                     //Lazy Loading of Features in the future(ALSO, remove the 'path' attribute in the Feature Module's @ngModule RouterModule.forChild([ { path: [HERE] } ])..
                     //should actually leave ONLY the Children(but outside the 'children' attrubite(so, should have curlybrace - separated array of path routes afterward)))
 
-                //Below demonstrates a part of the Resolve Guard that would provide a service to not show undesired portions of a page until loading material/data have been fetched
+                //Below demonstrates a part of the Resolve Guard that would provide a service to not show undesired portions of a page until loading material/data have been fetched.
+                //  We're handling it differntly by using a "loading... " UI display alongside an ' *ngIf ' element handler
             //{ path: 'nonExistantPath', component: ExampleListComponent, resolve: { exampleList: ExampleListResolveService (service that does NOT exist) }}
         ])
             // add ALL options together (i.e. preloadingStrategy AND enableTracing)
