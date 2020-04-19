@@ -21,7 +21,9 @@ export class ExampleService {
         var examples = this._http.get('http://localhost:53465/api/examples').delay(4130)    //delay is just used to test the loading words and css animation
             //.map((response: Response) => <IExample[]>response.json())
             //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>. You no longer need to call the '.map' function above yourself.
-            .pipe(catchError(error => this._auth.handleError(error)));  //UPDATED the older way to 'catch'... previously was "  .catch(error => this._auth.handleError(error));    "
+
+            //UPDATED the older way to 'catch'... previously was "  .catch(error => this._auth.handleError(error));    ". NOT sure this applies for " .map" function, but seems to work
+            .pipe(catchError(error => this._auth.handleError(error)));
 
         //perhaps ANOTHER way of facilitating a get from somewhere (implements "import 'rxjs/add/Observable/of'; " from above)
             //return Observable.of();   // I think this is more used for 'in-memory' type data, since the parameter in the example tutorial I'm using 
@@ -33,7 +35,9 @@ export class ExampleService {
         return this._http.get('http://localhost:53465/api/examples/' + exId)
             //.map((response: Response) => <IExample>response.json())
             //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>. You no longer need to call the '.map' function above yourself.
-            .pipe(catchError(error => this._auth.handleError(error)));  //UPDATED the older way to 'catch'... previously was "  .catch (error => this._auth.handleError(error));    "
+
+            //UPDATED the older way to 'catch'... previously was "  .catch(error => this._auth.handleError(error));    ". NOT sure this applies for " .map" function, but seems to work
+            .pipe(catchError(error => this._auth.handleError(error)));
     }
 
     //handleError(error: Response) {
