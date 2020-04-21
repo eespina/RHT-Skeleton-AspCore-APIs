@@ -16,9 +16,11 @@ import 'rxjs/add/Observable/throw';
 export class ExampleService {
     constructor(private _http: HttpClient, private _router: Router, private _auth: AuthService) { }
 
+    baseUrl: string = "http://localhost:53465/api/"
+
     getExamples(): Observable<IExample[]> {
         //var examples = this._http.get<IExample[]>('http://localhost:53465/api/examples').delay(4130)    //can ALSO use this as an alternative (includes the '<IExample[]>' as the type returned from the observable)
-        var examples = this._http.get('http://localhost:53465/api/examples').delay(4130)    //delay is just used to test the loading words and css animation
+        var examples = this._http.get(this.baseUrl + "examples").delay(4130)    //delay is just used to test the loading words and css animation
             //.map((response: Response) => <IExample[]>response.json())
             //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>. You no longer need to call the '.map' function above yourself.
 
@@ -32,7 +34,7 @@ export class ExampleService {
     }
 
     getExampleById(exId: string): Observable<IExample> {
-        return this._http.get('http://localhost:53465/api/examples/' + exId)
+        return this._http.get(`${this.baseUrl}/examples/${exId}`)   //string literal examples
             //.map((response: Response) => <IExample>response.json())
             //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>. You no longer need to call the '.map' function above yourself.
 
