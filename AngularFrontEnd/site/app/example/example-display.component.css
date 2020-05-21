@@ -1,4 +1,4 @@
-﻿/*  Example List CSS */
+﻿/*  Example List Display CSS */
 table {
     color: #369;
     font-family: Arial, Helvetica, sans-serif;
@@ -7,7 +7,7 @@ table {
 }
 
 td, th {
-    border: 1px solid cyan;
+    border: 1px solid magenta;
     padding: 5px;
 }
-/*  END Example List CSS */
+/*  END Example List Display CSS */
