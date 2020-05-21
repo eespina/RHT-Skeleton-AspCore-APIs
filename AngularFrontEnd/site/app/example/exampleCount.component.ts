@@ -8,7 +8,7 @@ export class ExampleCountComponent {
 
     selectedRadioButtonValue: string = 'All';
 
-    @Output()
+    @Output()   //A child component uses an event to pass data to the parent component, here we're passing a string to the Parent component (exampleList.component.ts)
     countRadioButtonSelectionChanged: EventEmitter<string> = new EventEmitter<string>();
 
     @Input()

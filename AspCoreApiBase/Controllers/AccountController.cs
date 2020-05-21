@@ -70,14 +70,14 @@ namespace AspCoreApiBase.Controllers
                 OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model);
                 if (newlyCreatedUser != null)
                 {
-                    return Ok(newlyCreatedUser);    //TODO - switch this to include a property that notifies the caller (Front End) that the user has been created
+                    return Ok(newlyCreatedUser);
                 }
                 else
                 {
                     return NotFound("USER NOT CREATED");
                 }
 
-                return Unauthorized();
+                //return Ok(new OwnerViewModel {LastName = "LastNameTest", FirstName = "FirstNameTest", UserName = "UserNameTest" });   //just used for Testing where i do NOT want to 
             }
             catch (System.Exception ex)
             {

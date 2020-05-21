@@ -71,3 +71,24 @@
 .lbl-error
 	color red
 	visibility hidden
+#displayArea
+	@media $tablet-up
+		margin-top 25px
+	@media $desktop-up
+		padding-top 60px
+		width 1000px
+		margin 0px auto
+.spinner
+	border 16px solid silver
+	border-top 16px solid blue
+	border-radius 50%
+	width 80px
+	height 80px
+	animation spin 700ms linear infinite
+	margin-left auto
+	margin-right auto
+@keyframes spin
+	0%
+		transform rotate(0deg)
+	100%
+		transfom rotate(-360deg)

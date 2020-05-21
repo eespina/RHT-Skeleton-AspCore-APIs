@@ -43,10 +43,10 @@ export class ExampleComponent implements OnInit {
         this.subscription.unsubscribe();
     }
 
-    ngOnInit() {//I DONT THINK THIS IS BEING USED right now
-        this._activatedRoute.params.subscribe(
+    ngOnInit() {
+        this._activatedRoute.paramMap.subscribe(
             params => {
-                let exCode = params['userName'];
+                let exCode = params.get('userName');    //TODO - MAY want to switch this 'userName' parameter to use an #ID instead. It's just more conventional
                 //let qp = this._activatedRoute.snapshot.queryParams['filterBy'] || ''; //OPTIONAL query parameter receiving, use this to BIND a local variable that is used in the HTML
 
                 //may want to create ANOTHER method to seperate this logic from this .ts file
@@ -60,7 +60,7 @@ export class ExampleComponent implements OnInit {
                             } else {
                                 throw (err);
                             }
-                        }, 0).delay(1000)
+                        }, 0).delay(1000)   //delay to be able to retry in a moment, after the previous one failed
                     })
                     .subscribe(
                     (exData) => {
@@ -70,7 +70,6 @@ export class ExampleComponent implements OnInit {
                             this.example = exData;
                             console.log('RECEIVED exDATA in Obesrvable-Params version');
                         }
-                        this.example = exData
                     },
                     (error) => {
                         this.statusMessage = 'Problem with the Service. Please Retry after some time ... ';

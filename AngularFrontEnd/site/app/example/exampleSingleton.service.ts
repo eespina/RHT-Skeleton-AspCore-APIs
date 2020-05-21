@@ -2,5 +2,5 @@
 
 @Injectable()
 export class ExampleSingletonService {
-    colorPreference: string = 'orange';
+    colorPreference: string = 'green';
 }

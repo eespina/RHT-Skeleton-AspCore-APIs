@@ -15,21 +15,25 @@ import { AuthService } from './user/auth.service';
         RouterModule.forRoot([
             { path: 'home', component: HomeComponent },
             {
-                path: 'register', component: RegisterComponent, canActivate: [AuthGuard]  //Loading this currently gives PageNotFound page
+                path: 'register', component: RegisterComponent, canActivate: [AuthGuard], canDeactivate: [AuthGuard]
             },
             { path: 'login', component: LoginComponent },
             {
                 path: 'examples', component: ExampleListComponent, canActivate: [AuthGuard] //data: { preload: true } (used for PreloaderService),
             },
-            { path: 'examples/:userName', component: ExampleComponent, canActivate: [AuthGuard] },
+            { path: 'examples/:userName', component: ExampleComponent, canActivate: [AuthGuard] },//{ path: 'examples/:userName/:id', .....  - to use more parameters
             { path: '', redirectTo: '/home', pathMatch: 'full' },
             { path: '**', component: PageNotFoundComponent }    //Precedence matters, use this last as a'Catch All' route
             //, loadChildren: 'app/examples/example.module#ExampleModule' }, //AFTER refactoring to Feature Modules, use this to implement, if desired,
                     //Lazy Loading of Features in the future(ALSO, remove the 'path' attribute in the Feature Module's @ngModule RouterModule.forChild([ { path: [HERE] } ])..
                     //should actually leave ONLY the Children(but outside the 'children' attrubite(so, should have curlybrace - separated array of path routes afterward)))
+
+                //Below demonstrates a part of the Resolve Guard that would provide a service to not show undesired portions of a page until loading material/data have been fetched.
+                //  We're handling it differntly by using a "loading... " UI display alongside an ' *ngIf ' element handler
+            //{ path: 'nonExistantPath', component: ExampleListComponent, resolve: { exampleList: ExampleListResolveService (service that does NOT exist) }}
         ])
             // add ALL options together (i.e. preloadingStrategy AND enableTracing)
-        //, { enableTracing: true }) //enables NavigationStart, RoutesRecognized, NavigationEnd, NavigationCanceled, NavigationError which all can then be seen in the console
+        //, { enableTracing: true }) //enables NavigationStart, RoutesRecognized, NavigationEnd, NavigationCanceled, NavigationError (and more, i think) which all can then be seen in the console
             //, { preloadingStrategy: PreloaderService })    //canLoad blocks pre loading
     ],
     providers: [AuthGuard, AuthService],
