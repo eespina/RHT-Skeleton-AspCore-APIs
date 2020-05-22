@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { ExampleListComponent } from './example/exampleList.component';
 import { RegisterComponent } from './user/register.component';
+import { ReactiveFormComponent } from './user/reactiveForm.component';
 import { LoginComponent } from './user/login.component';
 import { HeaderComponent } from './shared/header.component';
 import { FooterComponent } from './shared/footer.component';
@@ -27,6 +29,7 @@ import { ExampleDisplayComponent } from './example/example-display.component';
         BrowserModule,
         FormsModule,
         HttpModule,
+        ReactiveFormsModule,
         AppRoutingModule
         //InMemoryWebApiModule.forRoot()
     ],
@@ -40,6 +43,7 @@ import { ExampleDisplayComponent } from './example/example-display.component';
         HeaderComponent,
         FooterComponent,
         RegisterComponent,
+        ReactiveFormComponent ,
         PageNotFoundComponent,
         ExampleComponent],
     bootstrap: [

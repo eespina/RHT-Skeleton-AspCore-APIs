@@ -36,6 +36,8 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
         return false;
     }
 
+    //being coupled with the RegisterComponent, I can no longer use this for the "ReactiveFormComponent"
+        //therefore, I cannot check the 'dirty' form material, if it exists
     canDeactivate(component: RegisterComponent): boolean {
         console.log('In canDeactivate: ' + RegisterComponent.name);
         if (component.createExampleForm.dirty) {

@@ -1,7 +1,7 @@
 <div class="py-5">
     <div class="row">
         <div class="col-md-6 mx-auto">
-            <span class="anchor" id="formLogin"></span>
+            <span class="anchor" id="formLogin"></span><!--WHERE is this 'id' being used ?? -->
             <!-- form card login -->
             <div class="card rounded-0">
                 <div class="card-header">
@@ -15,7 +15,7 @@
                                    name="firstname" placeholder="place holder text"  #firstNameControl="ngModel" required>
                             <span *ngIf="firstNameControl.errors?.required && firstNameControl.touched" class="help-block">First Name is Required</span><!--REPLACE "help-block" with an actual syle class name-->
                         </div>
-                        <div class="form-group" [class.has-error]="lastNameControl.invalid && lastNameControl.touched" [class.hass-success]="lastNameControl.valid"><!--REPLACE "help-block" with an actual syle class name-->
+                        <div class="form-group" [class.has-error]="lastNameControl.invalid && lastNameControl.touched" [class.has-success]="lastNameControl.valid">
                             <label for="registerUserLastName">Last Name</label>
                             <input id="registerUserLastName" type="text" class="form-control rounded-0" [(ngModel)]="registeringUser.lastName" name="lastname" placeholder="place holder text" #lastNameControl="ngModel" required>
                             <span *ngIf="lastNameControl.errors?.required && lastNameControl.touched" class="help-block">Last Name is Required</span><!--REPLACE "help-block" with an actual syle class name-->

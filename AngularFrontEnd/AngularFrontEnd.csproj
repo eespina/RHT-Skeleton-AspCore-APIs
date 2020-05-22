@@ -84,6 +84,7 @@
     <Content Include="site\app\shared\footer.component.html" />
     <Content Include="site\app\shared\header.component.html" />
     <Content Include="site\app\user\login.component.html" />
+    <Content Include="site\app\user\reactiveForm.component.html" />
     <Content Include="site\app\user\register.component.html" />
     <Content Include="site\index.html" />
     <Content Include="site\src\css\main.concat.css" />
@@ -136,6 +137,7 @@
     <TypeScriptCompile Include="site\app\shared\footer.component.ts" />
     <TypeScriptCompile Include="site\app\shared\header.component.ts" />
     <TypeScriptCompile Include="site\app\user\login.component.ts" />
+    <TypeScriptCompile Include="site\app\user\reactiveForm.component.ts" />
     <TypeScriptCompile Include="site\app\user\register.component.ts" />
     <TypeScriptCompile Include="site\app\shared\preloader.service.ts" />
     <TypeScriptCompile Include="site\app\user\auth-route-guard.service.ts" />
