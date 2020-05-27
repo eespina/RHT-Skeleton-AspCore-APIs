@@ -41,7 +41,11 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-primary" type="submit">Register</button>
+                        <div class="btn-toolbar">
+                            <button class="btn btn-primary" type="submit">Register</button>
+                            <button class="btn btn-primary" type="button" (click)="loadFakeDataClick()">Load Fake Data</button>
+                            <button class="btn btn-primary" type="button" (click)="loadFakeDataPatchClick()">Load Fake PATCH Data</button>
+                        </div>
                     </form>
                 </div>
             </div>
