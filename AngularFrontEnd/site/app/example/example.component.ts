@@ -29,7 +29,7 @@ export class ExampleComponent implements OnInit {
         ////Example using Query Params
         //this._router.navigate(
         //    ['/examples'],
-        //    { queryParams: { filterBy: 'filte', showImage: true } }
+        //    { queryParams: { filterBy: 'filter', showImage: true } }
         //);
 
         ////using outlets for SECONDARY outlets

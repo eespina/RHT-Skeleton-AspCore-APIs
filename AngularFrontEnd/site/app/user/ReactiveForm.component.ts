@@ -15,7 +15,14 @@ export class ReactiveFormComponent implements OnInit {
             lastName: new FormControl(),
             userName: new FormControl(),
             email: new FormControl(),
-            password: new FormControl()
+            password: new FormControl(),
+
+            //Nested Form Group Examples (not yet persisted in any kind of memory)
+            skills: new FormGroup({
+                skillName: new FormControl(),
+                experienceInYears: new FormControl(),
+                proficiency: new FormControl()
+            })
         });
     }
 
