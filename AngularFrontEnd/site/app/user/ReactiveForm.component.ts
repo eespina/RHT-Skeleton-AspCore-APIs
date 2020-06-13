@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
     selector: 'reactive-form-example',
@@ -12,7 +12,8 @@ export class ReactiveFormComponent implements OnInit {
     ngOnInit() {
         this.reactiveFormGroup = this.fb.group({
             //create key/valkue pair (key is the name of the child control, and the value is an array)
-            firstName: [''],//1st element in the array is the default value (in this case, an empty string). The 2nd and 3rd parameters signify sync/async validators
+            //1st element in the array is the default value (in this case, an empty string). The 2nd and 3rd parameters signify sync/async validators
+            firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(42)]],
             lastName: [''],
             userName: [''],
             email: [''],
@@ -22,10 +23,14 @@ export class ReactiveFormComponent implements OnInit {
                 experienceInYears: [''],
                 proficiency: ['']
             })
+
+            //when it comees to validators, there's 'required', 'requiredTrue', 'email', 'pattern', 'min', 'max', 'minLength', 'maxLength'
         });
     }
 
     /*  below is the technique of using Reractive forms WITHOUT FormBuilder. It only uses FormGroup and FormControl and it has a parameterless constructor.
+        The FormControl is no longer in use and can be un-imported
+
     constructor() { }
 
     ngOnInit() {
