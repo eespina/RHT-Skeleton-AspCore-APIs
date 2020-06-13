@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';    //can also use "FormBuilder", alongside constructor injection, to create a form similar looking to the current manner
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 
 @Component({
     selector: 'reactive-form-example',
@@ -7,6 +7,25 @@ import { FormGroup, FormControl } from '@angular/forms';    //can also use "Form
 })
 export class ReactiveFormComponent implements OnInit {
     reactiveFormGroup: FormGroup;
+    constructor(private fb: FormBuilder) { }
+
+    ngOnInit() {
+        this.reactiveFormGroup = this.fb.group({
+            //create key/valkue pair (key is the name of the child control, and the value is an array)
+            firstName: [''],//1st element in the array is the default value (in this case, an empty string). The 2nd and 3rd parameters signify sync/async validators
+            lastName: [''],
+            userName: [''],
+            email: [''],
+            password: [''],
+            skills: this.fb.group({
+                skillName: [''],
+                experienceInYears: [''],
+                proficiency: ['']
+            })
+        });
+    }
+
+    /*  below is the technique of using Reractive forms WITHOUT FormBuilder. It only uses FormGroup and FormControl and it has a parameterless constructor.
     constructor() { }
 
     ngOnInit() {
@@ -24,7 +43,7 @@ export class ReactiveFormComponent implements OnInit {
                 proficiency: new FormControl()
             })
         });
-    }
+    }*/
 
     //This is just fake data that exists so I don;t have to sample data from the database (or any persisted information)
     loadFakeDataClick(): void {
@@ -45,7 +64,7 @@ export class ReactiveFormComponent implements OnInit {
     }
 
     //This is the PATCH version that would NOT include the nested values. If you used the setValue in the "loadFakeDataClick()" function,
-        //without the nested values, it will complain about not having the nested elements included
+    //without the nested values, it will complain about not having the nested elements included
     loadFakeDataPatchClick(): void {
         this.reactiveFormGroup.patchValue({
             firstName: 'FakeFirstname',
