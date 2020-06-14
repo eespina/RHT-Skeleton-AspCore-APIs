@@ -73,8 +73,8 @@ export class ReactiveFormComponent implements OnInit {
         });
     }*/
 
-    //This is just fake data that exists so I don;t have to sample data from the database (or any persisted information)
     loadFakeDataClick(): void {
+        //This is just fake data that exists so I don't have to sample data from the database (or any persisted information)
         this.reactiveFormGroup.setValue({   //  "setValue" would be useful for setting data loaded from some other material
             firstName: 'FakeFirstname',
             lastName: 'FakeLastName',
@@ -89,6 +89,9 @@ export class ReactiveFormComponent implements OnInit {
                 proficiency: 'advanced'
             }
         });
+
+        //now we're also logging to the console through the following method
+        this.logKeyValuePairs(this.reactiveFormGroup);
     }
 
     //This is the PATCH version that would NOT include the nested values. If you used the setValue in the "loadFakeDataClick()" function,
@@ -105,5 +108,37 @@ export class ReactiveFormComponent implements OnInit {
 
     onSubmit(): void {
         console.log(this.reactiveFormGroup.value);  //right now, just prints the object
+    }
+
+    //An example of looping through each control in the group. useful for Rest of controls, enable/disable form controls validation set/clears, mark dirty/touch/etc..
+    logKeyValuePairs(group: FormGroup): void {
+        //retreive all the keys we have in the group, and jsut prints them out to the log (notice it does NOT log the nested group)
+        console.log(Object.keys(group.controls));
+
+        //use a loop with a forEach
+        Object.keys(group.controls).forEach((key: string) => {//get all the keys and loop over each key
+            //the abstractControl variable can be, either, a FormControl or a NESTED FormGroup, so we need to check which it is
+            const abstractControl = group.get(key); //get the reference to its associated control by using that key
+            if (abstractControl instanceof FormGroup) {
+                this.logKeyValuePairs(abstractControl);//recursively call the same method for the NESTED form group
+            } else {
+                console.log('key = ' + key + ' value = ' + abstractControl.value);
+            }
+        });
+    }
+
+    DisableNestFormClick() {    //example of disableing the NESTED controls only
+        const group = this.reactiveFormGroup;
+        Object.keys(group.controls).forEach((key: string) => {//use a loop with a forEach to get all the keys and loop over each key
+            //the abstractControl variable can be, either, a FormControl or a NESTED FormGroup, so we need to check which it is
+            const abstractControl = group.get(key); //get the reference to its associated control by using that key
+            if (abstractControl instanceof FormGroup) {
+                abstractControl.disable();  //this will disable the NESTED controls
+            } else {
+                //if it's not a nested form, it will mark it as dirty (not useful, but an example of being able to use other in-house techniques)
+                abstractControl.markAsDirty();
+            }
+        });
+
     }
 }
