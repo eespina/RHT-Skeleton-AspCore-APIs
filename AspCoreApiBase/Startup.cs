@@ -185,6 +185,7 @@ namespace AspCoreApiBase
 
             #region SINGLE PAGE APP
             ////PROBABLY not necessary as there is no FED app in this solution. It is completely detached and set onto a different stand alone app.
+            //////  UPDATE: there is a SPA (Angular) now, but this is still commented it out. It is working nonetheless (2020-6-14).
             //app.UseSpa(spa =>
             //{
             //    spa.Options.SourcePath = "[DirectoryName]";

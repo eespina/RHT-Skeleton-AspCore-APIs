@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';   //FormGroup and FormControl inherit from AbstractControl
 
 @Component({
     selector: 'reactive-form-example',
@@ -18,13 +18,36 @@ export class ReactiveFormComponent implements OnInit {
             userName: [''],
             email: [''],
             password: [''],
-            skills: this.fb.group({
-                skillName: [''],
+            nestedGroup: this.fb.group({
+                nestedGroupName: [''],
                 experienceInYears: [''],
                 proficiency: ['']
             })
 
             //when it comees to validators, there's 'required', 'requiredTrue', 'email', 'pattern', 'min', 'max', 'minLength', 'maxLength'
+        });
+
+        //firstName - subscribe to the valueChanges observable of firstName formControl
+        this.reactiveFormGroup.get('firstName').valueChanges.subscribe(value => {
+            //specify an annonymous function that gets executed everytime the value of the formControl changes
+            console.log('firstName value changed to "' + value + '"');
+        });
+
+        //lastName - subscribe to the valueChanges observable of lastName formControl
+        this.reactiveFormGroup.get('lastName').valueChanges.subscribe((val: string) => {
+            console.log('lastName value length is ' + val.length);
+        });
+
+        //subscribe to the ROOT form group
+        this.reactiveFormGroup.valueChanges.subscribe((jsonValue: any) => {   //'any' is the default type
+            //specify an annonymous function that gets executed everytime the value of the formControl changes
+            console.log('form changed to (json) of ' + JSON.stringify(jsonValue));
+        });
+
+        //subscribe to the NESTED form group
+        this.reactiveFormGroup.get('nestedGroup').valueChanges.subscribe((jsonValue: any) => {   //'any' is the default type
+            //specify an annonymous function that gets executed everytime the value of the formControl changes
+            console.log('NESTED form changed to (json) of ' + JSON.stringify(jsonValue));
         });
     }
 
@@ -42,8 +65,8 @@ export class ReactiveFormComponent implements OnInit {
             password: new FormControl(),
 
             //Nested Form Group Examples (not yet persisted in any kind of memory)
-            skills: new FormGroup({
-                skillName: new FormControl(),
+            nestedGroup: new FormGroup({
+                nestedGroupName: new FormControl(),
                 experienceInYears: new FormControl(),
                 proficiency: new FormControl()
             })
@@ -60,8 +83,8 @@ export class ReactiveFormComponent implements OnInit {
             password: 'FakePassword',
 
             //Nested Form Group Examples (not yet persisted in any kind of memory)
-            skills: {
-                skillName: 'FakeSkill',
+            nestedGroup: {
+                nestedGroupName: 'FakenestedGroupName',
                 experienceInYears: 1234,
                 proficiency: 'advanced'
             }
