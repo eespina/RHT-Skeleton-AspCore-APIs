@@ -7,26 +7,33 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 })
 export class ReactiveFormComponent implements OnInit {
     reactiveFormGroup: FormGroup;
-    constructor(private fb: FormBuilder) { }
 
     //example showing how to use the Component class to hold the validation syntax instead of having it inside the .html
     validationMessages = {
+        'firstName': {
+            'required': 'Required',
+            'minLength': 'Too Short',  //shows 'undefined' at the moment
+            'maxLength': 'Too Long' //shows 'undefined' at the moment
+        },
         'lastName': {
-            'required': 'First Name is Required',
-            'minLength': 'Last Name must be greater than ',
-            'maxLength': 'Last Name must be less than 42'
+            'required': 'Required',
+            'minLength': 'Too Short',   //shows 'undefined' at the moment
+            'maxLength': 'Too Long' //shows 'undefined' at the moment
         },
         'proficiency': {
             'required': 'Proficiency is Required'
         }
     };
 
-    //now that we have 'validationMessages' ready, we need this object to store the validation messages of the form controls that havae actually failed validation
-        //This is what the UI will actually bind to
-    formErrors = {  //only using a few of the properties
+    //now that we have 'validationMessages' ready, we need this object to store the validation messages of the form controls that have actually failed validation
+    //This is what the UI will actually bind to
+    formErrors = {
+        'firstName': '',
         'lastName': '',
         'proficiency': ''
-    }
+    };
+
+    constructor(private fb: FormBuilder) { }
 
     ngOnInit() {
         this.reactiveFormGroup = this.fb.group({
@@ -67,6 +74,11 @@ export class ReactiveFormComponent implements OnInit {
         this.reactiveFormGroup.get('nestedGroup').valueChanges.subscribe((jsonValue: any) => {   //'any' is the default type
             //specify an annonymous function that gets executed everytime the value of the formControl changes
             console.log('NESTED form changed to (json) of ' + JSON.stringify(jsonValue));
+        });
+
+        //automatically do the validation logic through subscription
+        this.reactiveFormGroup.valueChanges.subscribe((data) => {
+            this.logValidationErrors(this.reactiveFormGroup);
         });
     }
 
@@ -110,7 +122,7 @@ export class ReactiveFormComponent implements OnInit {
         });
 
         //now we're also logging to the console through the following method
-        this.logValidationErros(this.reactiveFormGroup);
+        this.logValidationErrors(this.reactiveFormGroup);
         console.log(this.formErrors);
     }
 
@@ -131,7 +143,7 @@ export class ReactiveFormComponent implements OnInit {
     }
 
     //An example of looping through each control in the group. useful for Rest of controls, enable/disable form controls validation set/clears, mark dirty/touch/etc..
-    logValidationErros(group: FormGroup): void {
+    logValidationErrors(group: FormGroup = this.reactiveFormGroup): void {   //use " = this.reactiveFormGroup" to set it as the default value. doing this makes us not have to specify a value for this parameter when we call it from the template 
         //retreive all the keys we have in the group, and just prints them out to the log (notice it does NOT log the nested group)
         console.log(Object.keys(group.controls));
 
@@ -140,13 +152,11 @@ export class ReactiveFormComponent implements OnInit {
             //the abstractControl variable can be, either, a FormControl or a NESTED FormGroup, so we need to check which it is
             const abstractControl = group.get(key); //get the reference to its associated control by using that key
             if (abstractControl instanceof FormGroup) {
-                this.logValidationErros(abstractControl);   //recursively call the same method for the NESTED form group
+                this.logValidationErrors(abstractControl);   //recursively call the same method for the NESTED form group
             } else {
-                console.log('key = ' + key + ' value = ' + abstractControl.value);  //just logging the examples
-
                 this.formErrors[key] = '';
-                if (abstractControl) {  //if the form exists
-                    if (!abstractControl.valid) {
+                if (abstractControl) {
+                    if (!abstractControl.valid && (abstractControl.touched || abstractControl.dirty)) {
                         const messages = this.validationMessages[key];
 
                         for (const errorKey in abstractControl.errors) {
