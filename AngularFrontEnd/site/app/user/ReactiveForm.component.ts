@@ -9,19 +9,38 @@ export class ReactiveFormComponent implements OnInit {
     reactiveFormGroup: FormGroup;
     constructor(private fb: FormBuilder) { }
 
+    //example showing how to use the Component class to hold the validation syntax instead of having it inside the .html
+    validationMessages = {
+        'lastName': {
+            'required': 'First Name is Required',
+            'minLength': 'Last Name must be greater than ',
+            'maxLength': 'Last Name must be less than 42'
+        },
+        'proficiency': {
+            'required': 'Proficiency is Required'
+        }
+    };
+
+    //now that we have 'validationMessages' ready, we need this object to store the validation messages of the form controls that havae actually failed validation
+        //This is what the UI will actually bind to
+    formErrors = {  //only using a few of the properties
+        'lastName': '',
+        'proficiency': ''
+    }
+
     ngOnInit() {
         this.reactiveFormGroup = this.fb.group({
             //create key/valkue pair (key is the name of the child control, and the value is an array)
             //1st element in the array is the default value (in this case, an empty string). The 2nd and 3rd parameters signify sync/async validators
             firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(42)]],
-            lastName: [''],
+            lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(42)]],
             userName: [''],
             email: [''],
             password: [''],
             nestedGroup: this.fb.group({
                 nestedGroupName: [''],
-                experienceInYears: [''],
-                proficiency: ['']
+                experienceInYears: ['6'],   /// '6' is an example of using the default value
+                proficiency: ['', Validators.required]
             })
 
             //when it comees to validators, there's 'required', 'requiredTrue', 'email', 'pattern', 'min', 'max', 'minLength', 'maxLength'
@@ -77,7 +96,7 @@ export class ReactiveFormComponent implements OnInit {
         //This is just fake data that exists so I don't have to sample data from the database (or any persisted information)
         this.reactiveFormGroup.setValue({   //  "setValue" would be useful for setting data loaded from some other material
             firstName: 'FakeFirstname',
-            lastName: 'FakeLastName',
+            lastName: '',
             userName: 'FakeUserName',
             email: 'fake@email.com',
             password: 'FakePassword',
@@ -86,12 +105,13 @@ export class ReactiveFormComponent implements OnInit {
             nestedGroup: {
                 nestedGroupName: 'FakenestedGroupName',
                 experienceInYears: 1234,
-                proficiency: 'advanced'
+                proficiency: ''
             }
         });
 
         //now we're also logging to the console through the following method
-        this.logKeyValuePairs(this.reactiveFormGroup);
+        this.logValidationErros(this.reactiveFormGroup);
+        console.log(this.formErrors);
     }
 
     //This is the PATCH version that would NOT include the nested values. If you used the setValue in the "loadFakeDataClick()" function,
@@ -111,8 +131,8 @@ export class ReactiveFormComponent implements OnInit {
     }
 
     //An example of looping through each control in the group. useful for Rest of controls, enable/disable form controls validation set/clears, mark dirty/touch/etc..
-    logKeyValuePairs(group: FormGroup): void {
-        //retreive all the keys we have in the group, and jsut prints them out to the log (notice it does NOT log the nested group)
+    logValidationErros(group: FormGroup): void {
+        //retreive all the keys we have in the group, and just prints them out to the log (notice it does NOT log the nested group)
         console.log(Object.keys(group.controls));
 
         //use a loop with a forEach
@@ -120,9 +140,22 @@ export class ReactiveFormComponent implements OnInit {
             //the abstractControl variable can be, either, a FormControl or a NESTED FormGroup, so we need to check which it is
             const abstractControl = group.get(key); //get the reference to its associated control by using that key
             if (abstractControl instanceof FormGroup) {
-                this.logKeyValuePairs(abstractControl);//recursively call the same method for the NESTED form group
+                this.logValidationErros(abstractControl);   //recursively call the same method for the NESTED form group
             } else {
-                console.log('key = ' + key + ' value = ' + abstractControl.value);
+                console.log('key = ' + key + ' value = ' + abstractControl.value);  //just logging the examples
+
+                this.formErrors[key] = '';
+                if (abstractControl) {  //if the form exists
+                    if (!abstractControl.valid) {
+                        const messages = this.validationMessages[key];
+
+                        for (const errorKey in abstractControl.errors) {
+                            if (errorKey) {
+                                this.formErrors[key] += messages[errorKey] + ' ';
+                            }
+                        }
+                    }
+                }
             }
         });
     }
