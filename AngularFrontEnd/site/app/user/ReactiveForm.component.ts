@@ -20,6 +20,13 @@ export class ReactiveFormComponent implements OnInit {
             'minLength': 'Too Short',   //shows 'undefined' at the moment
             'maxLength': 'Too Long' //shows 'undefined' at the moment
         },
+        'email': {
+            'required': 'Email is Required',
+            'email': 'Email must be valid'
+        },
+        'phone': {
+            'required': 'Phone is Required'
+        },
         'proficiency': {
             'required': 'Proficiency is Required'
         }
@@ -42,7 +49,9 @@ export class ReactiveFormComponent implements OnInit {
             firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(42)]],
             lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(42)]],
             userName: [''],
-            email: [''],
+            contactPreference: ['email'],
+            email: ['', [Validators.required, Validators.email]],
+            phone: [''],
             password: [''],
             nestedGroup: this.fb.group({
                 nestedGroupName: [''],
@@ -80,6 +89,11 @@ export class ReactiveFormComponent implements OnInit {
         this.reactiveFormGroup.valueChanges.subscribe((data) => {
             this.logValidationErrors(this.reactiveFormGroup);
         });
+
+        //Every time the contact preference changes, this method, below, would get called. This is better for unit testing as the binding/calling method is NOT in the HTML anymore
+        this.reactiveFormGroup.get('contactPreference').valueChanges.subscribe((data: string) => {
+            this.onContactPreference_Changed(data);
+        });
     }
 
     /*  below is the technique of using Reractive forms WITHOUT FormBuilder. It only uses FormGroup and FormControl and it has a parameterless constructor.
@@ -93,6 +107,7 @@ export class ReactiveFormComponent implements OnInit {
             lastName: new FormControl(),
             userName: new FormControl(),
             email: new FormControl(),
+            phone: new FormControl(),
             password: new FormControl(),
 
             //Nested Form Group Examples (not yet persisted in any kind of memory)
@@ -111,6 +126,7 @@ export class ReactiveFormComponent implements OnInit {
             lastName: '',
             userName: 'FakeUserName',
             email: 'fake@email.com',
+            phone: '1234568',
             password: 'FakePassword',
 
             //Nested Form Group Examples (not yet persisted in any kind of memory)
@@ -134,6 +150,7 @@ export class ReactiveFormComponent implements OnInit {
             lastName: 'FakeLastName',
             userName: 'FakeUserName',
             email: 'fake@email.com',
+            phone: '1234568',
             password: 'FakePassword'
         });
     }
@@ -183,5 +200,19 @@ export class ReactiveFormComponent implements OnInit {
             }
         });
 
+    }
+
+    //dynamically set and clear validators on specific controls
+    onContactPreference_Changed(selectedValue: string) {
+        const phoneControl = this.reactiveFormGroup.get('phone');
+        if (selectedValue === 'phone') {
+            if (Validators) {
+                phoneControl.setValidators([Validators.required, Validators.minLength(5)]);
+            }
+        } else {
+            phoneControl.clearValidators();
+        }
+
+        phoneControl.updateValueAndValidity();  //immediately triggers the validation. in this example, we want this for forcing the user to enter a phone
     }
 }
