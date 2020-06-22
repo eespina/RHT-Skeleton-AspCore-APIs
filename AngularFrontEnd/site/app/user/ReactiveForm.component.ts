@@ -1,5 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';   //FormGroup and FormControl inherit from AbstractControl
+import { CustomValidators } from '../shared/custom.validators';
 
 @Component({
     selector: 'reactive-form-example',
@@ -51,7 +52,7 @@ export class ReactiveFormComponent implements OnInit {
             lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(42)]],
             userName: [''],
             contactPreference: ['email'],
-            email: ['', [Validators.required, Validators.email, emailDomainValidator('email.com')]],
+            email: ['', [Validators.required, Validators.email, CustomValidators.emailDomainValidator('email.com')]],
             phone: [''],
             password: [''],
             nestedGroup: this.fb.group({
@@ -216,29 +217,4 @@ export class ReactiveFormComponent implements OnInit {
 
         phoneControl.updateValueAndValidity();  //immediately triggers the validation. in this example, we want this for forcing the user to enter a phone
     }
-}
-
-////Custom Validator (should probably be inside a different class)
-////Instead of using 'ValidationErrors', we'll just use an Object with a key/value pair and it will look as "{[key: string] : any}"
-//function emailDomainValidator(control: AbstractControl): { [key: string]: any } | null {
-//    const email: string = control.value;
-//    const domain = email.substring(email.lastIndexOf('@') + 1); //should give us the email domain
-//    if (email === '' || domain.toLowerCase() === 'email.com') {    //just a test using 'email.com' as the desired domain
-//        return null;
-//    } else {
-//        return { 'emailDomainValidator': true };
-//    }
-//}
-
-//similar version to the COMMENTED out 'emailDomainValidator' function (above) but with a Closure
-function emailDomainValidator(domainName: string) {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-        const email: string = control.value;
-        const domain = email.substring(email.lastIndexOf('@') + 1); //should give us the email domain
-        if (email === '' || domain.toLowerCase() === domainName.toLocaleLowerCase()) {    //just a test using 'email.com' as the desired domain
-            return null;
-        } else {
-            return { 'emailDomainValidator': true };
-        }
-    };
 }
