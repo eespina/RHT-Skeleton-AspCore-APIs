@@ -26,6 +26,13 @@ export class ReactiveFormComponent implements OnInit {
             'email': 'Email must be valid',
             'emailDomainValidator': 'Email must be a "email" domain'
         },
+        'confirmEmail': {
+            'required': 'Confirm Email is Required',
+            'email': 'Email must be valid'
+        },
+        'emailGroup': {
+            'emailMisMatch': 'Emails do NOT match'
+        },
         'phone': {
             'required': 'Phone is Required'
         },
@@ -39,6 +46,10 @@ export class ReactiveFormComponent implements OnInit {
     formErrors = {
         'firstName': '',
         'lastName': '',
+        'email': '',
+        'confirmEmail': '',
+        'emailGroup': '',
+        'phone': '',
         'proficiency': ''
     };
 
@@ -46,13 +57,16 @@ export class ReactiveFormComponent implements OnInit {
 
     ngOnInit() {
         this.reactiveFormGroup = this.fb.group({
-            //create key/valkue pair (key is the name of the child control, and the value is an array)
+            //create key/value pair (key is the name of the child control, and the value is an array)
             //1st element in the array is the default value (in this case, an empty string). The 2nd and 3rd parameters signify sync/async validators
             firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(42)]],
             lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(42)]],
             userName: [''],
             contactPreference: ['email'],
-            email: ['', [Validators.required, Validators.email, CustomValidators.emailDomainValidator('email.com')]],
+            emailGroup: this.fb.group({
+                email: ['', [Validators.required, Validators.email, CustomValidators.emailDomainValidator('email.com')]],
+                confirmEmail: ['', Validators.required]
+            }, { validator: matchEmailValidator }),//tie the customer validator function to the nested form group
             phone: [''],
             password: [''],
             nestedGroup: this.fb.group({
@@ -168,23 +182,25 @@ export class ReactiveFormComponent implements OnInit {
 
         //use a loop with a forEach
         Object.keys(group.controls).forEach((key: string) => {//get all the keys and loop over each key
+
             //the abstractControl variable can be, either, a FormControl or a NESTED FormGroup, so we need to check which it is
             const abstractControl = group.get(key); //get the reference to its associated control by using that key
-            if (abstractControl instanceof FormGroup) {
-                this.logValidationErrors(abstractControl);   //recursively call the same method for the NESTED form group
-            } else {
-                this.formErrors[key] = '';
-                if (abstractControl) {
-                    if (!abstractControl.valid && (abstractControl.touched || abstractControl.dirty)) {
-                        const messages = this.validationMessages[key];
 
-                        for (const errorKey in abstractControl.errors) {
-                            if (errorKey) {
-                                this.formErrors[key] += messages[errorKey] + ' ';
-                            }
+            this.formErrors[key] = '';
+            if (abstractControl) {
+                if (!abstractControl.valid && (abstractControl.touched || abstractControl.dirty)) {
+                    const messages = this.validationMessages[key];
+
+                    for (const errorKey in abstractControl.errors) {
+                        if (errorKey) {
+                            this.formErrors[key] += messages[errorKey] + ' ';
                         }
                     }
                 }
+            }
+
+            if (abstractControl instanceof FormGroup) {
+                this.logValidationErrors(abstractControl);   //recursively call the same method for the NESTED form group
             }
         });
     }
@@ -216,5 +232,19 @@ export class ReactiveFormComponent implements OnInit {
         }
 
         phoneControl.updateValueAndValidity();  //immediately triggers the validation. in this example, we want this for forcing the user to enter a phone
+    }
+}
+
+//Returns an object with a Key(string)/Value(any) pair if there is a validation error. If there's no error, it will return null 
+function matchEmailValidator(group: AbstractControl): { [key: string]: any } | null {
+    //we'll opass our nested formgroup (emailFormGroup)
+    const emailControl = group.get('email');
+    const confirmEmailControl = group.get('confirmEmail');
+
+    //prestine means the user didn't have an opportunity to start typeing in the confrim email form conrtol
+    if (emailControl.value === confirmEmailControl.value || confirmEmailControl.pristine) {
+        return null;
+    } else {
+        return { 'emailMisMatch': true };
     }
 }
