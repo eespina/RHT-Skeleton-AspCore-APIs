@@ -53,17 +53,17 @@ export class ReactiveFormComponent implements OnInit {
     //now that we have 'validationMessages' ready, we need this object to store the validation messages of the form controls that have actually failed validation
     //This is what the UI will actually bind to
     formErrors = {
-        'firstName': '',
-        'lastName': '',
-        'email': '',
-        'confirmEmail': '',
-        'emailGroup': '',
-        'phone': '',
-        'proficiency': '',
-        'dynamicNestedGroupName': '',
-        'dynamicExperienceInYears': '',
-        'dynamicProficiency': ''
-    };
+        //'firstName': '',
+        //'lastName': '',
+        //'email': '',
+        //'confirmEmail': '',
+        //'emailGroup': '',
+        //'phone': '',
+        //'proficiency': '',
+        //'dynamicNestedGroupName': '',
+        //'dynamicExperienceInYears': '',
+        //'dynamicProficiency': ''
+    };    // no longer needed since the logValidationErrors method would take care of this at runtime
 
     constructor(private fb: FormBuilder) { }
 
@@ -280,15 +280,16 @@ export class ReactiveFormComponent implements OnInit {
                 this.logValidationErrors(abstractControl);   //recursively call the same method for the NESTED form group
             }
 
-            //if the instance is a formArray, then we have to get inside the forgroup by recursively calling it with the FormGroup being passed in
-            if (abstractControl instanceof FormArray) {
-                for (const control of abstractControl.controls) {
-                    //need to check if the control in the formarray is an instance of FormGroup, then recursively call the same method for the NESTED form group
-                    if (abstractControl instanceof FormGroup) {
-                        this.logValidationErrors(abstractControl);
-                    }
-                }
-            }
+
+            ////if the instance is a formArray, then we have to get inside the forgroup by recursively calling it with the FormGroup being passed in
+            //if (abstractControl instanceof FormArray) {
+            //    for (const control of abstractControl.controls) {
+            //        //need to check if the control in the formarray is an instance of FormGroup, then recursively call the same method for the NESTED form group
+            //        if (abstractControl instanceof FormGroup) {
+            //            this.logValidationErrors(abstractControl);
+            //        }
+            //    }
+            //} //no reason to need this anymore since the logic for dynamically generated 
         });
     }
 

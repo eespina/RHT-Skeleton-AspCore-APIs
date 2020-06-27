@@ -76,11 +76,12 @@
                             <div formArrayName="dynamicNestedGroup" *ngFor="let group of reactiveFormGroup.get('dynamicNestedGroup').controls; let i = index">
                                 <div [formGroupName]="i">
                                     <!--zero (above) is the index-->
-                                    <div class="form-group">
+                                    <div class="form-group" [ngClass]="{'has-error':group.get('dynamicNestedGroupName').invalid && group.controls.dynamicNestedGroupName.touched}">
                                         <label [attr.for]="'dynamicNestedGroupName' + i">Dynamic Array Nested Group</label><!-- 'for' does not have attribute binding, so we use 'attr'-->
-                                        <input type="text" [id]="'dynamicNestedGroupName' + i" formControlName="dynamicNestedGroupName" (blur)="logValidationErrors()" placeholder="Dynamic Group Name" />
+                                        <input type="text" [id]="'dynamicNestedGroupName' + i" formControlName="dynamicNestedGroupName" />
+                                        <span class="help-block" *ngIf="group.get('dynamicNestedGroupName').errors?.required && group.controls.dynamicNestedGroupName.touched">Dynamic Group Required</span>
                                         <label [attr.for]="'dynamicExperienceInYears' + i">Dynamic Array Nested Group</label><!-- 'for' does not have attribute binding, so we use 'attr'-->
-                                        <input type="text" [id]="'dynamicExperienceInYears' + i" placeholder="Dynamic Experience" formControlName="dynamicExperienceInYears" />
+                                        <input type="text" [id]="'dynamicExperienceInYears' + i" formControlName="dynamicExperienceInYears" />
                                     </div>
                                     <div class="form-group">
                                         <label [attr.for]="'dynamicProficiency' + i">Dynamic Proficiency</label>
