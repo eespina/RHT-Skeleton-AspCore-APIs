@@ -79,8 +79,15 @@
                                     <hr *ngIf="i > 0" />
                                     <div class="form-group" [ngClass]="{'has-error':group.get('dynamicNestedGroupName').invalid && group.controls.dynamicNestedGroupName.touched}">
                                         <label [attr.for]="'dynamicNestedGroupName' + i">Dynamic Array Nested Group</label><!-- 'for' does not have attribute binding, so we use 'attr'-->
-                                        <input type="text" [id]="'dynamicNestedGroupName' + i" formControlName="dynamicNestedGroupName" />
-                                        <span class="help-block" *ngIf="group.get('dynamicNestedGroupName').errors?.required && group.controls.dynamicNestedGroupName.touched">Dynamic Group Required</span>
+                                        <div class="col-sm-4">
+                                            <input type="text" [id]="'dynamicNestedGroupName' + i" formControlName="dynamicNestedGroupName" />
+                                            <span class="help-block" *ngIf="group.get('dynamicNestedGroupName').errors?.required && group.controls.dynamicNestedGroupName.touched">Dynamic Group Required</span>
+                                        </div>
+                                        <div class="col-sm-6" *ngIf="reactiveFormGroup.get('dynamicNestedGroup').length > 1"> <!--*ngIf="i > 0">-->
+                                            <button type="button" class="btn btn-danger btn-sm pull-right" title="Delete Group" (click)="removeDynamicGroup_click(i)">
+                                                <span class="glyphicon glyphicon-remove">X</span>
+                                            </button>
+                                        </div>
                                         <label [attr.for]="'dynamicExperienceInYears' + i">Dynamic Array Nested Group</label><!-- 'for' does not have attribute binding, so we use 'attr'-->
                                         <input type="text" [id]="'dynamicExperienceInYears' + i" formControlName="dynamicExperienceInYears" />
                                     </div>

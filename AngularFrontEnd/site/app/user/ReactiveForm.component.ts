@@ -334,6 +334,10 @@ export class ReactiveFormComponent implements OnInit {
     addDynamicGroupButton_Click(): void {
         (<FormArray>this.reactiveFormGroup.get('dynamicNestedGroup')).push(this.addDynamicFormGroup());   //need to type cast it into a FormArray to be able to use the 'push' method
     }
+
+    removeDynamicGroup_click(index: number): void{
+        (<FormArray>this.reactiveFormGroup.get('dynamicNestedGroup')).removeAt(index);
+    }
 }
 
 //Returns an object with a Key(string)/Value(any) pair if there is a validation error. If there's no error, it will return null 
