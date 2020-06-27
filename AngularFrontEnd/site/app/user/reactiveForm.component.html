@@ -70,12 +70,13 @@
                         <div class="well">
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-4">
-                                    <button type="button" class="btn btn-primary" (click)="addDynamicGroupButton_Click()">Dynamically Add Group</button>
+                                    <button type="button" class="btn btn-primary" (click)="addDynamicGroupButton_Click()" [disabled]="reactiveFormGroup.get('dynamicNestedGroup').invalid">Dynamically Add Group</button>
                                 </div>
                             </div>
                             <div formArrayName="dynamicNestedGroup" *ngFor="let group of reactiveFormGroup.get('dynamicNestedGroup').controls; let i = index">
                                 <div [formGroupName]="i">
                                     <!--zero (above) is the index-->
+                                    <hr *ngIf="i > 0" />
                                     <div class="form-group" [ngClass]="{'has-error':group.get('dynamicNestedGroupName').invalid && group.controls.dynamicNestedGroupName.touched}">
                                         <label [attr.for]="'dynamicNestedGroupName' + i">Dynamic Array Nested Group</label><!-- 'for' does not have attribute binding, so we use 'attr'-->
                                         <input type="text" [id]="'dynamicNestedGroupName' + i" formControlName="dynamicNestedGroupName" />
