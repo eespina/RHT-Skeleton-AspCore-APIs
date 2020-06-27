@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';   //FormGroup and FormControl inherit from AbstractControl
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';   //FormGroup and FormControl inherit from AbstractControl
 import { CustomValidators } from '../shared/custom.validators';
 
 @Component({
@@ -136,20 +136,82 @@ export class ReactiveFormComponent implements OnInit {
     }*/
 
     loadFakeDataClick(): void {
+
+        //-------------------------- FormArray Example
+        const formArray = new FormArray([//can create a Formarray like this, with the 'new' keyword
+            new FormControl('Glenn', Validators.required),
+            new FormGroup({
+                country: new FormControl('', Validators.required)
+            }),
+            new FormArray([])
+        ]);
+
+        console.log(formArray.length);  //should print out the number '3' for each indece in the formArray
+
+        //iterate over each index (FormControl, FormGroup or FormArray) in the array
+        for (const control of formArray.controls) {
+            if (control instanceof FormControl) {
+                //do something to the control that is a FormControl
+            }
+            if (control instanceof FormGroup) {
+                //do something to the control that is a FormGroup
+            }
+            if (control instanceof FormArray) {
+                //do something to the control that is a FormArray
+            }
+        }
+
+        //it's more common to use arrays with like types, however, you can use them with mixed types like the 'formArray' examples
+        const formBuilderArray = this.fb.array([
+            new FormControl('Glenn', Validators.required),//name
+            new FormControl('IT', Validators.required),//department
+            new FormControl('', Validators.required)//Gender
+        ]);
+
+        //FormArray Useful METHODS
+        //push - Inserts the control at the end of the array    (i.e "formBuilderArray.push(new FormControl('Caleb', Validators.required));")
+        //insert - Inserts the control at the specified index in the array
+        //removeAt - Removes the control at the specified index in the array
+        //setControl - Replace an existing control at the specified index
+        //at - Return the control at the specified index in the array   (i.e "formBuilderArray.at(3).value;" .... would return 'Caleb')
+
+        //using a FormGroup to create the same group of FormControls
+
+        //it's more common to use arrays with like types, however, you can use them with mixed types like the 'formArray' examples
+        const formGroup = this.fb.group([
+            new FormControl('Glenn', Validators.required),//name
+            new FormControl('IT', Validators.required),//department
+            new FormControl('', Validators.required)//Gender
+        ]);
+
+        //DIFFERENCES between a formGroup and a formArray (as in the similarities between the two groups above) are that 
+            //formarray data is serialized as an array whereas a formgroup is serialized as an Object. FormArrays are usefull for dynamically creating groups and controls
+
+        //The FormArray items (above) are designed not to show, I would imaginge it's just passing one of the groups (above) into the 'this.reactiveFormGroup.setValue()' method (below)
+
+        //-------------------------- FormArray Example END
+
+
         //This is just fake data that exists so I don't have to sample data from the database (or any persisted information)
         this.reactiveFormGroup.setValue({   //  "setValue" would be useful for setting data loaded from some other material
             firstName: 'FakeFirstname',
             lastName: '',
             userName: 'FakeUserName',
-            email: 'fake@email.com',
             phone: '1234568',
             password: 'FakePassword',
+            contactPreference: '',
 
             //Nested Form Group Examples (not yet persisted in any kind of memory)
             nestedGroup: {
                 nestedGroupName: 'FakenestedGroupName',
                 experienceInYears: 1234,
                 proficiency: ''
+            },
+
+            //Nested Form Group Examples (not yet persisted in any kind of memory)
+            emailGroup: {
+                email: 'email@email.com',
+                confirmEmail: 'email@email.com'
             }
         });
 
