@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <label for="nestedGroupName">Nested Group</label>
                                 <input type="text" id="nestedGroupName" formControlName="nestedGroupName" placeholder="Nested Group Name" />
-                                <input type="text" placeholder="Experience in Years" formControlName="experienceInYears" />
+                                <input type="text" placeholder="Experience" formControlName="experienceInYears" />
                             </div>
                             <div class="form-group">
                                 <label>Proficiency</label>
@@ -66,7 +66,31 @@
                                 <input type="radio" value="advanced" formControlName="proficiency" />Advanced
                             </div>
                         </div>
-
+                        <br />
+                        <div class="well">
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-4">
+                                    <button type="button" class="btn btn-primary" (click)="addDynamicGroupButton_Click()">Dynamically Add Group</button>
+                                </div>
+                            </div>
+                            <div formArrayName="dynamicNestedGroup" *ngFor="let group of reactiveFormGroup.get('dynamicNestedGroup').controls; let i = index">
+                                <div [formGroupName]="i">
+                                    <!--zero (above) is the index-->
+                                    <div class="form-group">
+                                        <label for="dynamicNestedGroupName">Dynamic Array Nested Group</label>
+                                        <input type="text" id="dynamicNestedGroupName" formControlName="dynamicNestedGroupName" placeholder="Dynamic Group Name" />
+                                        <input type="text" placeholder="Dynamic Experience" formControlName="dynamicExperienceInYears" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Dynamic Proficiency</label>
+                                        <input type="radio" value="beginner" formControlName="dynamicProficiency" />Beginner
+                                        <input type="radio" value="intermediate" formControlName="dynamicProficiency" />Intermediate
+                                        <input type="radio" value="advanced" formControlName="dynamicProficiency" />Advanced
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
                         <div class="btn-toolbar">
                             <button class="btn btn-primary" type="submit">Register</button>
                             <button class="btn btn-primary" type="button" (click)="loadFakeDataClick()">Load Fake Data</button>

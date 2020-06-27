@@ -38,6 +38,15 @@ export class ReactiveFormComponent implements OnInit {
         },
         'proficiency': {
             'required': 'Proficiency is Required'
+        },
+        'dynamicNestedGroupName': {
+            'required': 'Requred Field'
+        },
+        'dynamicExperienceInYears': {
+            'required': 'Requred Field'
+        },
+        'dynamicProficiency': {
+            'required': 'Requred Field'
         }
     };
 
@@ -50,7 +59,10 @@ export class ReactiveFormComponent implements OnInit {
         'confirmEmail': '',
         'emailGroup': '',
         'phone': '',
-        'proficiency': ''
+        'proficiency': '',
+        'dynamicNestedGroupName': '',
+        'dynamicExperienceInYears': '',
+        'dynamicProficiency': ''
     };
 
     constructor(private fb: FormBuilder) { }
@@ -73,7 +85,10 @@ export class ReactiveFormComponent implements OnInit {
                 nestedGroupName: [''],
                 experienceInYears: ['6'],   /// '6' is an example of using the default value
                 proficiency: ['', Validators.required]
-            })
+            }),
+            dynamicNestedGroup: this.fb.array([
+                this.addDynamicFormGroup()
+            ])
 
             //when it comees to validators, there's 'required', 'requiredTrue', 'email', 'pattern', 'min', 'max', 'minLength', 'maxLength'
         });
@@ -185,7 +200,7 @@ export class ReactiveFormComponent implements OnInit {
         ]);
 
         //DIFFERENCES between a formGroup and a formArray (as in the similarities between the two groups above) are that 
-            //formarray data is serialized as an array whereas a formgroup is serialized as an Object. FormArrays are usefull for dynamically creating groups and controls
+        //formarray data is serialized as an array whereas a formgroup is serialized as an Object. FormArrays are usefull for dynamically creating groups and controls
 
         //The FormArray items (above) are designed not to show, I would imaginge it's just passing one of the groups (above) into the 'this.reactiveFormGroup.setValue()' method (below)
 
@@ -264,6 +279,16 @@ export class ReactiveFormComponent implements OnInit {
             if (abstractControl instanceof FormGroup) {
                 this.logValidationErrors(abstractControl);   //recursively call the same method for the NESTED form group
             }
+
+            //if the instance is a formArray, then we have to get inside the forgroup by recursively calling it with the FormGroup being passed in
+            if (abstractControl instanceof FormArray) {
+                for (const control of abstractControl.controls) {
+                    //need to check if the control in the formarray is an instance of FormGroup, then recursively call the same method for the NESTED form group
+                    if (abstractControl instanceof FormGroup) {
+                        this.logValidationErrors(abstractControl);
+                    }
+                }
+            }
         });
     }
 
@@ -294,6 +319,19 @@ export class ReactiveFormComponent implements OnInit {
         }
 
         phoneControl.updateValueAndValidity();  //immediately triggers the validation. in this example, we want this for forcing the user to enter a phone
+    }
+
+    //dynamically add a dynamic formgrouping
+    addDynamicFormGroup(): FormGroup {
+        return this.fb.group({
+            dynamicNestedGroupName: ['', Validators.required],
+            dynamicExperienceInYears: ['', Validators.required],
+            dynamicProficiency: ['', Validators.required]
+        })
+    }
+
+    addDynamicGroupButton_Click(): void {
+        (<FormArray>this.reactiveFormGroup.get('dynamicNestedGroup')).push(this.addDynamicFormGroup());   //need to type cast it into a FormArray to be able to use the 'push' method
     }
 }
 
