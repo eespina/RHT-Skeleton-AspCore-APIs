@@ -21,7 +21,7 @@
                             <label for="userName" class="col-lg-3">Username</label>
                             <input id="userName" type="text" class="form-control" formControlName="userName">
                         </div>
-                        
+
                         <br />
                         <div class="form-group">
                             <label>Contact Preference</label>
@@ -51,7 +51,7 @@
                             <label for="password" class="col-lg-3">Password</label>
                             <input id="password" type="text" class="form-control" formControlName="password">
                         </div>
-                        
+
                         <br />
                         <div formGroupName="nestedGroup">
                             <div class="form-group">
@@ -77,12 +77,13 @@
                                 <div [formGroupName]="i">
                                     <!--zero (above) is the index-->
                                     <div class="form-group">
-                                        <label for="dynamicNestedGroupName">Dynamic Array Nested Group</label>
-                                        <input type="text" id="dynamicNestedGroupName" formControlName="dynamicNestedGroupName" placeholder="Dynamic Group Name" />
-                                        <input type="text" placeholder="Dynamic Experience" formControlName="dynamicExperienceInYears" />
+                                        <label [attr.for]="'dynamicNestedGroupName' + i">Dynamic Array Nested Group</label><!-- 'for' does not have attribute binding, so we use 'attr'-->
+                                        <input type="text" [id]="'dynamicNestedGroupName' + i" formControlName="dynamicNestedGroupName" (blur)="logValidationErrors()" placeholder="Dynamic Group Name" />
+                                        <label [attr.for]="'dynamicExperienceInYears' + i">Dynamic Array Nested Group</label><!-- 'for' does not have attribute binding, so we use 'attr'-->
+                                        <input type="text" [id]="'dynamicExperienceInYears' + i" placeholder="Dynamic Experience" formControlName="dynamicExperienceInYears" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Dynamic Proficiency</label>
+                                        <label [attr.for]="'dynamicProficiency' + i">Dynamic Proficiency</label>
                                         <input type="radio" value="beginner" formControlName="dynamicProficiency" />Beginner
                                         <input type="radio" value="intermediate" formControlName="dynamicProficiency" />Intermediate
                                         <input type="radio" value="advanced" formControlName="dynamicProficiency" />Advanced
