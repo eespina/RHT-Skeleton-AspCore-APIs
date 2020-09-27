@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace AspCoreApiBase.Controllers
 {
-    //[Authorize]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ExamplesController : Controller
     {
         IUserService userService;

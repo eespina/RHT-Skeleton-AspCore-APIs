@@ -34,7 +34,7 @@ export class ExampleService {
     }
 
     getExampleById(exId: string): Observable<IExample> {
-        return this._http.get(`${this.baseUrl}/examples/${exId}`)   //string literal examples
+        return this._http.get(`${this.baseUrl}examples/${exId}`)   //string literal examples
             //.map((response: Response) => <IExample>response.json())
             //HttpClient.get() applies res.json() automatically and returns Observable<HttpResponse<string>>. You no longer need to call the '.map' function above yourself.
 

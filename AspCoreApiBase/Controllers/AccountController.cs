@@ -1,5 +1,4 @@
-﻿using AspCoreBase.Data.Entities.Authority;
-using AspCoreBase.Services.Interfaces;
+﻿using AspCoreBase.Services.Interfaces;
 using AspCoreBase.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace AspCoreApiBase.Controllers
 {
-    public class AccountController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> logger;
         private readonly IAuthenticateService authenticateService;
@@ -25,7 +26,7 @@ namespace AspCoreApiBase.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [Route("login"), HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             OwnerViewModel loggedInUser;
@@ -50,7 +51,8 @@ namespace AspCoreApiBase.Controllers
             }
         }
 
-        [HttpPost, Authorize]
+        [Authorize]
+        [Route("logout"), HttpPost]
         public async Task<IActionResult> Logout([FromBody] LoginViewModel model)
         {
             await authenticateService.SignOutAsync();
@@ -58,7 +60,8 @@ namespace AspCoreApiBase.Controllers
             return NoContent();
         }
 
-        [HttpPost, Authorize]
+        [Authorize]
+        [Route("registeruser"), HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] OwnerViewModel model)
         {
             if (!ModelState.IsValid)
