@@ -1,27 +1,23 @@
-﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
-namespace AspCoreApiBase
+namespace AspCoreBase
 {
     public class Program
     {
-        /*
-         *  still just a console app in terms of having this 'Main' method that just listens for web requests
-         *  when newly created as an Empty project
-         *  */
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
-            
-            ////builds a web hosts and listens for requests
-            ////only method that is included in the Empty web project
-            //BuildWebHost(args).Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)  //creates a default builder for our web hosts - also sets up a default configuration file that can be readily available

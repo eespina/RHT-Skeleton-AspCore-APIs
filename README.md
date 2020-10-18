@@ -16,3 +16,4 @@ Owners Portal for eVillage Saas product. TEMPORARILY on hold while creation of t
 	- Ensure your database connections are correct and that they are Running
 	
 	- For helpful debugging and to run both projects at the same time, go to the Visual Studio properties on the Solution level and choose "Multiple startup projects"
+	
