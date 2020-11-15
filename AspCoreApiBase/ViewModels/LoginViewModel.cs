@@ -1,3 +1,4 @@
+using AspCoreApiBase.ViewModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace AspCoreBase.ViewModels
@@ -10,5 +11,6 @@ namespace AspCoreBase.ViewModels
 		public string Password { get; set; }
         public string ChangedCredentialString { get; set; }
 		public bool RememberMe { get; set; }
+        public ErrorViewModel Error { get; set; }
     }
 }

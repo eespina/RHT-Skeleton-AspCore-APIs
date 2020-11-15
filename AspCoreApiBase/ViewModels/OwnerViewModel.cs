@@ -48,5 +48,6 @@ namespace AspCoreBase.ViewModels
         public Guid ModifiedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
         public TokenHandleViewModel tokenHandleViewModel { get; set; }
-    }
+		public ErrorViewModel Error { get; set; }
+	}
 }
