@@ -33,27 +33,23 @@ namespace AspCoreApiBase.Controllers
             return returnList;
         }
 
-        // GET api/values/[username]
         [HttpGet("{username}")]
-        public async Task<OwnerViewModel> Get(string username)
+        public async Task<OwnerViewModel> Get(string username)  //inside the client app, we've mixed IUser and IExample (angular). Should NOT be an issue creating new POCO/POJO entities in the future
         {
             var user = await userService.FindUser(username);
             return user;
         }
 
-        // POST api/values
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
