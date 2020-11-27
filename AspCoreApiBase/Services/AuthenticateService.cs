@@ -142,6 +142,7 @@ namespace AspCoreBase.Services
                         catch (Exception ex)
                         {
                             //throw new InvalidOperationException($"Cannot create Token {ex}"); //TODO - LOG
+                            var NEEDtoLOGthis = ex.ToString();
                             return null;
                         }
                     }//END - if (result.Succeeded)

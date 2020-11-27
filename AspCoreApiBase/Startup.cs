@@ -134,12 +134,24 @@ namespace AspCoreBase
             //{
             //    configuration.RootPath = "[somewhere]/dist";
             //});
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) { app.UseDeveloperExceptionPage(); }
+            app.UseSwagger();   // Enable middleware to serve generated Swagger as a JSON endpoint.
+            //app.UseSwagger(c => // Use this version of the "app.UseSwagger()" method for reasons commented about below
+            //{//Swashbuckle generates and exposes Swagger JSON in version 3.0 of the specification—officially called the OpenAPI Specification. To support backwards compatibility, you can opt into exposing JSON in the 2.0 format instead
+            //    c.SerializeAsV2 = true;
+            //});
+            app.UseSwaggerUI(c =>   // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiCoreBase .NET Core App"); // specifying the Swagger JSON endpoint.
+                c.RoutePrefix = string.Empty;
+            });
             app.UseCors("CorsPolicy");
             app.UseStaticFiles();//no longer using this as it is replaced by the 'Views' folder and its information (copy/pasted the content into the Views folder)
             app.UseAuthentication();
