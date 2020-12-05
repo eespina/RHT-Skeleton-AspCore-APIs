@@ -30,6 +30,12 @@ using System.Threading.Tasks;
 
 namespace AspCoreBase
 {
+    /// <summary>
+    /// This class NEEDS to be cleaned up. We have JWT Bearer process mixed in with OAuth 2.0 tactics inside this entire file (not just this abstract class).
+    /// "Startup_jwtVersion" is the version that has ONLY the jwt stuff with the username/password intended in the viewmodel that handles that process.
+    /// Decisions NEED to be made to determine WHICH authroization process to go with. For now, we're going with JWT Bearer token but with Identity Server
+    /// an OAuth 2.0 things within this that can be accessed with Swagger.
+    /// </summary>
     public abstract class Startup
     {
         public IConfiguration Config { get; }
@@ -41,7 +47,6 @@ namespace AspCoreBase
             Config = configuration;
             //this.environment = environment;
         }
-
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
@@ -208,6 +213,12 @@ namespace AspCoreBase
             return services;
         }
 
+        /// <summary>
+        /// Currently not correclty implemented and is wrongfully connected to the login/tokenization process, but this can be fixed, rather easily, later
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
         {
             var authorityUrl = new Uri($"{configuration["IdentityProvider:Authority"]}", UriKind.Absolute);
@@ -226,6 +237,7 @@ namespace AspCoreBase
             //                {
             //                    AuthorizationUrl = authorityUrl,
             //                    TokenUrl = new Uri(authorityUrl, "/connect/token"),
+            //                    //TokenUrl = new Uri(authorityUrl, "/Account/login"),
             //                    Scopes = new Dictionary<string, string> {
             //                        { configuration["IdentityProvider:ApiName"], "APICoreBaseScope" }
             //                    },
