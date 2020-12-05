@@ -36,7 +36,7 @@ namespace AspCoreBase
         //private readonly IHostEnvironment environment;
 
         public Startup(IConfiguration configuration)
-            //public Startup(IConfiguration configuration, IHostEnvironment environment)
+        //public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Config = configuration;
             //this.environment = environment;
@@ -211,29 +211,55 @@ namespace AspCoreBase
         public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
         {
             var authorityUrl = new Uri($"{configuration["IdentityProvider:Authority"]}", UriKind.Absolute);
+
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "APICoreBase API", Version = "v1" });
+            //    c.AddSecurityDefinition("oauth2",
+            //        new OpenApiSecurityScheme
+            //        {
+            //            Description = "Requests an authorization token from Identity Provider",
+            //            Type = SecuritySchemeType.OAuth2,
+            //            Flows = new OpenApiOAuthFlows()
+            //            {
+            //                ClientCredentials = new OpenApiOAuthFlow
+            //                {
+            //                    AuthorizationUrl = authorityUrl,
+            //                    TokenUrl = new Uri(authorityUrl, "/connect/token"),
+            //                    Scopes = new Dictionary<string, string> {
+            //                        { configuration["IdentityProvider:ApiName"], "APICoreBaseScope" }
+            //                    },
+            //                }
+            //            },
+            //        });
+            //    c.OperationFilter<SwaggerOAuthFilter>();
+            //});
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "APICoreBase API", Version = "v1" });
-                c.AddSecurityDefinition("oauth2",
+                c.AddSecurityDefinition("Bearer",
                     new OpenApiSecurityScheme
                     {
-                        Description = "Requests an authorization token from Identity Provider",
-                        Type = SecuritySchemeType.OAuth2,
-                        Flows = new OpenApiOAuthFlows()
-                        {
-                            ClientCredentials = new OpenApiOAuthFlow
-                            {
-                                AuthorizationUrl = authorityUrl,
-                                TokenUrl = new Uri(authorityUrl, "/connect/token"),
-                                Scopes = new Dictionary<string, string> {
-                                    { configuration["IdentityProvider:ApiName"], "APICoreBaseScope" }
-                                },
+                        In = ParameterLocation.Header,
+                        Description = "Please insert JWT with Bearer into field",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.ApiKey
+                    });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement { {
+                        new OpenApiSecurityScheme{
+                            Reference = new OpenApiReference{
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
                             }
                         },
-                    });
-                c.OperationFilter<SwaggerOAuthFilter>();
+                        new string[]{}
+                    }
+                });
             });
+
             services.AddSwaggerGenNewtonsoftSupport();
+
             return services;
         }
 
