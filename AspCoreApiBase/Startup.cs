@@ -3,36 +3,52 @@ using AspCoreBase.Data.Entities.Authority;
 using AspCoreBase.Services;
 using AspCoreBase.Services.Interfaces;
 using AutoMapper;
+using Humanizer;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AspCoreBase
 {
-    public class Startup
+    public abstract class Startup
     {
-        private readonly IConfiguration config;
-        private readonly IHostEnvironment environment;
+        public IConfiguration Config { get; }
+        //private readonly IHostEnvironment environment;
 
-        public Startup(IConfiguration configuration, IHostEnvironment environment)
+        public Startup(IConfiguration configuration)
+            //public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
-            config = configuration;
-            this.environment = environment;
+            Config = configuration;
+            //this.environment = environment;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
+            services.AddCustomSwagger(Config);
 
             services.AddAutoMapper(typeof(Startup));
 
@@ -68,14 +84,14 @@ namespace AspCoreBase
                     {
                         ValidateIssuer = true,
                         //// Ensure the token was issued by a trusted authorization server (default true):
-                        ValidIssuer = config["Tokens:Issuer"],
+                        ValidIssuer = Config["Tokens:Issuer"],
                         // Ensure the token audience matches our audience value (default true):
                         ValidateAudience = true,
-                        ValidAudience = config["Tokens:Audience"],
+                        ValidAudience = Config["Tokens:Audience"],
 
                         //// Specify the key used to sign the token:
                         //RequireSignedTokens = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Tokens:Key"])),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config["Tokens:Key"])),
 
                         //// Ensure the token hasn't expired:
                         //RequireExpirationTime = true,
@@ -97,12 +113,12 @@ namespace AspCoreBase
             //creating and configuring the database provider using this AspCoreBaseDbContext
             services.AddDbContext<VillageDbContext>(cfg =>
             {
-                cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseConnectionString"));
+                cfg.UseSqlServer(this.Config.GetConnectionString("aspCoreBaseConnectionString"));
             });
 
             services.AddDbContext<AuthorityDbContext>(cfg =>
             {
-                cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseAuthorityConnectionString"));
+                cfg.UseSqlServer(this.Config.GetConnectionString("aspCoreBaseAuthorityConnectionString"));
             });
 
             #region SERVICES
@@ -139,7 +155,7 @@ namespace AspCoreBase
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
+        public virtual void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) { app.UseDeveloperExceptionPage(); }
             app.UseSwagger();   // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -160,5 +176,135 @@ namespace AspCoreBase
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
+        public virtual void BindIdentityServerAuthenticationOptions(IdentityServerAuthenticationOptions options)
+            => Config.GetSection("IdentityProvider").Bind(options);
     }
+
+    #region AUXILLIARY STARTUP HELPER CLASSES
+    /// <summary>
+    /// I MAY WANT TO REFACTOR THIS INTO ANOTHER CLASS FILE
+    /// </summary>
+    internal static class CustomExtensions
+    {
+        public static IServiceCollection AddCustomMvc(this IServiceCollection services)
+        {
+            services.AddControllers(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+                config.ValueProviderFactories.Add(new SnakeCaseQueryStringValueProvider());
+            })
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver =
+                new DefaultContractResolver()
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy(true, false)
+                };
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+            return services;
+        }
+
+        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
+        {
+            var authorityUrl = new Uri($"{configuration["IdentityProvider:Authority"]}", UriKind.Absolute);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "APICoreBase API", Version = "v1" });
+                c.AddSecurityDefinition("oauth2",
+                    new OpenApiSecurityScheme
+                    {
+                        Description = "Requests an authorization token from Identity Provider",
+                        Type = SecuritySchemeType.OAuth2,
+                        Flows = new OpenApiOAuthFlows()
+                        {
+                            ClientCredentials = new OpenApiOAuthFlow
+                            {
+                                AuthorizationUrl = authorityUrl,
+                                TokenUrl = new Uri(authorityUrl, "/connect/token"),
+                                Scopes = new Dictionary<string, string> {
+                                    { configuration["IdentityProvider:ApiName"], "APICoreBaseScope" }
+                                },
+                            }
+                        },
+                    });
+                c.OperationFilter<SwaggerOAuthFilter>();
+            });
+            services.AddSwaggerGenNewtonsoftSupport();
+            return services;
+        }
+
+        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, Action<IdentityServerAuthenticationOptions> configureOptions)
+        {
+            services
+                .AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie("none")
+                .AddIdentityServerAuthentication(configureOptions);
+            return services;
+        }
+    }
+
+    /// <summary>
+    /// I MAY WANT TO REFACTOR THIS INTO ANOTHER CLASS FILE
+    /// </summary>
+    public class SnakeCaseQueryStringValueProvider : IValueProviderFactory
+    {
+        public Task CreateValueProviderAsync(ValueProviderFactoryContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.ValueProviders.Add(BuildQueryStringValueProvider(context));
+
+            return Task.CompletedTask;
+        }
+
+        private static QueryStringValueProvider BuildQueryStringValueProvider(ValueProviderFactoryContext context)
+        {
+            var collection = context.ActionContext.HttpContext.Request.Query
+                .ToDictionary(t => t.Key.Pascalize(), t => t.Value, StringComparer.OrdinalIgnoreCase);
+
+            var queryStringValueProvider = new QueryStringValueProvider(
+                BindingSource.Query,
+                new QueryCollection(collection),
+                CultureInfo.InvariantCulture);
+
+            return queryStringValueProvider;
+        }
+    }
+
+    /// <summary>
+    ///     Updates swagger.json output to include security information
+    ///     for any controllers or actions that contain the Authorize attribute
+    /// </summary>
+    public class SwaggerOAuthFilter : IOperationFilter
+    {
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        {
+            // Check for authorize filter.
+            var filterPipeline = context.ApiDescription.ActionDescriptor.FilterDescriptors;
+            var isAuthorized = filterPipeline.Select(filterInfo => filterInfo.Filter).Any(filter => filter is AuthorizeFilter);
+
+            if (!isAuthorized) return;
+
+            var oAuthScheme = new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+            };
+
+            operation.Security = new List<OpenApiSecurityRequirement>
+                {
+                    new OpenApiSecurityRequirement
+                    {
+                        [oAuthScheme ] = new string[0]
+                    }
+                };
+        }
+    }
+    #endregion
 }
