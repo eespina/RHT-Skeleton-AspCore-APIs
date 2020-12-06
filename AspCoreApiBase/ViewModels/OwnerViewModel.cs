@@ -22,12 +22,12 @@ namespace AspCoreBase.ViewModels
 		[Required]
 		public string UserName { get; set; }
 
-		[Required]
-		[StringLength(18, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
-		[RegularExpression("^((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)).+$", ErrorMessage = "Password must contain All qualifying characters")]
-		public string Password { get; set; }
+		//[Required]
+		//[StringLength(18, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+		//[RegularExpression("^((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)).+$", ErrorMessage = "Password must contain All qualifying characters")]
+		//public string Password { get; set; }
 
-        [Required]
+        //[Required]
         public UserTypeViewModel UserType { get; set; }    //NEEDED in Admin Portal only
 
         public Guid CurrentAdministeringUser { get; set; }  //this should be null and replaced in the Admin portal
@@ -35,7 +35,7 @@ namespace AspCoreBase.ViewModels
 
         [MaxLength(1000, ErrorMessage = "Notes are Too Long!")]
 		public string Notes { get; set; }
-		[Required]
+		//[Required]
 		public bool IsActive { get; set; }
 
 		public PropertyViewModel Property { get; set; }

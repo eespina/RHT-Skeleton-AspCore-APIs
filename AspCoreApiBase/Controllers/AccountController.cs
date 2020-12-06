@@ -46,7 +46,6 @@ namespace AspCoreApiBase.Controllers
                     loggedInUser = await authenticateService.CreateToken(decryptedUserName, deryptedPassword);
                     if (loggedInUser != null)
                     {
-                        loggedInUser.Password = string.Empty;
                         return Ok(loggedInUser);
                     }
                 }
@@ -68,6 +67,11 @@ namespace AspCoreApiBase.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// This has not yet been tested thoroughly so I hope it works
+        /// </summary>
+        /// <param name="model">User model from teh client-side</param>
+        /// <returns>Newly created OwnderViewModel to the client</returns>
         [Authorize]
         [Route("registeruser"), HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] OwnerViewModel model)
@@ -78,15 +82,18 @@ namespace AspCoreApiBase.Controllers
             }
             try
             {
-                OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model);
-                if (newlyCreatedUser != null)
+                Request.Headers.TryGetValue("password", out var encryptedPassword);
+                if (!string.IsNullOrWhiteSpace(encryptedPassword))
                 {
-                    return Ok(newlyCreatedUser);
+                    var decryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword); //TODO - THINK about just not keeping an encrypted key in the database instead of going through the process.
+                    OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model, decryptedPassword);
+                    if (newlyCreatedUser != null)
+                    {
+                        return Ok(newlyCreatedUser);
+                    }
                 }
-                else
-                {
-                    return NotFound("USER NOT CREATED");
-                }
+
+                return NotFound("USER NOT CREATED");
 
                 //return Ok(new OwnerViewModel {LastName = "LastNameTest", FirstName = "FirstNameTest", UserName = "UserNameTest" });   //just used for Testing where i do NOT want to 
             }
