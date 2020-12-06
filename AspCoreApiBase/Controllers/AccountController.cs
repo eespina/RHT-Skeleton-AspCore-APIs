@@ -1,4 +1,5 @@
-﻿using AspCoreBase.Services.Interfaces;
+﻿using AspCoreBase.Services;
+using AspCoreBase.Services.Interfaces;
 using AspCoreBase.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace AspCoreApiBase.Controllers
 
         [AllowAnonymous]
         [Route("login"), HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Login()
         {
             OwnerViewModel loggedInUser;
             if (!ModelState.IsValid)
@@ -36,11 +37,18 @@ namespace AspCoreApiBase.Controllers
             }
             try
             {
-                loggedInUser = await authenticateService.CreateToken(model);
-                if (loggedInUser != null)
+                Request.Headers.TryGetValue("username", out var encryptedUserName);
+                Request.Headers.TryGetValue("password", out var encryptedPassword);
+                if (!string.IsNullOrWhiteSpace(encryptedUserName) && !string.IsNullOrWhiteSpace(encryptedPassword))
                 {
-                    loggedInUser.Password = string.Empty;
-                    return Ok(loggedInUser);
+                    var decryptedUserName = await authenticateService.DecryptStringAES(encryptedUserName);
+                    var deryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword);
+                    loggedInUser = await authenticateService.CreateToken(decryptedUserName, deryptedPassword);
+                    if (loggedInUser != null)
+                    {
+                        loggedInUser.Password = string.Empty;
+                        return Ok(loggedInUser);
+                    }
                 }
 
                 return Unauthorized();
@@ -53,7 +61,7 @@ namespace AspCoreApiBase.Controllers
 
         [Authorize]
         [Route("logout"), HttpPost]
-        public async Task<IActionResult> Logout([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Logout()
         {
             await authenticateService.SignOutAsync();
 

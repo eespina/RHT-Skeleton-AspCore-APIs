@@ -6,9 +6,11 @@ namespace AspCoreBase.Services.Interfaces
 {
 	public interface IAuthenticateService
 	{
-		Task<SignInResult> PasswordSign(LoginViewModel model);
+		Task<SignInResult> PasswordSign(string decryptedUsername, string decryptedPassword);
 		Task<bool> SignOutAsync();
-		Task<OwnerViewModel> CreateToken(LoginViewModel model);
-		Task<bool> ChangeCredentialsAsync(LoginViewModel model);
+		Task<OwnerViewModel> CreateToken(string decryptedUsername, string decryptedPassword);
+		Task<bool> ChangeCredentialsAsync(string decryptedUsername, string decryptedPassword);
+		Task<string> DecryptStringAES(string cipherText);
+		Task<string> EncryptStringAES(string plainText);
 	}
 }

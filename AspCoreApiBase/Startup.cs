@@ -1,3 +1,4 @@
+using AspCoreApiBase.Models;
 using AspCoreBase.Data;
 using AspCoreBase.Data.Entities.Authority;
 using AspCoreBase.Services;
@@ -112,6 +113,7 @@ namespace AspCoreBase
             #region SERVICES
             //example of Service using Dependency inject such that, when it is to be used, the 'services' logic will handle how to create it's 'MailService'
             //example using scoped because the repository should be shared within one scope, usually a request. this way they are not getting constrcuted over and over again
+            services.Configure<AppSettings>(config.GetSection("AppSettings"));
             services.AddScoped<IVillageDbRepository, VillageDbRepository>();
             services.AddScoped<IAuthorityDbRepository, AuthorityDbRepository>();
             services.AddTransient<IAuthenticateService, AuthenticateService>();
