@@ -502,3 +502,216 @@ namespace AspCoreBase
 
 //}
 #endregion
+
+#region PURE REFERENCE VERSION
+//using AutoMapper;
+//using Humanizer;
+//using IdentityServer4.AccessTokenValidation;
+//using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Builder;
+//using Microsoft.AspNetCore.Hosting;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.HttpOverrides;
+//using Microsoft.AspNetCore.Mvc.Authorization;
+//using Microsoft.AspNetCore.Mvc.ModelBinding;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.DependencyInjection;
+//using Microsoft.OpenApi.Models;
+//using Newtonsoft.Json;
+//using Newtonsoft.Json.Serialization;
+//using Swashbuckle.AspNetCore.SwaggerGen;
+//using System;
+//using System.Collections.Generic;
+//using System.Globalization;
+//using System.Linq;
+//using System.Threading.Tasks;
+
+//namespace AceNeogovApi
+//{
+//    public abstract class Startup
+//    {
+//        public IConfiguration Configuration { get; }
+
+//        protected Startup(IConfiguration configuration)
+//        {
+//            Configuration = configuration;
+//        }
+
+//        // This method gets called by the runtime. Use this method to add services to the container.
+//        public virtual void ConfigureServices(IServiceCollection services)
+//        {
+//            services
+//                .AddCustomMvc()
+//                .AddCustomSwagger(Configuration)
+//                .AddCustomAuthentication(BindIdentityServerAuthenticationOptions)
+//                //.AddCorrelationIdAccessor()
+//                //.AddLocaleService()
+//                //.AddRequestResponseLoggingDefaultServices(Configuration)
+//                .AddDistributedMemoryCache()
+//                .AddAutoMapper(typeof(Startup))
+//                .AddHealthChecks();
+//        }
+
+//        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+//        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+//        {
+//            app.UseHealthChecks("/healthcheck");
+
+//            //app.UseApiExceptionMiddleware();
+
+//            //app.UseRequestResponseLoggingMiddleware();
+
+//            app.UseRouting();
+
+//            app.UseAuthentication();
+
+//            app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedProto });
+
+//            // Shows UseCors with CorsPolicyBuilder.
+//            app.UseCors(builder => builder.AllowAnyMethod().AllowAnyHeader());
+
+//            //app.UseCorrelationIdMiddleware();
+
+//            // Enable middleware to serve generated Swagger as a JSON endpoint
+//            app.UseSwagger();
+
+//            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+//            app.UseSwaggerUI(c =>
+//            {
+//                c.SwaggerEndpoint("/swagger/v1/swagger.json", "NeoGov API");
+//                c.RoutePrefix = string.Empty;
+//            });
+//            app.UseEndpoints(config =>
+//            {
+//                config.MapControllers();
+//            });
+//        }
+
+//        public virtual void BindIdentityServerAuthenticationOptions(IdentityServerAuthenticationOptions options)
+//            => Configuration.GetSection("IdentityProvider").Bind(options);
+//    }
+
+//    internal static class CustomExtensions
+//    {
+//        public static IServiceCollection AddCustomMvc(this IServiceCollection services)
+//        {
+//            services.AddControllers(config =>
+//            {
+//                var policy = new AuthorizationPolicyBuilder()
+//                    .RequireAuthenticatedUser()
+//                    .Build();
+//                config.Filters.Add(new AuthorizeFilter(policy));
+//                config.ValueProviderFactories.Add(new SnakeCaseQueryStringValueProvider());
+//            })
+//            .AddNewtonsoftJson(options =>
+//            {
+//                options.SerializerSettings.ContractResolver =
+//                new DefaultContractResolver()
+//                {
+//                    NamingStrategy = new SnakeCaseNamingStrategy(true, false)
+//                };
+//                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+//            });
+//            return services;
+//        }
+
+//        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
+//        {
+//            var authorityUrl = new Uri($"{configuration["IdentityProvider:Authority"]}", UriKind.Absolute);
+//            services.AddSwaggerGen(c =>
+//            {
+//                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NeoGov API", Version = "v1" });
+//                c.AddSecurityDefinition("oauth2",
+//                    new OpenApiSecurityScheme
+//                    {
+//                        Description = "Requests an authorization token from Identity Provider",
+//                        Type = SecuritySchemeType.OAuth2,
+//                        Flows = new OpenApiOAuthFlows()
+//                        {
+//                            ClientCredentials = new OpenApiOAuthFlow
+//                            {
+//                                AuthorizationUrl = authorityUrl,
+//                                TokenUrl = new Uri(authorityUrl, "/connect/token"),
+//                                Scopes = new Dictionary<string, string> {
+//                                    { configuration["IdentityProvider:ApiName"], "AceNeogovApi" }
+//                                },
+//                            }
+//                        },
+//                    });
+//                c.OperationFilter<SwaggerOAuthFilter>();
+//            });
+//            services.AddSwaggerGenNewtonsoftSupport();
+//            return services;
+//        }
+
+//        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, Action<IdentityServerAuthenticationOptions> configureOptions)
+//        {
+//            services
+//                .AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+//                .AddCookie("none")
+//                .AddIdentityServerAuthentication(configureOptions);
+//            return services;
+//        }
+//    }
+
+//    /// <summary>
+//    /// I MAY WANT TO REFACTOR THIS INTO ANOTHER CLASS FILE
+//    /// </summary>
+//    public class SnakeCaseQueryStringValueProvider : IValueProviderFactory
+//    {
+//        public Task CreateValueProviderAsync(ValueProviderFactoryContext context)
+//        {
+//            if (context == null)
+//            {
+//                throw new ArgumentNullException(nameof(context));
+//            }
+
+//            context.ValueProviders.Add(BuildQueryStringValueProvider(context));
+
+//            return Task.CompletedTask;
+//        }
+
+//        private static QueryStringValueProvider BuildQueryStringValueProvider(ValueProviderFactoryContext context)
+//        {
+//            var collection = context.ActionContext.HttpContext.Request.Query
+//                .ToDictionary(t => t.Key.Pascalize(), t => t.Value, StringComparer.OrdinalIgnoreCase);
+
+//            var queryStringValueProvider = new QueryStringValueProvider(
+//                BindingSource.Query,
+//                new QueryCollection(collection),
+//                CultureInfo.InvariantCulture);
+
+//            return queryStringValueProvider;
+//        }
+//    }
+
+//    /// <summary>
+//    ///     Updates swagger.json output to include security information
+//    ///     for any controllers or actions that contain the Authorize attribute
+//    /// </summary>
+//    public class SwaggerOAuthFilter : IOperationFilter
+//    {
+//        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+//        {
+//            // Check for authorize filter.
+//            var filterPipeline = context.ApiDescription.ActionDescriptor.FilterDescriptors;
+//            var isAuthorized = filterPipeline.Select(filterInfo => filterInfo.Filter).Any(filter => filter is AuthorizeFilter);
+
+//            if (!isAuthorized) return;
+
+//            var oAuthScheme = new OpenApiSecurityScheme
+//            {
+//                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+//            };
+
+//            operation.Security = new List<OpenApiSecurityRequirement>
+//                {
+//                    new OpenApiSecurityRequirement
+//                    {
+//                        [oAuthScheme ] = new string[0]
+//                    }
+//                };
+//        }
+//    }
+//}
+#endregion
