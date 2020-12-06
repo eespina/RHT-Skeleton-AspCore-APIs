@@ -18,12 +18,12 @@ namespace AspCoreBase
     public class Startup
     {
         private readonly IConfiguration config;
-        private readonly IHostEnvironment environment;
+        //private readonly IHostEnvironment environment;
 
-        public Startup(IConfiguration configuration, IHostEnvironment environment)
+        public Startup(IConfiguration configuration)//, IHostEnvironment environment)
         {
             config = configuration;
-            this.environment = environment;
+            //this.environment = environment;
         }
 
         public IConfiguration Configuration { get; }
@@ -526,7 +526,7 @@ namespace AspCoreBase
 //using System.Linq;
 //using System.Threading.Tasks;
 
-//namespace AceNeogovApi
+//namespace AspCoreBase
 //{
 //    public abstract class Startup
 //    {
@@ -578,7 +578,7 @@ namespace AspCoreBase
 //            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
 //            app.UseSwaggerUI(c =>
 //            {
-//                c.SwaggerEndpoint("/swagger/v1/swagger.json", "NeoGov API");
+//                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AspCoreBase API");
 //                c.RoutePrefix = string.Empty;
 //            });
 //            app.UseEndpoints(config =>
@@ -620,9 +620,9 @@ namespace AspCoreBase
 //            var authorityUrl = new Uri($"{configuration["IdentityProvider:Authority"]}", UriKind.Absolute);
 //            services.AddSwaggerGen(c =>
 //            {
-//                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NeoGov API", Version = "v1" });
+//                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AspCoreBase API", Version = "v1" });
 //                c.AddSecurityDefinition("oauth2",
-//                    new OpenApiSecurityScheme
+//                    new OpenApiSecuritySchemef
 //                    {
 //                        Description = "Requests an authorization token from Identity Provider",
 //                        Type = SecuritySchemeType.OAuth2,
@@ -633,7 +633,7 @@ namespace AspCoreBase
 //                                AuthorizationUrl = authorityUrl,
 //                                TokenUrl = new Uri(authorityUrl, "/connect/token"),
 //                                Scopes = new Dictionary<string, string> {
-//                                    { configuration["IdentityProvider:ApiName"], "AceNeogovApi" }
+//                                    { configuration["IdentityProvider:ApiName"], "AspCoreBase" }
 //                                },
 //                            }
 //                        },
