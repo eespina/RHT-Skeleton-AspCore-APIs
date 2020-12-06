@@ -15,6 +15,10 @@ using System.Text;
 
 namespace AspCoreBase
 {
+    /// <summary>
+    /// This Base App TEMPLATE should really swtich to Identity Server/Swagger, or anyting that, at the very least, uses variables instaed of Bearer tokens.
+    /// This should happen before starting a porject OFF of this base app.
+    /// </summary>
     public class Startup
     {
         private readonly IConfiguration config;
