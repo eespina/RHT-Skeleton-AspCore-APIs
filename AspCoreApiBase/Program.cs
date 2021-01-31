@@ -2,11 +2,16 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog.Web;
+using System;
+using System.Reflection;
 
 namespace AspCoreBase
 {
     public class Program
     {
+        #region PRE-IDENTITYSERVER-PHASE OVERHAUL
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -38,5 +43,39 @@ namespace AspCoreBase
                                                                                                          //.AddEnvironmentVariables()
                 ;
         }
+        #endregion
+
+        #region IDENTITYSERVER-PHASE OVERHAUL ATTEMPT
+        //public static void Main(string[] args)
+        //{
+        //    var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+        //    try
+        //    {
+        //        logger.Debug("Initializing main");
+        //        CreateHostBuilder(args).Build().Run();
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        logger.Error(exception, "Stopped program because of exception");
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        NLog.LogManager.Shutdown();
+        //    }
+        //}
+
+        //public static IHostBuilder CreateHostBuilder(string[] args) =>
+        //    Host.CreateDefaultBuilder(args)
+        //        .ConfigureWebHostDefaults(webBuilder =>
+        //        {
+        //            webBuilder.UseStartup(Assembly.GetEntryAssembly().FullName);
+        //        })
+        //        .ConfigureLogging(logging =>
+        //        {
+        //            logging.ClearProviders();
+        //        })
+        //        .UseNLog();
+        #endregion
     }
 }
