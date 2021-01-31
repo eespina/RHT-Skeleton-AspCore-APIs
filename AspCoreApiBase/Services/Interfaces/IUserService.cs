@@ -8,6 +8,6 @@ namespace AspCoreBase.Services.Interfaces
 	{
 		Task<IEnumerable<OwnerViewModel>> FindUsers();
         Task<OwnerViewModel> FindUser(string userName);
-        Task<OwnerViewModel> CreateNewUser(OwnerViewModel userOwnerViewModel);
+        Task<OwnerViewModel> CreateNewUser(OwnerViewModel userOwnerViewModel, string password);
 	}
 }

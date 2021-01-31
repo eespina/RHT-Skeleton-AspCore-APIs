@@ -1,4 +1,5 @@
-﻿using AspCoreBase.Services.Interfaces;
+﻿using AspCoreBase.Services;
+using AspCoreBase.Services.Interfaces;
 using AspCoreBase.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace AspCoreApiBase.Controllers
 
         [AllowAnonymous]
         [Route("login"), HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Login()
         {
             OwnerViewModel loggedInUser;
             if (!ModelState.IsValid)
@@ -36,11 +37,17 @@ namespace AspCoreApiBase.Controllers
             }
             try
             {
-                loggedInUser = await authenticateService.CreateToken(model);
-                if (loggedInUser != null)
+                Request.Headers.TryGetValue("username", out var encryptedUserName);
+                Request.Headers.TryGetValue("password", out var encryptedPassword);
+                if (!string.IsNullOrWhiteSpace(encryptedUserName) && !string.IsNullOrWhiteSpace(encryptedPassword))
                 {
-                    loggedInUser.Password = string.Empty;
-                    return Ok(loggedInUser);
+                    var decryptedUserName = await authenticateService.DecryptStringAES(encryptedUserName);
+                    var deryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword);
+                    loggedInUser = await authenticateService.CreateToken(decryptedUserName, deryptedPassword);
+                    if (loggedInUser != null)
+                    {
+                        return Ok(loggedInUser);
+                    }
                 }
 
                 return Unauthorized();
@@ -53,13 +60,18 @@ namespace AspCoreApiBase.Controllers
 
         [Authorize]
         [Route("logout"), HttpPost]
-        public async Task<IActionResult> Logout([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Logout()
         {
             await authenticateService.SignOutAsync();
 
             return NoContent();
         }
 
+        /// <summary>
+        /// This has not yet been tested thoroughly so I hope it works
+        /// </summary>
+        /// <param name="model">User model from teh client-side</param>
+        /// <returns>Newly created OwnderViewModel to the client</returns>
         [Authorize]
         [Route("registeruser"), HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] OwnerViewModel model)
@@ -70,15 +82,18 @@ namespace AspCoreApiBase.Controllers
             }
             try
             {
-                OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model);
-                if (newlyCreatedUser != null)
+                Request.Headers.TryGetValue("password", out var encryptedPassword);
+                if (!string.IsNullOrWhiteSpace(encryptedPassword))
                 {
-                    return Ok(newlyCreatedUser);
+                    var decryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword); //TODO - THINK about just not keeping an encrypted key in the database instead of going through the process.
+                    OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model, decryptedPassword);
+                    if (newlyCreatedUser != null)
+                    {
+                        return Ok(newlyCreatedUser);
+                    }
                 }
-                else
-                {
-                    return NotFound("USER NOT CREATED");
-                }
+
+                return NotFound("USER NOT CREATED");
 
                 //return Ok(new OwnerViewModel {LastName = "LastNameTest", FirstName = "FirstNameTest", UserName = "UserNameTest" });   //just used for Testing where i do NOT want to 
             }
