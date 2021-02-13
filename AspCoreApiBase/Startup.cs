@@ -145,7 +145,10 @@ namespace AspCoreBase
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) { app.UseDeveloperExceptionPage(); }
+            if (env.IsDevelopment()) { // should be in the middleware as early as possible as to be able to show anything wrong for any middleware BELOW this implementation
+                app.UseDeveloperExceptionPage();//creates an advanced looking exception page
+            }
+
             app.UseCors("CorsPolicy");
 
             ////EXAMPLES of static files in .NET Core (NOT NEEDED because there are no files to use), use this BEFORE UseStaticFiles() method is used
