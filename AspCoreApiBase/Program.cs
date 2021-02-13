@@ -28,7 +28,7 @@ namespace AspCoreBase
             WebHost.CreateDefaultBuilder(args)  //creates a default builder for our web hosts - also sets up a default configuration file that can be readily available
                 .ConfigureAppConfiguration(SetupConfiguration)
                 .UseStartup<Startup>()  //tells it what class to use ( in this case, Startup.cs) to set up HOW to listen for web requests
-                .Build();   //Then it just builds it so it can then runn it
+                .Build();   //Then it just builds it so it can then run it
 
         private static void SetupConfiguration(WebHostBuilderContext ctx, IConfigurationBuilder builder)
         {

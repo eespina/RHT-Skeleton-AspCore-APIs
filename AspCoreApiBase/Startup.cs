@@ -153,6 +153,17 @@ namespace AspCoreBase
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            ////EXAMPLE of using  middleware. //use the Use method to ensure the rest of the middleware is called
+            //app.Use(async (context, next) =>
+            //{
+            //    await context.Response.WriteAsync("Hello from 1st Middleware !");
+            //    await next();
+            //});
+
+            //app.Run(async (context) => {    //EXAMPLE of Terminal Middleware (nothing below this method would be called if anything existed below)
+            //    await context.Response.WriteAsync("Hello from 2st Middleware !");
+            //});
         }
     }
 }
