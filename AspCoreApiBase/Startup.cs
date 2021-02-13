@@ -22,7 +22,7 @@ namespace AspCoreBase
     /// </summary>
     public class Startup
     {
-        private readonly IConfiguration config;
+        private readonly IConfiguration config; //  appsettings.json < appsettings.{env}.json overrides < User secrets < Environment Variables (launchSettings.json) < Command-line arguments (i.e. from the CLI)
         //private readonly IHostEnvironment environment;
 
         public Startup(IConfiguration configuration)//, IHostEnvironment environment)
