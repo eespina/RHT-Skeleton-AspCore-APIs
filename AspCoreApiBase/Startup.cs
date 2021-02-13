@@ -147,7 +147,21 @@ namespace AspCoreBase
         {
             if (env.IsDevelopment()) { app.UseDeveloperExceptionPage(); }
             app.UseCors("CorsPolicy");
+
+            ////EXAMPLES of static files in .NET Core (NOT NEEDED because there are no files to use), use this BEFORE UseStaticFiles() method is used
+            ///Default directory for static files is 'wwwroot' 
+            //DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            //defaultFilesOptions.DefaultFileNames.Clear();
+            //defaultFilesOptions.DefaultFileNames.Add("sample.html");
+            //app.UseFileServer();
+
+            //FileServerOptions fileServerOptions = new FileServerOptions();  //this COMBINES the functionality of UseStaticFiles, UseDefaultFiles and UseDirectoryBrowser middleware
+            //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
+            //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("sample.html");
+            //app.UseFileServer(fileServerOptions);
+
             app.UseStaticFiles();//no longer using this as it is replaced by the 'Views' folder and its information (copy/pasted the content into the Views folder)
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseRouting();
