@@ -3,17 +3,17 @@ using AspCoreBase.Data.Entities;
 
 namespace AspCoreBase.Data
 {
-	public class VillageDbContext : DbContext
-	{
-		public VillageDbContext(DbContextOptions<VillageDbContext> options) : base(options) { }
-		public DbSet<AdminUser> AdminUser { get; set; }
-		public DbSet<OwnerUser> OwnerUser { get; set; }
-		public DbSet<Property> Property { get; set; }
-		public DbSet<UserProperty> UserProperty { get; set; }
+    public class VillageDbContext : DbContext
+    {
+        public VillageDbContext(DbContextOptions<VillageDbContext> options) : base(options) { }
+        public DbSet<AdminUser> AdminUser { get; set; }
+        public DbSet<OwnerUser> OwnerUser { get; set; }
+        public DbSet<Property> Property { get; set; }
+        public DbSet<UserProperty> UserProperty { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			/*	May NOT Need these below as there may NOT be a need to have a bridge table to map/match User and Property
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            /*	May NOT Need these below as there may NOT be a need to have a bridge table to map/match User and Property
 			 *	
 			modelBuilder.Entity<OwnerUser>()
 				.HasOne(p => p.AdminUser)
@@ -38,7 +38,23 @@ namespace AspCoreBase.Data
 				.HasConstraintName("ForeignKey_UserProperty_Property");
 
 				END OF - May NOT Need these below as there may NOT be a need to have a bridge table to map/match User and Property */
-		}
 
-	}
+            /*
+				//SEED data option - usefull if we just want to use test data instead of live data
+                modelBuilder.Entity<OwnerUser>().HasData(
+                new OwnerUser
+                {
+                    FirstName = "Test Owner 1",
+                    Email = "test_1@email.com"
+                },
+                new OwnerUser
+                {
+                    FirstName = "Test Owner 2",
+                    Email = "test_2@email.com"
+                }
+                );
+            */
+        }
+
+    }
 }

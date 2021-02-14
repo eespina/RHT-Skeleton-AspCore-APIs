@@ -102,6 +102,9 @@ namespace AspCoreBase
                 cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseConnectionString"));
             });
 
+            ////Just another version of the line above. it's better performance, but both work fine. AddDbContextPool can keep multiple DBContext objects alive and gives you an unused one rather than creating a new one each time
+            //services.AddDbContextPool<VillageDbContext>(options => options.UseSqlServer("aspCoreBaseConnectionString"));
+
             services.AddDbContext<AuthorityDbContext>(cfg =>
             {
                 cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseAuthorityConnectionString"));
