@@ -37,10 +37,7 @@ namespace AspCoreBase
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-
             services.AddAutoMapper(typeof(Startup));
-
             services.AddCors(options => { options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); });
 
             //Configure Identity. IdentityRole = in case we want to configure roles, its a type of data that can store info about a user,
@@ -148,6 +145,10 @@ namespace AspCoreBase
             if (env.IsDevelopment()) { // should be in the middleware as early as possible as to be able to show anything wrong for any middleware BELOW this implementation
                 app.UseDeveloperExceptionPage();//creates an advanced looking exception page
             }
+            else if (env.IsEnvironment("Made Up Env as the 'ASPNETCORE_ENVIRONMENT' value"))
+            {
+                //jsut another way of getting the environment
+            }
 
             app.UseCors("CorsPolicy");
 
@@ -158,7 +159,7 @@ namespace AspCoreBase
             //defaultFilesOptions.DefaultFileNames.Add("sample.html");
             //app.UseFileServer();
 
-            //FileServerOptions fileServerOptions = new FileServerOptions();  //this COMBINES the functionality of UseStaticFiles, UseDefaultFiles and UseDirectoryBrowser middleware
+            //FileServerOptions fileServerOptions = new FileServerOptions();  //this COMBINES the functionality of UseStaticFiles, UseDefaultFiles and UseDirectoryBrowser middleware (making the use of "DefaultFilesOptions" unnecessary)
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("sample.html");
             //app.UseFileServer(fileServerOptions);
