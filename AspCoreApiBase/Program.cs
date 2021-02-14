@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using NLog.Web;
-using System;
-using System.Reflection;
 
 namespace AspCoreBase
 {
@@ -22,7 +21,16 @@ namespace AspCoreBase
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+            .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                    logging.AddDebug();
+                    logging.AddEventSourceLogger();
+                    logging.AddNLog();
+                })
+            ;
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)  //creates a default builder for our web hosts - also sets up a default configuration file that can be readily available
