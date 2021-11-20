@@ -22,7 +22,7 @@ namespace AspCoreBase
     /// </summary>
     public class Startup
     {
-        private readonly IConfiguration config;
+        private readonly IConfiguration config; //  appsettings.json < appsettings.{env}.json overrides < User secrets < Environment Variables (launchSettings.json) < Command-line arguments (i.e. from the CLI)
         //private readonly IHostEnvironment environment;
 
         public Startup(IConfiguration configuration)//, IHostEnvironment environment)
@@ -37,10 +37,7 @@ namespace AspCoreBase
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-
             services.AddAutoMapper(typeof(Startup));
-
             services.AddCors(options => { options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); });
 
             //Configure Identity. IdentityRole = in case we want to configure roles, its a type of data that can store info about a user,
@@ -105,6 +102,9 @@ namespace AspCoreBase
                 cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseConnectionString"));
             });
 
+            ////Just another version of the line above. it's better performance, but both work fine. AddDbContextPool can keep multiple DBContext objects alive and gives you an unused one rather than creating a new one each time
+            //services.AddDbContextPool<VillageDbContext>(options => options.UseSqlServer("aspCoreBaseConnectionString"));
+
             services.AddDbContext<AuthorityDbContext>(cfg =>
             {
                 cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseAuthorityConnectionString"));
@@ -145,14 +145,46 @@ namespace AspCoreBase
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) { app.UseDeveloperExceptionPage(); }
+            if (env.IsDevelopment()) { // should be in the middleware as early as possible as to be able to show anything wrong for any middleware BELOW this implementation
+                app.UseDeveloperExceptionPage();//creates an advanced looking exception page
+            }
+            else if (env.IsEnvironment("Made Up Env as the 'ASPNETCORE_ENVIRONMENT' value"))
+            {
+                //jsut another way of getting the environment
+            }
+
             app.UseCors("CorsPolicy");
+
+            ////EXAMPLES of static files in .NET Core (NOT NEEDED because there are no files to use), use this BEFORE UseStaticFiles() method is used
+            ///Default directory for static files is 'wwwroot' 
+            //DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            //defaultFilesOptions.DefaultFileNames.Clear();
+            //defaultFilesOptions.DefaultFileNames.Add("sample.html");
+            //app.UseFileServer();
+
+            //FileServerOptions fileServerOptions = new FileServerOptions();  //this COMBINES the functionality of UseStaticFiles, UseDefaultFiles and UseDirectoryBrowser middleware (making the use of "DefaultFilesOptions" unnecessary)
+            //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
+            //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("sample.html");
+            //app.UseFileServer(fileServerOptions);
+
             app.UseStaticFiles();//no longer using this as it is replaced by the 'Views' folder and its information (copy/pasted the content into the Views folder)
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            ////EXAMPLE of using  middleware. //use the Use method to ensure the rest of the middleware is called
+            //app.Use(async (context, next) =>
+            //{
+            //    await context.Response.WriteAsync("Hello from 1st Middleware !");
+            //    await next();
+            //});
+
+            //app.Run(async (context) => {    //EXAMPLE of Terminal Middleware (nothing below this method would be called if anything existed below)
+            //    await context.Response.WriteAsync("Hello from 2st Middleware !");
+            //});
         }
     }
 }
