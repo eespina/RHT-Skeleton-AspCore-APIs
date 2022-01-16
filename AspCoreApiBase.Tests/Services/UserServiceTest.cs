@@ -15,8 +15,8 @@ namespace AspCoreApiBase.Tests.Services
     {
         private readonly Mock<IVillageDbRepository> _iVillageDbRepositoryMock = new Mock<IVillageDbRepository>();
         private readonly Mock<ILogger<UserService>> _loggerMock = new Mock<ILogger<UserService>>();
-        private readonly Mock<UserManager<AuthorityUser>> _authorityUserMock = new Mock<UserManager<AuthorityUser>>();
-        private readonly Mock<UserManager<AuthorityUser>> _userManagerMock = new Mock<UserManager<AuthorityUser>>();
+        private readonly Mock<UserManager<AuthorityUser>> _authorityUserMock = new Mock<UserManager<AuthorityUser>>(Mock.Of<IUserStore<AuthorityUser>>(), null, null, null, null, null, null, null, null);
+        private readonly Mock<UserManager<AuthorityUser>> _userManagerMock = new Mock<UserManager<AuthorityUser>>(Mock.Of<IUserStore<AuthorityUser>>(), null, null, null, null, null, null, null, null);
         private readonly Mock<IMapper> _mapperMock = new Mock<IMapper>();
 
         [Fact(DisplayName = "FindUsers_Returns_List_of_OwnerViewModel")]
@@ -30,10 +30,6 @@ namespace AspCoreApiBase.Tests.Services
             _userManagerMock.Setup(m => m.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new AuthorityUser { Id = "UserManagerId", FirstName = "TestFirstName", LastName = "TsetLastName" });
             _userManagerMock.Setup(userManager => userManager.IsInRoleAsync(It.IsAny<AuthorityUser>(), "TestUserManagerRoleAsync")).ReturnsAsync(true);
 
-            //Gives exception currently
-                //(Castle.DynamicProxy.InvalidProxyConstructorArgumentsException: 'Can not instantiate proxy of class: Microsoft.AspNetCore.Identity.UserManager`1
-                //[[AspCoreBase.Data.Entities.Authority.AuthorityUser, AspCoreApiBase, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]].
-                //Could not find a parameterless constructor.')
             var userServiceControllerMock = new UserService(_authorityUserMock.Object, _mapperMock.Object, _loggerMock.Object, _iVillageDbRepositoryMock.Object, _userManagerMock.Object);
 
             //Act
