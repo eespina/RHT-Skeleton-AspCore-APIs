@@ -10,15 +10,15 @@ namespace AspCoreApiBase.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ExamplesController : Controller
+    public class UserController : Controller
     {
         IUserService userService;
         IPropertyService propertyService;
         IMailService mailService;
         IAuthenticateService authenticateService;
-        private readonly ILogger<ExamplesController> logger;
+        private readonly ILogger<UserController> logger;
 
-        public ExamplesController(IUserService UserService, ILogger<ExamplesController> logger, IPropertyService propertyService, IMailService mailService, IAuthenticateService authenticateService)
+        public UserController(IUserService UserService, ILogger<UserController> logger, IPropertyService propertyService, IMailService mailService, IAuthenticateService authenticateService)
         {
             this.userService = UserService;
             this.logger = logger;
@@ -36,7 +36,7 @@ namespace AspCoreApiBase.Controllers
         }
 
         [HttpGet("{username}"), Authorize]
-        public async Task<IActionResult> Get(string username)  //inside the client app, we've mixed IUser and IExample (angular). Should NOT be an issue creating new POCO/POJO entities in the future
+        public async Task<IActionResult> Get(string username)
         {
             var user = await userService.FindUser(username);
             return Ok(user);
