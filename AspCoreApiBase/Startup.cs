@@ -119,7 +119,7 @@ namespace AspCoreBase
             services.AddTransient<IAuthenticateService, AuthenticateService>();
             services.AddTransient<IMailService, MailService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IPropertyService, PropertyService>(); // Add IAspCoreBaseDbRepository as a service people can use, but use as the implementation AspCoreBaseDbRepository. perhaps useful in testing
+            services.AddTransient<IExampleService, ExampleService>(); // Add IAspCoreBaseDbRepository as a service people can use, but use as the implementation AspCoreBaseDbRepository. perhaps useful in testing
             #endregion
 
             //// adds all the services that the subsystem requires to run ASP.NET MVC and would get rid of an 'IServiceCollection.AddMvc' error
@@ -326,7 +326,7 @@ namespace AspCoreBase
 //            services.AddTransient<IAuthenticateService, AuthenticateService>();
 //            services.AddTransient<IMailService, MailService>();
 //            services.AddTransient<IUserService, UserService>();
-//            services.AddTransient<IPropertyService, PropertyService>(); // Add IAspCoreBaseDbRepository as a service people can use, but use as the implementation AspCoreBaseDbRepository. perhaps useful in testing
+//            services.AddTransient<IExampleService, ExampleService>(); // Add IAspCoreBaseDbRepository as a service people can use, but use as the implementation AspCoreBaseDbRepository. perhaps useful in testing
 //            #endregion
 
 //            //// adds all the services that the subsystem requires to run ASP.NET MVC and would get rid of an 'IServiceCollection.AddMvc' error

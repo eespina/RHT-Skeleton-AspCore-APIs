@@ -47,30 +47,30 @@ namespace AspCoreBase.Data
             }
         }
 
-        public async Task<List<Property>> GetProperties()
+        public async Task<List<Example>> GetExamples()
 		{
 			try
 			{
-				var allProperties = await ctx.Property.Where(u => u.IsActive).ToListAsync();
-				return allProperties;
+				var allExamples = await ctx.Example.Where(u => u.IsActive).ToListAsync();
+				return allExamples;
 			}
 			catch (Exception ex)
 			{
-				logger.LogError("ERROR inside ExampleDbRepository.GetProperties - " + ex);
+				logger.LogError("ERROR inside ExampleDbRepository.GetExamples - " + ex);
 				return null;
 			}
 		}
 
-		public async Task<Property> GetProperty(string propertyName)
+		public async Task<Example> GetExample(string exampleName)
 		{
 			try
 			{
-				var property = await ctx.Property.FirstAsync(p => p.BuildingName == propertyName);
-				return property;
+				var example = await ctx.Example.FirstAsync(p => p.IsActive == true);
+				return example;
 			}
 			catch (Exception ex)
 			{
-				logger.LogError("ERROR inside ExampleDbRepository.GetProperty - " + ex);
+				logger.LogError("ERROR inside ExampleDbRepository.GetExample - " + ex);
 				return null;
 			}
 		}

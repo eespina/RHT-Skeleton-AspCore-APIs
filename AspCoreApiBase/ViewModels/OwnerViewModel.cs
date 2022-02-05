@@ -38,9 +38,9 @@ namespace AspCoreBase.ViewModels
 		//[Required]
 		public bool IsActive { get; set; }
 
-		public PropertyViewModel Property { get; set; }
-		public string PropertyName { get; set; }
-		public Guid PropertyId { get; set; }
+		public ExampleViewModel Example { get; set; }
+		public string ExampleName { get; set; }
+		public Guid ExampleId { get; set; }
 		public string TemporaryCredentials { get; set; }
 
         public Guid CreatedBy { get; set; }

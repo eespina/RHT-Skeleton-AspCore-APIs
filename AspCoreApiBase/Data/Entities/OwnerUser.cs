@@ -21,6 +21,6 @@ namespace AspCoreBase.Data.Entities
 		public string UserName { get; set; }
 		//public AdminUser AdminUser { get; set; }
 
-		//public List<UserProperty> UserProperties { get; set; }
+		//public List<UserExample> UserExamples { get; set; }
 	}
 }

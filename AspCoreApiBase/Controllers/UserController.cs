@@ -13,16 +13,16 @@ namespace AspCoreApiBase.Controllers
     public class UserController : Controller
     {
         IUserService userService;
-        IPropertyService propertyService;
+        IExampleService exampleService;
         IMailService mailService;
         IAuthenticateService authenticateService;
         private readonly ILogger<UserController> logger;
 
-        public UserController(IUserService UserService, ILogger<UserController> logger, IPropertyService propertyService, IMailService mailService, IAuthenticateService authenticateService)
+        public UserController(IUserService UserService, ILogger<UserController> logger, IExampleService exampleService, IMailService mailService, IAuthenticateService authenticateService)
         {
             this.userService = UserService;
             this.logger = logger;
-            this.propertyService = propertyService;
+            this.exampleService = exampleService;
             this.mailService = mailService;
             this.authenticateService = authenticateService;
         }

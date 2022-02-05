@@ -4,9 +4,10 @@ using AspCoreBase.ViewModels;
 
 namespace AspCoreBase.Services.Interfaces
 {
-	public interface IPropertyService
+	public interface IExampleService
 	{
-		Task<IEnumerable<PropertyViewModel>> GetProperties();
-		Task<bool> CreatePropertyUserConnection(OwnerViewModel u);
+		Task<IEnumerable<ExampleViewModel>> GetExamples();
+		Task<ExampleViewModel> GetExamples(string exampleName);
+		Task<bool> CreateExampleUserConnection(OwnerViewModel u);
 	}
 }

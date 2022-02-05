@@ -8,8 +8,8 @@ namespace AspCoreBase.Data
 	{
 		Task<List<OwnerUser>> GetExampleUserOwners();
         Task<OwnerUser> GetExampleUserOwner(string userName);
-        Task<List<Property>> GetProperties();
-		Task<Property> GetProperty(string propertyName);
+        Task<List<Example>> GetExamples();
+		Task<Example> GetExample(string exampleName);
 		Task<bool> SaveAllAsync();
 		void AddEntity(object model);
 	}
