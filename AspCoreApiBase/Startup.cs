@@ -97,13 +97,13 @@ namespace AspCoreBase
             //services.AddSingleton<IMailService, MailService>();   // heaviest as it will be sustained in the application for the entirety of the application running
 
             //creating and configuring the database provider using this AspCoreBaseDbContext
-            services.AddDbContext<VillageDbContext>(cfg =>
+            services.AddDbContext<ExampleDbContext>(cfg =>
             {
                 cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseConnectionString"));
             });
 
             ////Just another version of the line above. it's better performance, but both work fine. AddDbContextPool can keep multiple DBContext objects alive and gives you an unused one rather than creating a new one each time
-            //services.AddDbContextPool<VillageDbContext>(options => options.UseSqlServer("aspCoreBaseConnectionString"));
+            //services.AddDbContextPool<ExampleDbContext>(options => options.UseSqlServer("aspCoreBaseConnectionString"));
 
             services.AddDbContext<AuthorityDbContext>(cfg =>
             {
@@ -114,7 +114,7 @@ namespace AspCoreBase
             //example of Service using Dependency inject such that, when it is to be used, the 'services' logic will handle how to create it's 'MailService'
             //example using scoped because the repository should be shared within one scope, usually a request. this way they are not getting constrcuted over and over again
             services.Configure<AppSettings>(config.GetSection("AppSettings"));
-            services.AddScoped<IVillageDbRepository, VillageDbRepository>();
+            services.AddScoped<IExampleDbRepository, ExampleDbRepository>();
             services.AddScoped<IAuthorityDbRepository, AuthorityDbRepository>();
             services.AddTransient<IAuthenticateService, AuthenticateService>();
             services.AddTransient<IMailService, MailService>();
@@ -308,7 +308,7 @@ namespace AspCoreBase
 //            //services.AddSingleton<IMailService, MailService>();   // heaviest as it will be sustained in the application for the entirety of the application running
 
 //            //creating and configuring the database provider using this AspCoreBaseDbContext
-//            services.AddDbContext<VillageDbContext>(cfg =>
+//            services.AddDbContext<ExampleDbContext>(cfg =>
 //            {
 //                cfg.UseSqlServer(this.Config.GetConnectionString("aspCoreBaseConnectionString"));
 //            });
@@ -321,7 +321,7 @@ namespace AspCoreBase
 //            #region SERVICES
 //            //example of Service using Dependency inject such that, when it is to be used, the 'services' logic will handle how to create it's 'MailService'
 //            //example using scoped because the repository should be shared within one scope, usually a request. this way they are not getting constrcuted over and over again
-//            services.AddScoped<IVillageDbRepository, VillageDbRepository>();
+//            services.AddScoped<IExampleDbRepository, ExampleDbRepository>();
 //            services.AddScoped<IAuthorityDbRepository, AuthorityDbRepository>();
 //            services.AddTransient<IAuthenticateService, AuthenticateService>();
 //            services.AddTransient<IMailService, MailService>();

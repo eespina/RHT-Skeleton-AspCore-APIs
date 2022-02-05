@@ -4,10 +4,10 @@ using AspCoreBase.Data.Entities;
 
 namespace AspCoreBase.Data
 {
-	public interface IVillageDbRepository
+	public interface IExampleDbRepository
 	{
-		Task<List<OwnerUser>> GetVillageUserOwners();
-        Task<OwnerUser> GetVillageUserOwner(string userName);
+		Task<List<OwnerUser>> GetExampleUserOwners();
+        Task<OwnerUser> GetExampleUserOwner(string userName);
         Task<List<Property>> GetProperties();
 		Task<Property> GetProperty(string propertyName);
 		Task<bool> SaveAllAsync();

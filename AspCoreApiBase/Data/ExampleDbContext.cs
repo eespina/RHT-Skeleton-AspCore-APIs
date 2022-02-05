@@ -3,9 +3,9 @@ using AspCoreBase.Data.Entities;
 
 namespace AspCoreBase.Data
 {
-    public class VillageDbContext : DbContext
+    public class ExampleDbContext : DbContext
     {
-        public VillageDbContext(DbContextOptions<VillageDbContext> options) : base(options) { }
+        public ExampleDbContext(DbContextOptions<ExampleDbContext> options) : base(options) { }
         public DbSet<AdminUser> AdminUser { get; set; }
         public DbSet<OwnerUser> OwnerUser { get; set; }
         public DbSet<Property> Property { get; set; }

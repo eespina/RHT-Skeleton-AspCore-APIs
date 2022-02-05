@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AspCoreBase.Data.Entities
 {
-	public class AdminUser  //TODO - inherit from Village User (which should act/be an abstract class with, perhaps, an associated Interface)
+	public class AdminUser  //TODO - inherit from Example User (which should act/be an abstract class with, perhaps, an associated Interface)
 	{
 		[Key]
 		public Guid AdminUserId { get; set; }

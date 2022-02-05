@@ -8,18 +8,18 @@ using System;
 
 namespace AspCoreBase.Data
 {
-	public class VillageDbRepository : IVillageDbRepository
+	public class ExampleDbRepository : IExampleDbRepository
 	{
-		private readonly VillageDbContext ctx;
-		private readonly ILogger<VillageDbRepository> logger;
+		private readonly ExampleDbContext ctx;
+		private readonly ILogger<ExampleDbRepository> logger;
 
-		public VillageDbRepository(VillageDbContext ctx, ILogger<VillageDbRepository> logger)
+		public ExampleDbRepository(ExampleDbContext ctx, ILogger<ExampleDbRepository> logger)
 		{
 			this.ctx = ctx;
 			this.logger = logger;
 		}
 
-		public async Task<List<OwnerUser>> GetVillageUserOwners()
+		public async Task<List<OwnerUser>> GetExampleUserOwners()
 		{
 			try
 			{
@@ -28,12 +28,12 @@ namespace AspCoreBase.Data
 			}
 			catch (Exception ex)
 			{
-				logger.LogError("ERROR inside VillageDbRepository.GetVillageUserOwners - " + ex);
+				logger.LogError("ERROR inside ExampleDbRepository.GetExampleUserOwners - " + ex);
 				return null;
 			}
         }
 
-        public async Task<OwnerUser> GetVillageUserOwner(string userName)
+        public async Task<OwnerUser> GetExampleUserOwner(string userName)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace AspCoreBase.Data
             }
             catch (Exception ex)
             {
-                logger.LogError("ERROR inside VillageDbRepository.GetVillageUserOwner - " + ex);
+                logger.LogError("ERROR inside ExampleDbRepository.GetExampleUserOwner - " + ex);
                 return null;
             }
         }
@@ -56,7 +56,7 @@ namespace AspCoreBase.Data
 			}
 			catch (Exception ex)
 			{
-				logger.LogError("ERROR inside VillageDbRepository.GetProperties - " + ex);
+				logger.LogError("ERROR inside ExampleDbRepository.GetProperties - " + ex);
 				return null;
 			}
 		}
@@ -70,7 +70,7 @@ namespace AspCoreBase.Data
 			}
 			catch (Exception ex)
 			{
-				logger.LogError("ERROR inside VillageDbRepository.GetProperty - " + ex);
+				logger.LogError("ERROR inside ExampleDbRepository.GetProperty - " + ex);
 				return null;
 			}
 		}

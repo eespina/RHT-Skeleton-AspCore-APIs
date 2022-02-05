@@ -19,15 +19,15 @@ namespace AspCoreBase.Services
     public class UserService : IUserService
     {
         private readonly ILogger<UserService> logger;
-        private readonly IVillageDbRepository villageDbRepository;
+        private readonly IExampleDbRepository exampleDbRepository;
         private readonly IMapper mapper;
         private readonly UserManager<AuthorityUser> authorityUser;
         private readonly UserManager<AuthorityUser> userManager;
 
-        public UserService(UserManager<AuthorityUser> AuthorityUser, IMapper mapper, ILogger<UserService> logger, IVillageDbRepository repository, UserManager<AuthorityUser> userManager)
+        public UserService(UserManager<AuthorityUser> AuthorityUser, IMapper mapper, ILogger<UserService> logger, IExampleDbRepository repository, UserManager<AuthorityUser> userManager)
         {
             this.authorityUser = AuthorityUser;
-            this.villageDbRepository = repository;
+            this.exampleDbRepository = repository;
             this.mapper = mapper;
             this.logger = logger;
             this.userManager = userManager;
@@ -35,22 +35,22 @@ namespace AspCoreBase.Services
 
         public async Task<IEnumerable<OwnerViewModel>> FindUsers()
         {
-            var users = await villageDbRepository.GetVillageUserOwners();
+            var users = await exampleDbRepository.GetExampleUserOwners();
             if (users.Any())
             {
-                var villageUsersMapped = mapper.Map<IEnumerable<OwnerUser>, IEnumerable<OwnerViewModel>>(users);
-                return villageUsersMapped;
+                var exampleUsersMapped = mapper.Map<IEnumerable<OwnerUser>, IEnumerable<OwnerViewModel>>(users);
+                return exampleUsersMapped;
             }
             return null;
         }
 
         public async Task<OwnerViewModel> FindUser(string userName)
         {
-            var user = await villageDbRepository.GetVillageUserOwner(userName);
+            var user = await exampleDbRepository.GetExampleUserOwner(userName);
             if (user != null)
             {
-                var villageUserMapped = mapper.Map<OwnerUser, OwnerViewModel>(user);
-                return villageUserMapped;
+                var exampleUserMapped = mapper.Map<OwnerUser, OwnerViewModel>(user);
+                return exampleUserMapped;
             }
             return null;
         }
@@ -78,7 +78,7 @@ namespace AspCoreBase.Services
 
                         //var temporaryCredentials = randomTemporaryCredentialsGeneration();	//TODO - RESTORE THIS when email Invitiations Services are in order
 
-                        //CREATE Village Authority User
+                        //CREATE example Authority User
                         result = await authorityUser.CreateAsync(user, password);
 
                         if (result != IdentityResult.Success)
@@ -86,7 +86,7 @@ namespace AspCoreBase.Services
                             logger.LogWarning("ERROR inside UserService.CreateNewOwnerUser.Authority - For some reason, AuthorityUser Creation was NOT 'Success'ful. User was Not Created");
                             result = null;
                         }
-                        else//CREATE eVillage User
+                        else//CREATE example User
                         {
                             userViewModel.CreatedBy = userViewModel.CurrentAdministeringUser;
                             userViewModel.CreatedDate = DateTime.Now;
@@ -96,7 +96,7 @@ namespace AspCoreBase.Services
                             userViewModel.UserId = new Guid(user.Id);
                             userViewModel.UserType = GetUserType(userViewModel.UserType.Id);
 
-                            if (await CreateVillageUser(userViewModel))
+                            if (await CreateExampleUser(userViewModel))
                             {
                                 return userViewModel;
                             }
@@ -152,27 +152,27 @@ namespace AspCoreBase.Services
             return new string(chars.ToArray());
         }
 
-        private async Task<bool> CreateVillageUser(OwnerViewModel user)
+        private async Task<bool> CreateExampleUser(OwnerViewModel user)
         {
             try
             {
                 if (user.UserType.Id == 1)
                 {
-                    return await CreateAdminUser(user);
+                    return await CreateExampleAdminUser(user);
                 }
                 else if (user.UserType.Id == 2 || user.UserType.Id == 3)
                 {
-                    return await CreateOwnerUser(user);
+                    return await CreateExampleOwnerUser(user);
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError("ERROR inside UserService.CreateVillageUser - " + ex);
+                logger.LogError("ERROR inside UserService.CreateExampleUser - " + ex);
             }
             return false;
         }
 
-        private async Task<bool> CreateOwnerUser(OwnerViewModel user)
+        private async Task<bool> CreateExampleOwnerUser(OwnerViewModel user)
         {
             try
             {
@@ -190,13 +190,13 @@ namespace AspCoreBase.Services
                     CreatedDate = DateTime.Now
                 };
 
-                villageDbRepository.AddEntity(ownerUser);
+                exampleDbRepository.AddEntity(ownerUser);
 
-                return await villageDbRepository.SaveAllAsync();
+                return await exampleDbRepository.SaveAllAsync();
             }
             catch (Exception ex)
             {
-                logger.LogError("ERROR inside UserService.createVillageOwnerUser - " + ex);
+                logger.LogError("ERROR inside UserService.CreateExampleOwnerUser - " + ex);
                 return false;
             }
         }
@@ -207,7 +207,7 @@ namespace AspCoreBase.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        private async Task<bool> CreateAdminUser(OwnerViewModel user)
+        private async Task<bool> CreateExampleAdminUser(OwnerViewModel user)
         {
             try
             {
@@ -226,13 +226,13 @@ namespace AspCoreBase.Services
                     StartDate = DateTime.Now
                 };
 
-                villageDbRepository.AddEntity(adminUser);
+                exampleDbRepository.AddEntity(adminUser);
 
-                return await villageDbRepository.SaveAllAsync();
+                return await exampleDbRepository.SaveAllAsync();
             }
             catch (Exception ex)
             {
-                logger.LogError("ERROR inside UserService.createVillageOwnerUser - " + ex);
+                logger.LogError("ERROR inside UserService.CreateExampleAdminUser - " + ex);
                 return false;
             }
         }

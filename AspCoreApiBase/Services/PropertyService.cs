@@ -13,13 +13,13 @@ namespace AspCoreBase.Services
 	public class PropertyService : IPropertyService
 	{
 		private readonly ILogger<PropertyService> logger;
-		private readonly IVillageDbRepository villageDbRepository;
+		private readonly IExampleDbRepository exampleDbRepository;
 		private readonly IMapper mapper;
 
-		public PropertyService(ILogger<PropertyService> logger, IVillageDbRepository villageDbRepository, IMapper mapper)
+		public PropertyService(ILogger<PropertyService> logger, IExampleDbRepository exampleDbRepository, IMapper mapper)
 		{
 			this.logger = logger;
-			this.villageDbRepository = villageDbRepository;
+			this.exampleDbRepository = exampleDbRepository;
 			this.mapper = mapper;
 		}
 
@@ -27,7 +27,7 @@ namespace AspCoreBase.Services
 		{
 			try
 			{
-				var properties = await villageDbRepository.GetProperties();
+				var properties = await exampleDbRepository.GetProperties();
 				if (properties != null)
 				{
 					if (properties.Count > 0)
@@ -58,7 +58,7 @@ namespace AspCoreBase.Services
 		{
 			try
 			{
-				var property = await villageDbRepository.GetProperty(propertyName);
+				var property = await exampleDbRepository.GetProperty(propertyName);
 				if (property != null)
 				{
 					var firstOne = property;
@@ -87,7 +87,7 @@ namespace AspCoreBase.Services
 			if (property != null)
 			{
 				//save the userProperty with the PropertyId
-				villageDbRepository.AddEntity(new UserProperty
+				exampleDbRepository.AddEntity(new UserProperty
 				{
 					UserPropertyId = new Guid(),
 					UserId = user.UserId,
@@ -101,7 +101,7 @@ namespace AspCoreBase.Services
 					CreatedDate = DateTime.Now
 				});
 
-				return await villageDbRepository.SaveAllAsync();
+				return await exampleDbRepository.SaveAllAsync();
 			}
 
 			logger.LogWarning("ERROR inside PropertyService.CreatePropertyUserConnection - Could Not find Property to associate to new User " + user.UserName + "!");

@@ -4,9 +4,9 @@ using AspCoreBase.ViewModels;
 
 namespace AspCoreBase.Data
 {
-	public class VillageProfile : Profile
+	public class ExampleProfile : Profile
 	{
-		public VillageProfile()
+		public ExampleProfile()
 		{
 			CreateMap<OwnerUser, OwnerViewModel>()
 				.ForMember(o => o.Email, ex => ex.MapFrom(o => o.Email))
