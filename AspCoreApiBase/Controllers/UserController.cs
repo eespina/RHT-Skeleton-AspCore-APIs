@@ -30,7 +30,7 @@ namespace AspCoreApiBase.Controllers
         [HttpGet, Authorize]
         public async Task<IEnumerable<OwnerViewModel>> Get()//public IEnumerable<string> Get()
         {
-            //var returnList = new string[] { "Example1", "Example2" };
+            //var returnList = new string[] { "User1", "User2" };
             var returnList = await userService.FindUsers();
             return returnList;
         }

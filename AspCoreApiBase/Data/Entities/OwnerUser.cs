@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspCoreBase.Data.Entities
 {
-	public class OwnerUser  //TODO - inherit from Example User (which should act/be an abstract class with, perhaps, an associated Interface)
+	public class OwnerUser  //TODO - inherit from User User (which should act/be an abstract class with, perhaps, an associated Interface)
 	{
 		[Key]
 		public Guid OwnerUserId { get; set; }
