@@ -41,8 +41,9 @@ namespace AspCoreApiBase.Controllers
         [HttpPost, Authorize]
         public async Task<IActionResult> Post([FromBody] ExampleViewModel exampleViewModel)
         {
-            var postExample = exampleViewModel;
-            return Ok(new ExampleViewModel());
+            var postExample = new ExampleViewModel();
+
+            return Ok(postExample.ExampleId);
         }
 
         /// <summary>
@@ -50,16 +51,18 @@ namespace AspCoreApiBase.Controllers
         /// </summary>
         /// <param name="ownerViewModel">material from the client-side application to save over the existing datat for a particular client</param>
         /// <returns>SHOULD return something, we're currently mocking </returns>
-        [HttpPut("{id}"), Authorize]
+        [HttpPut, Authorize]
         public async Task<IActionResult> Put([FromBody] ExampleViewModel exampleViewModel)
         {
-            var putExample = exampleViewModel;
-            return Ok(new ExampleViewModel());
+            var putExample = exampleViewModel;//Todo Replace this with the updated example.
+            return Ok(putExample);
         }
 
-        [HttpDelete("{id}"), Authorize]
-        public void Delete(int id)
+        [HttpDelete("{exampleId}"), Authorize]
+        public async Task<IActionResult> Delete(string exampleId)
         {
+            var deletingExampleId = exampleId;
+            return Ok();
         }
     }
 }
