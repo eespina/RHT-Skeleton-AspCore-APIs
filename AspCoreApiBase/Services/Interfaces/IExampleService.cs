@@ -7,7 +7,7 @@ namespace AspCoreBase.Services.Interfaces
 	public interface IExampleService
 	{
 		Task<IEnumerable<ExampleViewModel>> GetExamples();
-		Task<ExampleViewModel> GetExamples(string exampleName);
+		Task<ExampleViewModel> GetExample(string exampleName);
 		Task<bool> CreateExampleUserConnection(OwnerViewModel u);
 	}
 }

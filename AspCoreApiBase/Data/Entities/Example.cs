@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AspCoreBase.Data.Entities
@@ -8,7 +7,7 @@ namespace AspCoreBase.Data.Entities
 	{
 		[Key]
 		public Guid ExampleId { get; set; }
-		public string ExampleCharacteric { get; set; }
+		public string ExampleCharacteristic { get; set; }
 		public bool IsActive { get; set; }
 		public Guid ModifiedBy { get; set; }
 		public DateTime ModifiedDate { get; set; }

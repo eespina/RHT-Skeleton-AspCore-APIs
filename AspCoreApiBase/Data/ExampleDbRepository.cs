@@ -61,11 +61,17 @@ namespace AspCoreBase.Data
 			}
 		}
 
-		public async Task<Example> GetExample(string exampleName)
+		public async Task<Example> GetExample(string exampleId)
 		{
 			try
 			{
-				var example = await ctx.Example.FirstAsync(p => p.IsActive == true);
+				if (string.IsNullOrWhiteSpace(exampleId))
+				{
+					logger.LogWarning("No Examples were found using the passed parameter '" + exampleId + "'.");
+					return null;
+				}
+
+				var example = await ctx.Example.FirstAsync(p => p.ExampleId.ToString().ToLower().Trim() == exampleId.ToLower().Trim());
 				return example;
 			}
 			catch (Exception ex)

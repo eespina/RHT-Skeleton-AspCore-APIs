@@ -7,6 +7,7 @@ using AspCoreBase.Data.Entities;
 using AspCoreBase.Services.Interfaces;
 using AspCoreBase.ViewModels;
 using System;
+using System.Linq;
 
 namespace AspCoreBase.Services
 {
@@ -30,7 +31,7 @@ namespace AspCoreBase.Services
 				var examples = await exampleDbRepository.GetExamples();
 				if (examples != null)
 				{
-					if (examples.Count > 0)
+					if (examples.Any())
 					{
 						var examplesMapped = mapper.Map<IEnumerable<Example>, IEnumerable<ExampleViewModel>>(examples);
 						return examplesMapped;
@@ -54,14 +55,13 @@ namespace AspCoreBase.Services
 			}
 		}
 
-		public async Task<ExampleViewModel> GetExamples(string exampleName)
+		public async Task<ExampleViewModel> GetExample(string exampleId)
 		{
 			try
 			{
-				var example = await exampleDbRepository.GetExample(exampleName);
+				var example = await exampleDbRepository.GetExample(exampleId);
 				if (example != null)
 				{
-					var firstOne = example;
 					var exampleMapped = mapper.Map<Example, ExampleViewModel>(example);
 					return exampleMapped;
 				}
@@ -82,7 +82,7 @@ namespace AspCoreBase.Services
 		public async Task<bool> CreateExampleUserConnection(OwnerViewModel user)
 		{
 			//get the example with the existing 'u' UserViewModel
-			var example = await GetExamples(user.ExampleName);
+			var example = await GetExample(user.ExampleName);
 
 			if (example != null)
 			{

@@ -14,6 +14,9 @@ namespace AspCoreBase.Data
 			CreateMap<AdminUser, OwnerViewModel>()
 				.ForMember(o => o.Email, ex => ex.MapFrom(o => o.Email))
 				.ReverseMap();
+			CreateMap<Example, ExampleViewModel>()
+				.ForMember(e => e.ExampleId, ex => ex.MapFrom(e => e.ExampleId))
+				.ReverseMap();
 		}
 	}
 }
