@@ -82,7 +82,9 @@ namespace AspCoreApiBase.Controllers
             }
             try
             {
-                Request.Headers.TryGetValue("password", out var encryptedPassword);
+                var requestHeadersCount = Request.Headers.Count;
+                var requestHeadersPw = Request.Headers["reticulatingsplines"];
+                Request.Headers.TryGetValue("reticulatingsplines", out var encryptedPassword);
                 if (!string.IsNullOrWhiteSpace(encryptedPassword))
                 {
                     var decryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword); //TODO - THINK about just not keeping an encrypted key in the database instead of going through the process.

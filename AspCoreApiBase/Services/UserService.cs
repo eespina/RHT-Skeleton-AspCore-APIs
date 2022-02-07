@@ -152,6 +152,12 @@ namespace AspCoreBase.Services
             return new string(chars.ToArray());
         }
 
+        /// <summary>
+        /// The theory HERE is that if you did not need to seperate the Admin user from whatever user is going to be needed
+        /// in a real scenario, you can just neglect one or delete and combine user/account tech
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         private async Task<bool> CreateExampleUser(OwnerViewModel user)
         {
             try
@@ -253,30 +259,14 @@ namespace AspCoreBase.Services
                     break;
                 case 3:
                     type.Id = 3;
-                    type.Name = "Renter";
+                    type.Name = "Vendor";
                     break;
                 case 4:
                     type.Id = 4;
-                    type.Name = "Doorman";
-                    break;
-                case 5:
-                    type.Id = 5;
-                    type.Name = "Maintenance";
-                    break;
-                case 6:
-                    type.Id = 6;
-                    type.Name = "Janitor";
-                    break;
-                case 7:
-                    type.Id = 7;
-                    type.Name = "Vendor";
-                    break;
-                case 8:
-                    type.Id = 8;
                     type.Name = "Unassigned";
                     break;
                 default:
-                    type.Id = 8;
+                    type.Id = 5;
                     type.Name = "Unassigned";
                     break;
             }
