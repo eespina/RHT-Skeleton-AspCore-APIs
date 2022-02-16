@@ -1,5 +1,5 @@
 # RHT-Skeleton-Angular-AspCore-APIs
-Owners Portal for eVillage Saas product. TEMPORARILY on hold while creation of the MVC .NET Core version (with Views) is being created. Eventually material will transfer to this version.
+Base/Skeleton version of any future api (microservice) project(s)
 
 # Setting Up
 
@@ -10,7 +10,7 @@ Owners Portal for eVillage Saas product. TEMPORARILY on hold while creation of t
 	- If there is an error concerning an 'UnhandledPromiseRejectionWarning', try typing 'gulp' again to retry the gulp process
 	
 	- Open Visual Studio and build the solution
-	- In Visual Studio, set the AngularFroenEnd's Start page as 'index.html'
+	- In Visual Studio, set the AngularFrontEnd's Start page as 'index.html'
 	- Note that a token must be presented for accessing areas that require authorization/permission
 	
 	- Ensure your database connections are correct and that they are Running
