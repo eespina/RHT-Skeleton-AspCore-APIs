@@ -87,7 +87,7 @@ namespace AspCoreBase.Services
 			if (example != null)
 			{
 				//save the userExample with the ExampleId
-				exampleDbRepository.AddEntity(new UserExample
+				await exampleDbRepository.AddEntity(new UserExample
 				{
 					UserExampleId = new Guid(),
 					UserId = user.UserId,
@@ -105,5 +105,89 @@ namespace AspCoreBase.Services
 			logger.LogWarning("ERROR inside ExampleService.CreateExampleUserConnection - Could Not find Example to associate to new User " + user.UserName + "!");
 			return false;
 		}
-	}
+
+        public async Task<ExampleViewModel> CreateExample(ExampleViewModel exampleViewModel)
+		{
+			try
+			{
+				var newExample = new Example
+				{
+					ExampleId = new Guid(),
+					ExampleCharacteristic = exampleViewModel.ExampleCharacteristic,
+					IsActive = exampleViewModel.IsActive,
+					ModifiedBy = exampleViewModel.CreatedBy,//TODO, next time, make this NULLABLE
+					ModifiedDate = DateTime.Now,//TODO, next time, make this NULLABLE
+					CreatedBy = exampleViewModel.CreatedBy,
+					CreatedDate = DateTime.Now
+				};
+
+				//save the userExample with the ExampleId
+				await exampleDbRepository.AddEntity(newExample);
+
+				await exampleDbRepository.SaveAllAsync();
+
+				exampleViewModel.ExampleId = newExample.ExampleId;
+
+				return exampleViewModel;
+			}
+			catch (Exception ex)
+			{
+				logger.LogError("ERROR inside ExampleService.GetExamples when calling it's Service counterpart - " + ex);
+				return null;
+			}
+		}
+
+		public async Task<bool> UpdateExample(ExampleViewModel exampleViewModel)
+		{
+			try
+			{
+				var example = await exampleDbRepository.GetExample(exampleViewModel.ExampleId.ToString());
+				if (example != null)
+				{
+					example.IsActive = exampleViewModel.IsActive;
+					example.ExampleCharacteristic = exampleViewModel.ExampleCharacteristic;
+					example.ModifiedBy = exampleViewModel.ModifiedBy;
+					example.ModifiedDate = exampleViewModel.ModifiedDate;
+
+					return await exampleDbRepository.SaveAllAsync();
+				}
+				else
+				{
+					logger.LogWarning("WARNING inside ExampleService.GetExamples - Examples is NULL.");
+				}
+
+				return false;
+			}
+			catch (System.Exception ex)
+			{
+				logger.LogError("ERROR inside ExampleService.GetExamples when calling it's Service counterpart - " + ex);
+				return false;
+			}
+		}
+
+        public async Task<bool> DeleteExample(string exampleId)
+		{
+			try
+			{
+				var example = await exampleDbRepository.GetExample(exampleId);
+				if (example != null)
+				{
+					await exampleDbRepository.DeleteEntityAsync(example);
+
+					return await exampleDbRepository.SaveAllAsync();
+				}
+				else
+				{
+					logger.LogWarning("WARNING inside ExampleService.GetExamples - Examples is NULL.");
+				}
+
+				return false;
+			}
+			catch (System.Exception ex)
+			{
+				logger.LogError("ERROR inside ExampleService.GetExamples when calling it's Service counterpart - " + ex);
+				return false;
+			}
+		}
+    }
 }

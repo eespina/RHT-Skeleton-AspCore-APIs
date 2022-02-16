@@ -41,9 +41,9 @@ namespace AspCoreApiBase.Controllers
         [HttpPost, Authorize]
         public async Task<IActionResult> Post([FromBody] ExampleViewModel exampleViewModel)
         {
-            var postExample = new ExampleViewModel();
+            var isCreationSuccessful = await exampleService.CreateExample(exampleViewModel);
 
-            return Ok(postExample.ExampleId);
+            return Ok(isCreationSuccessful);
         }
 
         /// <summary>
@@ -54,15 +54,15 @@ namespace AspCoreApiBase.Controllers
         [HttpPut, Authorize]
         public async Task<IActionResult> Put([FromBody] ExampleViewModel exampleViewModel)
         {
-            var putExample = exampleViewModel;//Todo Replace this with the updated example.
-            return Ok(putExample);
+            var isUpdateSuccessful = await exampleService.UpdateExample(exampleViewModel);
+            return Ok(isUpdateSuccessful);
         }
 
         [HttpDelete("{exampleId}"), Authorize]
         public async Task<IActionResult> Delete(string exampleId)
         {
-            var deletingExampleId = exampleId;
-            return Ok();
+            var isDeletionSuccessful = await exampleService.DeleteExample(exampleId);
+            return Ok(isDeletionSuccessful);
         }
     }
 }

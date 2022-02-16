@@ -9,5 +9,8 @@ namespace AspCoreBase.Services.Interfaces
 		Task<IEnumerable<ExampleViewModel>> GetExamples();
 		Task<ExampleViewModel> GetExample(string exampleName);
 		Task<bool> CreateExampleUserConnection(OwnerViewModel u);
+		Task<ExampleViewModel> CreateExample(ExampleViewModel exampleViewModel);
+		Task<bool> UpdateExample(ExampleViewModel exampleViewModel);
+		Task<bool> DeleteExample(string exampleId);
 	}
 }

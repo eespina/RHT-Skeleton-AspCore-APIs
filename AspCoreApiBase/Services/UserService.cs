@@ -44,13 +44,51 @@ namespace AspCoreBase.Services
             return null;
         }
 
-        public async Task<OwnerViewModel> FindUser(string userName)
+        public async Task<OwnerViewModel> FindUserByUserName(string userName)
         {
-            var user = await exampleDbRepository.GetExampleUserOwner(userName);
+            var user = await exampleDbRepository.GetExampleUserOwnerByUserName(userName);
             if (user != null)
             {
                 var exampleUserMapped = mapper.Map<OwnerUser, OwnerViewModel>(user);
+                exampleUserMapped.CurrentAdministeringUser = user.OwnerUserId;
+                exampleUserMapped.UserId = user.OwnerUserId;
                 return exampleUserMapped;
+            }
+            return null;
+        }
+
+        public async Task<OwnerViewModel> FindUserByEmail(string email)
+        {
+            var user = await exampleDbRepository.GetExampleUserOwnerByEmail(email);
+            if (user != null)
+            {
+                var exampleUserMapped = mapper.Map<OwnerUser, OwnerViewModel>(user);
+                exampleUserMapped.CurrentAdministeringUser = user.OwnerUserId;
+                exampleUserMapped.UserId = user.OwnerUserId;
+                return exampleUserMapped;
+            }
+            return null;
+        }
+
+        public async Task<OwnerViewModel> UpdateUser(OwnerViewModel ownerViewModel)
+        {
+            var user = await exampleDbRepository.GetExampleUserOwnerByEmail(ownerViewModel.Email);
+            if (user != null)
+            {
+                user.Email = ownerViewModel.Email;
+                user.FirstName = ownerViewModel.FirstName;
+                user.LastName = ownerViewModel.LastName;
+                user.IsActive = ownerViewModel.IsActive;
+                user.Notes = ownerViewModel.Notes;
+                user.UserName = ownerViewModel.UserName;
+                user.ModifiedBy = ownerViewModel.ModifiedBy;//could possibly be CurrentAdministeringUser (there's even a 'AdministeringUserEmail' property as well, lol)
+                user.ModifiedDate = DateTime.Now;
+                await exampleDbRepository.UpdateEntity(user);
+                var isSaved = await exampleDbRepository.SaveAllAsync();
+                if (isSaved)
+                {
+                    return ownerViewModel;
+                }
             }
             return null;
         }
@@ -88,13 +126,13 @@ namespace AspCoreBase.Services
                         }
                         else//CREATE example User
                         {
+                            userViewModel.UserId = new Guid(user.Id);
+                            userViewModel.IsActive = true;
+                            userViewModel.UserType = GetUserType(userViewModel.UserType.Id);
                             userViewModel.CreatedBy = userViewModel.CurrentAdministeringUser;
                             userViewModel.CreatedDate = DateTime.Now;
                             userViewModel.ModifiedBy = userViewModel.CurrentAdministeringUser;
                             userViewModel.ModifiedDate = DateTime.Now;
-                            userViewModel.IsActive = true;
-                            userViewModel.UserId = new Guid(user.Id);
-                            userViewModel.UserType = GetUserType(userViewModel.UserType.Id);
 
                             if (await CreateExampleUser(userViewModel))
                             {
@@ -120,37 +158,47 @@ namespace AspCoreBase.Services
             }
         }
 
-        #region PRIVATE HELPER METHODS FOR USER SERVICE
-        private string RandomTemporaryCredentialsGeneration()
+        public async Task<bool> DeleteUser(string userId)
         {
-            var opts = new PasswordOptions()
+            try
             {
-                RequiredLength = 8,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireNonAlphanumeric = true,
-                RequireUppercase = true
-            };
+                var example = await exampleDbRepository.GetExampleUserOwnerByOwnerUserId(userId);
+                if (example != null)
+                {
+                    await exampleDbRepository.DeleteEntityAsync(example);
+                    var isownerUserDeleted = await exampleDbRepository.SaveAllAsync();
+                    if (isownerUserDeleted)
+                    {
+                        var user = await authorityUser.FindByIdAsync(userId);
+                        if (user != null)
+                        {
+                            var isAuthorityUserDeleted = await authorityUser.DeleteAsync(user);
+                            if (isAuthorityUserDeleted.Succeeded)
+                                return true;
+                            else
+                                logger.LogWarning("WARNING DeleteAsync NOT Succeeded - User NOT DELETED.");
+                        }
+                        else
+                        {
+                            logger.LogWarning("WARNING inside UserService.DeleteUser - User is NULL.");
+                        }
+                    }
+                }
+                else
+                {
+                    logger.LogWarning("WARNING inside UserService.DeleteUser - OwnerUser is NULL.");
+                }
 
-            string[] randomChars = new[] { "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "0123456789", "!@#$%^&*" };
-
-            Random rand = new Random(Environment.TickCount);
-            List<char> chars = new List<char>();
-
-            chars.Insert(rand.Next(0, chars.Count), randomChars[0][rand.Next(0, randomChars[0].Length)]);   //RequireUppercase
-            chars.Insert(rand.Next(0, chars.Count), randomChars[1][rand.Next(0, randomChars[1].Length)]);   //RequireLowercase
-            chars.Insert(rand.Next(0, chars.Count), randomChars[2][rand.Next(0, randomChars[2].Length)]);   //RequireDigit
-            chars.Insert(rand.Next(0, chars.Count), randomChars[3][rand.Next(0, randomChars[3].Length)]);   //RequireNonAlphanumeric
-
-            for (int i = chars.Count; i < opts.RequiredLength; i++)
-            {
-                string rcs = randomChars[rand.Next(0, randomChars.Length)];
-                chars.Insert(rand.Next(0, chars.Count),
-                    rcs[rand.Next(0, rcs.Length)]);
+                return false;
             }
-
-            return new string(chars.ToArray());
+            catch (Exception ex)
+            {
+                logger.LogError("ERROR inside UserService.DeleteUser when calling it's Service counterpart - " + ex);
+                return false;
+            }
         }
+
+        #region PRIVATE HELPER METHODS FOR USER SERVICE
 
         /// <summary>
         /// The theory HERE is that if you did not need to seperate the Admin user from whatever user is going to be needed
@@ -190,6 +238,7 @@ namespace AspCoreBase.Services
                     Email = user.Email,
                     IsActive = true,
                     UserName = user.UserName,
+                    Notes = user.Notes,
                     ModifiedBy = user.CurrentAdministeringUser,
                     ModifiedDate = DateTime.Now,
                     CreatedBy = user.CurrentAdministeringUser,
@@ -225,6 +274,7 @@ namespace AspCoreBase.Services
                     Email = user.Email,
                     IsActive = true,
                     UserName = user.UserName,
+                    Notes = user.Notes,
                     ModifiedBy = user.CurrentAdministeringUser,
                     ModifiedDate = DateTime.Now,
                     CreatedBy = user.CurrentAdministeringUser,
@@ -273,6 +323,7 @@ namespace AspCoreBase.Services
 
             return type;
         }
+
         #endregion
     }
 }

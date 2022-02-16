@@ -31,9 +31,23 @@ namespace AspCoreBase.Data
 				logger.LogError("ERROR inside ExampleDbRepository.GetExampleUserOwners - " + ex);
 				return null;
 			}
-        }
+		}
 
-        public async Task<OwnerUser> GetExampleUserOwner(string userName)
+		public async Task<OwnerUser> GetExampleUserOwnerByOwnerUserId(string ownerUserId)
+		{
+			try
+			{
+				var ownerUser = await ctx.OwnerUser.FirstOrDefaultAsync(u => u.OwnerUserId.ToString() == ownerUserId);
+				return ownerUser;
+			}
+			catch (Exception ex)
+			{
+				logger.LogError("ERROR inside ExampleDbRepository.GetExampleUserOwnerByUserName - " + ex);
+				return null;
+			}
+		}
+
+		public async Task<OwnerUser> GetExampleUserOwnerByUserName(string userName)
         {
             try
             {
@@ -42,12 +56,26 @@ namespace AspCoreBase.Data
             }
             catch (Exception ex)
             {
-                logger.LogError("ERROR inside ExampleDbRepository.GetExampleUserOwner - " + ex);
+                logger.LogError("ERROR inside ExampleDbRepository.GetExampleUserOwnerByUserName - " + ex);
                 return null;
             }
-        }
+		}
 
-        public async Task<List<Example>> GetExamples()
+		public async Task<OwnerUser> GetExampleUserOwnerByEmail(string email)
+		{
+			try
+			{
+				var allOwnerUsers = await ctx.OwnerUser.Where(u => u.IsActive && u.Email == email).ToListAsync();
+				return allOwnerUsers.FirstOrDefault();
+			}
+			catch (Exception ex)
+			{
+				logger.LogError("ERROR inside ExampleDbRepository.GetExampleUserOwnerByEmail - " + ex);
+				return null;
+			}
+		}
+
+		public async Task<List<Example>> GetExamples()
 		{
 			try
 			{
@@ -71,8 +99,8 @@ namespace AspCoreBase.Data
 					return null;
 				}
 
-				var example = await ctx.Example.FirstAsync(p => p.ExampleId.ToString().ToLower().Trim() == exampleId.ToLower().Trim());
-				return example;
+				var example = await ctx.Example.Where(p => p.ExampleId.ToString().ToLower() == exampleId.ToLower()).ToListAsync();
+				return example.FirstOrDefault();
 			}
 			catch (Exception ex)
 			{
@@ -86,9 +114,19 @@ namespace AspCoreBase.Data
 			return await ctx.SaveChangesAsync() > 0;
 		}
 
-		public void AddEntity(object model)
+		public async Task AddEntity(object model)
 		{
-			ctx.Add(model);
+			await ctx.AddAsync(model);
 		}
-	}
+
+		public async Task UpdateEntity(object model)
+		{
+			ctx.Update(model);
+		}
+
+		public async Task DeleteEntityAsync(object model)
+        {
+			ctx.Remove(model);
+        }
+    }
 }

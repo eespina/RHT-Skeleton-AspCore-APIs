@@ -96,7 +96,9 @@ namespace AspCoreBase
             //services.AddScoped<IMailService, MailService>();  //heavier with the service being elongated for a longer period
             //services.AddSingleton<IMailService, MailService>();   // heaviest as it will be sustained in the application for the entirety of the application running
 
-            //creating and configuring the database provider using this AspCoreBaseDbContext
+            //creating and configuring the database provider using this AspCoreBaseDbContext. Other databasese, in a real world scenario, would probaby be added such as this "Example" on it's own to support more sufficient MicroServices architecture
+            //This Solution mimics a 'gateway' server application since it's still a Template/Base project. Expansion into other added Project within this solution SHOULD have it's own setup, ideally.
+            //Above all, things may easily be moved around whenever
             services.AddDbContext<ExampleDbContext>(cfg =>
             {
                 cfg.UseSqlServer(this.config.GetConnectionString("aspCoreBaseConnectionString"));

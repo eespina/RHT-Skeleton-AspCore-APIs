@@ -38,12 +38,12 @@ namespace AspCoreApiBase.Controllers
         [HttpGet("{username}"), Authorize]
         public async Task<IActionResult> Get(string username)
         {
-            var user = await userService.FindUser(username);
+            var user = await userService.FindUserByUserName(username);
             return Ok(user);
         }
 
         [HttpPost, Authorize]
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
@@ -53,25 +53,46 @@ namespace AspCoreApiBase.Controllers
         /// <param name="ownerViewModel">material from the client-side application to save over the existing datat for a particular client</param>
         /// <returns>SHOULD return something, we're currently mocking </returns>
         [HttpPut("{id}"), Authorize]
-        public async Task<IActionResult> Put([FromBody]  OwnerViewModel ownerViewModel)
+        public async Task<IActionResult> Put([FromBody] OwnerViewModel ownerViewModel)
         {
-            Request.Headers.TryGetValue("old-password", out var encryptedOldPassword);
-            Request.Headers.TryGetValue("new-password", out var encryptedNewPassword);
-            if (!string.IsNullOrWhiteSpace(encryptedOldPassword) && !string.IsNullOrWhiteSpace(encryptedNewPassword))
+            var areCredentialsSet = false;
+            if (ownerViewModel.IsChangingCredentials)
             {
-                var decryptedOldPassword = await authenticateService.DecryptStringAES(encryptedOldPassword);
-                var decryptedNewPassword = await authenticateService.DecryptStringAES(encryptedNewPassword);
+                Request.Headers.TryGetValue("old-password", out var encryptedOldPassword);
+                Request.Headers.TryGetValue("new-password", out var encryptedNewPassword);
+                if (!string.IsNullOrWhiteSpace(encryptedOldPassword) && !string.IsNullOrWhiteSpace(encryptedNewPassword))
+                {
+                    var decryptedOldPassword = await authenticateService.DecryptStringAES(encryptedOldPassword);
+                    var decryptedNewPassword = await authenticateService.DecryptStringAES(encryptedNewPassword);
 
-                //CHECK for the existing password to ensure they match, then UPDATE the existing user
+                    if (await authenticateService.EnsureAdministeringUserIsValid(ownerViewModel.UserId.ToString(), decryptedOldPassword))
+                    {
+                        var newPw = await authenticateService.ChangeCredentialsAsync(ownerViewModel.UserId.ToString(), decryptedNewPassword);
+                        if (!string.IsNullOrWhiteSpace(newPw))
+                        {
+                            areCredentialsSet = true;
+                        }
+                    }
+                }
 
-                return Ok(new OwnerViewModel { UserName = decryptedNewPassword });
+                if (!areCredentialsSet)
+                {
+                    return Unauthorized("Password Not Changed. User Not Updated");
+                }
             }
-            return BadRequest("There is no use-able password information present in the Header");
+
+            //do any other updating here
+            var updatedUser = await userService.UpdateUser(ownerViewModel);
+
+            //return BadRequest("There is no use-able password information present in the Header");
+            return Ok(updatedUser);
         }
 
-        [HttpDelete("{id}"), Authorize]
-        public void Delete(int id)
+        [HttpDelete("{userId}"), Authorize]
+        public async Task<IActionResult> Delete(string userId)
         {
+            var isDeletionSuccessful = await userService.DeleteUser(userId);
+            return Ok(isDeletionSuccessful);
         }
     }
 }
