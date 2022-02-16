@@ -19,15 +19,15 @@ namespace AspCoreBase.Services
     public class UserService : IUserService
     {
         private readonly ILogger<UserService> logger;
-        private readonly IVillageDbRepository villageDbRepository;
+        private readonly IExampleDbRepository exampleDbRepository;
         private readonly IMapper mapper;
         private readonly UserManager<AuthorityUser> authorityUser;
         private readonly UserManager<AuthorityUser> userManager;
 
-        public UserService(UserManager<AuthorityUser> AuthorityUser, IMapper mapper, ILogger<UserService> logger, IVillageDbRepository repository, UserManager<AuthorityUser> userManager)
+        public UserService(UserManager<AuthorityUser> AuthorityUser, IMapper mapper, ILogger<UserService> logger, IExampleDbRepository repository, UserManager<AuthorityUser> userManager)
         {
             this.authorityUser = AuthorityUser;
-            this.villageDbRepository = repository;
+            this.exampleDbRepository = repository;
             this.mapper = mapper;
             this.logger = logger;
             this.userManager = userManager;
@@ -35,22 +35,60 @@ namespace AspCoreBase.Services
 
         public async Task<IEnumerable<OwnerViewModel>> FindUsers()
         {
-            var users = await villageDbRepository.GetVillageUserOwners();
+            var users = await exampleDbRepository.GetExampleUserOwners();
             if (users.Any())
             {
-                var villageUsersMapped = mapper.Map<IEnumerable<OwnerUser>, IEnumerable<OwnerViewModel>>(users);
-                return villageUsersMapped;
+                var exampleUsersMapped = mapper.Map<IEnumerable<OwnerUser>, IEnumerable<OwnerViewModel>>(users);
+                return exampleUsersMapped;
             }
             return null;
         }
 
-        public async Task<OwnerViewModel> FindUser(string userName)
+        public async Task<OwnerViewModel> FindUserByUserName(string userName)
         {
-            var user = await villageDbRepository.GetVillageUserOwner(userName);
+            var user = await exampleDbRepository.GetExampleUserOwnerByUserName(userName);
             if (user != null)
             {
-                var villageUserMapped = mapper.Map<OwnerUser, OwnerViewModel>(user);
-                return villageUserMapped;
+                var exampleUserMapped = mapper.Map<OwnerUser, OwnerViewModel>(user);
+                exampleUserMapped.CurrentAdministeringUser = user.OwnerUserId;
+                exampleUserMapped.UserId = user.OwnerUserId;
+                return exampleUserMapped;
+            }
+            return null;
+        }
+
+        public async Task<OwnerViewModel> FindUserByEmail(string email)
+        {
+            var user = await exampleDbRepository.GetExampleUserOwnerByEmail(email);
+            if (user != null)
+            {
+                var exampleUserMapped = mapper.Map<OwnerUser, OwnerViewModel>(user);
+                exampleUserMapped.CurrentAdministeringUser = user.OwnerUserId;
+                exampleUserMapped.UserId = user.OwnerUserId;
+                return exampleUserMapped;
+            }
+            return null;
+        }
+
+        public async Task<OwnerViewModel> UpdateUser(OwnerViewModel ownerViewModel)
+        {
+            var user = await exampleDbRepository.GetExampleUserOwnerByEmail(ownerViewModel.Email);
+            if (user != null)
+            {
+                user.Email = ownerViewModel.Email;
+                user.FirstName = ownerViewModel.FirstName;
+                user.LastName = ownerViewModel.LastName;
+                user.IsActive = ownerViewModel.IsActive;
+                user.Notes = ownerViewModel.Notes;
+                user.UserName = ownerViewModel.UserName;
+                user.ModifiedBy = ownerViewModel.ModifiedBy;//could possibly be CurrentAdministeringUser (there's even a 'AdministeringUserEmail' property as well, lol)
+                user.ModifiedDate = DateTime.Now;
+                await exampleDbRepository.UpdateEntity(user);
+                var isSaved = await exampleDbRepository.SaveAllAsync();
+                if (isSaved)
+                {
+                    return ownerViewModel;
+                }
             }
             return null;
         }
@@ -78,7 +116,7 @@ namespace AspCoreBase.Services
 
                         //var temporaryCredentials = randomTemporaryCredentialsGeneration();	//TODO - RESTORE THIS when email Invitiations Services are in order
 
-                        //CREATE Village Authority User
+                        //CREATE example Authority User
                         result = await authorityUser.CreateAsync(user, password);
 
                         if (result != IdentityResult.Success)
@@ -86,17 +124,17 @@ namespace AspCoreBase.Services
                             logger.LogWarning("ERROR inside UserService.CreateNewOwnerUser.Authority - For some reason, AuthorityUser Creation was NOT 'Success'ful. User was Not Created");
                             result = null;
                         }
-                        else//CREATE eVillage User
+                        else//CREATE example User
                         {
+                            userViewModel.UserId = new Guid(user.Id);
+                            userViewModel.IsActive = true;
+                            userViewModel.UserType = GetUserType(userViewModel.UserType.Id);
                             userViewModel.CreatedBy = userViewModel.CurrentAdministeringUser;
                             userViewModel.CreatedDate = DateTime.Now;
                             userViewModel.ModifiedBy = userViewModel.CurrentAdministeringUser;
                             userViewModel.ModifiedDate = DateTime.Now;
-                            userViewModel.IsActive = true;
-                            userViewModel.UserId = new Guid(user.Id);
-                            userViewModel.UserType = GetUserType(userViewModel.UserType.Id);
 
-                            if (await CreateVillageUser(userViewModel))
+                            if (await CreateExampleUser(userViewModel))
                             {
                                 return userViewModel;
                             }
@@ -120,59 +158,75 @@ namespace AspCoreBase.Services
             }
         }
 
-        #region PRIVATE HELPER METHODS FOR USER SERVICE
-        private string RandomTemporaryCredentialsGeneration()
+        public async Task<bool> DeleteUser(string userId)
         {
-            var opts = new PasswordOptions()
+            try
             {
-                RequiredLength = 8,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireNonAlphanumeric = true,
-                RequireUppercase = true
-            };
+                var example = await exampleDbRepository.GetExampleUserOwnerByOwnerUserId(userId);
+                if (example != null)
+                {
+                    await exampleDbRepository.DeleteEntityAsync(example);
+                    var isownerUserDeleted = await exampleDbRepository.SaveAllAsync();
+                    if (isownerUserDeleted)
+                    {
+                        var user = await authorityUser.FindByIdAsync(userId);
+                        if (user != null)
+                        {
+                            var isAuthorityUserDeleted = await authorityUser.DeleteAsync(user);
+                            if (isAuthorityUserDeleted.Succeeded)
+                                return true;
+                            else
+                                logger.LogWarning("WARNING DeleteAsync NOT Succeeded - User NOT DELETED.");
+                        }
+                        else
+                        {
+                            logger.LogWarning("WARNING inside UserService.DeleteUser - User is NULL.");
+                        }
+                    }
+                }
+                else
+                {
+                    logger.LogWarning("WARNING inside UserService.DeleteUser - OwnerUser is NULL.");
+                }
 
-            string[] randomChars = new[] { "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "0123456789", "!@#$%^&*" };
-
-            Random rand = new Random(Environment.TickCount);
-            List<char> chars = new List<char>();
-
-            chars.Insert(rand.Next(0, chars.Count), randomChars[0][rand.Next(0, randomChars[0].Length)]);   //RequireUppercase
-            chars.Insert(rand.Next(0, chars.Count), randomChars[1][rand.Next(0, randomChars[1].Length)]);   //RequireLowercase
-            chars.Insert(rand.Next(0, chars.Count), randomChars[2][rand.Next(0, randomChars[2].Length)]);   //RequireDigit
-            chars.Insert(rand.Next(0, chars.Count), randomChars[3][rand.Next(0, randomChars[3].Length)]);   //RequireNonAlphanumeric
-
-            for (int i = chars.Count; i < opts.RequiredLength; i++)
-            {
-                string rcs = randomChars[rand.Next(0, randomChars.Length)];
-                chars.Insert(rand.Next(0, chars.Count),
-                    rcs[rand.Next(0, rcs.Length)]);
+                return false;
             }
-
-            return new string(chars.ToArray());
+            catch (Exception ex)
+            {
+                logger.LogError("ERROR inside UserService.DeleteUser when calling it's Service counterpart - " + ex);
+                return false;
+            }
         }
 
-        private async Task<bool> CreateVillageUser(OwnerViewModel user)
+        #region PRIVATE HELPER METHODS FOR USER SERVICE
+
+        /// <summary>
+        /// The theory HERE is that if you did not need to seperate the Admin user from whatever user is going to be needed
+        /// in a real scenario, you can just neglect one or delete and combine user/account tech
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        private async Task<bool> CreateExampleUser(OwnerViewModel user)
         {
             try
             {
                 if (user.UserType.Id == 1)
                 {
-                    return await CreateAdminUser(user);
+                    return await CreateExampleAdminUser(user);
                 }
                 else if (user.UserType.Id == 2 || user.UserType.Id == 3)
                 {
-                    return await CreateOwnerUser(user);
+                    return await CreateExampleOwnerUser(user);
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError("ERROR inside UserService.CreateVillageUser - " + ex);
+                logger.LogError("ERROR inside UserService.CreateExampleUser - " + ex);
             }
             return false;
         }
 
-        private async Task<bool> CreateOwnerUser(OwnerViewModel user)
+        private async Task<bool> CreateExampleOwnerUser(OwnerViewModel user)
         {
             try
             {
@@ -184,19 +238,20 @@ namespace AspCoreBase.Services
                     Email = user.Email,
                     IsActive = true,
                     UserName = user.UserName,
+                    Notes = user.Notes,
                     ModifiedBy = user.CurrentAdministeringUser,
                     ModifiedDate = DateTime.Now,
                     CreatedBy = user.CurrentAdministeringUser,
                     CreatedDate = DateTime.Now
                 };
 
-                villageDbRepository.AddEntity(ownerUser);
+                exampleDbRepository.AddEntity(ownerUser);
 
-                return await villageDbRepository.SaveAllAsync();
+                return await exampleDbRepository.SaveAllAsync();
             }
             catch (Exception ex)
             {
-                logger.LogError("ERROR inside UserService.createVillageOwnerUser - " + ex);
+                logger.LogError("ERROR inside UserService.CreateExampleOwnerUser - " + ex);
                 return false;
             }
         }
@@ -207,7 +262,7 @@ namespace AspCoreBase.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        private async Task<bool> CreateAdminUser(OwnerViewModel user)
+        private async Task<bool> CreateExampleAdminUser(OwnerViewModel user)
         {
             try
             {
@@ -219,6 +274,7 @@ namespace AspCoreBase.Services
                     Email = user.Email,
                     IsActive = true,
                     UserName = user.UserName,
+                    Notes = user.Notes,
                     ModifiedBy = user.CurrentAdministeringUser,
                     ModifiedDate = DateTime.Now,
                     CreatedBy = user.CurrentAdministeringUser,
@@ -226,13 +282,13 @@ namespace AspCoreBase.Services
                     StartDate = DateTime.Now
                 };
 
-                villageDbRepository.AddEntity(adminUser);
+                exampleDbRepository.AddEntity(adminUser);
 
-                return await villageDbRepository.SaveAllAsync();
+                return await exampleDbRepository.SaveAllAsync();
             }
             catch (Exception ex)
             {
-                logger.LogError("ERROR inside UserService.createVillageOwnerUser - " + ex);
+                logger.LogError("ERROR inside UserService.CreateExampleAdminUser - " + ex);
                 return false;
             }
         }
@@ -253,36 +309,21 @@ namespace AspCoreBase.Services
                     break;
                 case 3:
                     type.Id = 3;
-                    type.Name = "Renter";
+                    type.Name = "Vendor";
                     break;
                 case 4:
                     type.Id = 4;
-                    type.Name = "Doorman";
-                    break;
-                case 5:
-                    type.Id = 5;
-                    type.Name = "Maintenance";
-                    break;
-                case 6:
-                    type.Id = 6;
-                    type.Name = "Janitor";
-                    break;
-                case 7:
-                    type.Id = 7;
-                    type.Name = "Vendor";
-                    break;
-                case 8:
-                    type.Id = 8;
                     type.Name = "Unassigned";
                     break;
                 default:
-                    type.Id = 8;
+                    type.Id = 5;
                     type.Name = "Unassigned";
                     break;
             }
 
             return type;
         }
+
         #endregion
     }
 }

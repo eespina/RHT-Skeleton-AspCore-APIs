@@ -46,7 +46,9 @@ namespace AspCoreApiBase.Controllers
                     loggedInUser = await authenticateService.CreateToken(decryptedUserName, deryptedPassword);
                     if (loggedInUser != null)
                     {
-                        return Ok(loggedInUser);
+                        var user = await userService.FindUserByEmail(loggedInUser.Email);
+                        user.tokenHandleViewModel = loggedInUser.tokenHandleViewModel;
+                        return Ok(user);
                     }
                 }
 
@@ -82,7 +84,9 @@ namespace AspCoreApiBase.Controllers
             }
             try
             {
-                Request.Headers.TryGetValue("password", out var encryptedPassword);
+                var requestHeadersCount = Request.Headers.Count;
+                var requestHeadersPw = Request.Headers["reticulatingsplines"];
+                Request.Headers.TryGetValue("reticulatingsplines", out var encryptedPassword);
                 if (!string.IsNullOrWhiteSpace(encryptedPassword))
                 {
                     var decryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword); //TODO - THINK about just not keeping an encrypted key in the database instead of going through the process.
@@ -101,6 +105,37 @@ namespace AspCoreApiBase.Controllers
             {
                 return BadRequest(ex.ToString());
             }
+        }
+
+        [Authorize]
+        [Route("resetusercreds/{userId}"), HttpPut]
+        public async Task<IActionResult> ResetUserCreds(string userid)
+        {
+            var areCredentialsSet = false;
+            Request.Headers.TryGetValue("administeringuserid", out var administeringUserId);
+            Request.Headers.TryGetValue("password", out var encryptedPassword);
+            if (!string.IsNullOrWhiteSpace(administeringUserId) && !string.IsNullOrWhiteSpace(encryptedPassword))
+            {
+                var deryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword);
+
+                if (await authenticateService.EnsureAdministeringUserIsValid(administeringUserId, deryptedPassword))
+                {
+                    var newPw = await authenticateService.ChangeCredentialsAsync(userid, string.Empty);
+                    if (!string.IsNullOrWhiteSpace(newPw))
+                    {
+                        areCredentialsSet = true;
+                    }
+                }
+            }
+
+            if (!areCredentialsSet)
+            {
+                return Unauthorized("Password Not Changed. User Not Updated");
+            }
+
+            //TODO - Send the user the new password via EMAIL
+
+            return Ok(true);
         }
     }
 }
