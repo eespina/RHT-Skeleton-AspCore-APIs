@@ -15,14 +15,14 @@ namespace AspCoreBase.Services
 	public class MailService : IMailService
 	{
 		private readonly ILogger<MailService> logger;
-		private readonly IVillageDbRepository villageDbRepository;
+		private readonly IExampleDbRepository exampleDbRepository;
 		private readonly UserManager<AuthorityUser> authorityUser;
 
-		public MailService(UserManager<AuthorityUser> AuthorityUser, ILogger<MailService> logger, IVillageDbRepository repository)
+		public MailService(UserManager<AuthorityUser> AuthorityUser, ILogger<MailService> logger, IExampleDbRepository repository)
 		{
 			this.authorityUser = AuthorityUser;
 			this.logger = logger;
-			this.villageDbRepository = repository;
+			this.exampleDbRepository = repository;
 		}
 
 		public async Task<bool> SaveEmailComposition(OwnerViewModel user, System.Security.Claims.ClaimsPrincipal currentUser)
@@ -50,9 +50,9 @@ namespace AspCoreBase.Services
 					CreatedDate = DateTime.Now
 				};
 
-				villageDbRepository.AddEntity(invitation);
+				exampleDbRepository.AddEntity(invitation);
 
-				return await villageDbRepository.SaveAllAsync();
+				return await exampleDbRepository.SaveAllAsync();
 			}
 
 			logger.LogWarning("ERROR inside MailService.SaveEmailComposition - Admin " + user.UserName + " Not created");

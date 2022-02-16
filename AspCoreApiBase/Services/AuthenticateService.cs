@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -50,7 +51,6 @@ namespace AspCoreBase.Services
             }
 
         }
-
 
         public async Task<bool> SignOutAsync()
         {
@@ -131,7 +131,7 @@ namespace AspCoreBase.Services
                                 config["Tokens:Issuer"],
                                 config["Tokens:Audience"],
                                 //claims,
-                                expires: DateTime.UtcNow.AddMinutes(6),
+                                expires: DateTime.UtcNow.AddMinutes(15),
                                 signingCredentials: creds
                                 );
 
@@ -171,65 +171,104 @@ namespace AspCoreBase.Services
             return null;    //No User found Or Password incorrect
         }
 
-        /// <summary>
-        /// NOT currently being used
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<bool> ChangeCredentialsAsync(string decryptedUsername, string decryptedPassword)
+        public async Task<bool> EnsureAdministeringUserIsValid(string id, string decryptedOldPassword)
         {
-            try
+            var user = await userManager.FindByIdAsync(id);   //userManager needs to be initialized in the Constructor
+
+            if (user != null)
             {
-                var locallyAuthenticateUser = await PasswordSign(decryptedUsername, decryptedPassword);
-                if (locallyAuthenticateUser != null)
+                var result = await signInManager.CheckPasswordSignInAsync(user, decryptedOldPassword, false);
+                if (result != null)
                 {
-                    if (locallyAuthenticateUser.Succeeded)
+                    if (result.Succeeded)
                     {
-                        //TODO - UNCOMMENT this section when wanting to use the logic for CHANGE'ing the password
-
-                        //var currentUser = userManager.Users.First(u => u.UserName == model.Username);
-                        //if (currentUser != null)
-                        //{
-                        //    var removeCurrentCredentials = await userManager.RemovePasswordAsync(currentUser);
-                        //    if (removeCurrentCredentials.Succeeded)
-                        //    {
-                        //        removeCurrentCredentials = await userManager.AddPasswordAsync(currentUser, model.ChangedCredentialString);
-                        //        if (removeCurrentCredentials.Succeeded)
-                        //        {
-                        //            return true;
-                        //        }
-                        //        else
-                        //        {
-                        //            logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Unable to Add Current Users New Credentials.");
-                        //        }
-                        //    }
-                        //    else
-                        //    {
-                        //        logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Unable to Remove Current Users Credentials.");
-                        //    }
-
-                        //    logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - ChangePasswordAsync method did not work.");
-                        //}
-                        //else
-                        //{
-                        //    logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - userManager.Users did not contain the Current User.");
-                        //}
+                        return true;
                     }
                     else
                     {
-                        logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Authentication attempt Failed. Credentials may be incorrect");
+                        logger.LogWarning("WARNING inside EnsureAdministeringUserIsValid - Authentication attempt Failed. Credentials may be incorrect");
                     }
                 }
                 else
                 {
-                    logger.LogWarning("WARNING inside SettingsController.ProfileManagement.HttpPost - Authentication attempt Failed. Resulting attempt returned NULL for variable currentUser");
+                    logger.LogWarning("WARNING inside EnsureAdministeringUserIsValid - Authentication attempt Failed. Resulting attempt returned NULL for variable currentUser");
+                }
+            }
+            else
+            {
+                logger.LogWarning("WARNING inside EnsureAdministeringUserIsValid - Authentication attempt Failed. Existing user NOT FOUND");
+            }
+
+            return false;
+        }
+
+        public async Task<string> ChangeCredentialsAsync(string id, string decryptedNewPassword)
+        {
+            try
+            {
+                var currentUser = await userManager.FindByIdAsync(id);   //userManager needs to be initialized in the Constructor
+                if (currentUser != null)
+                {
+                    var removeCurrentCredentials = await userManager.RemovePasswordAsync(currentUser);
+                    if (removeCurrentCredentials.Succeeded)
+                    {
+                        var newPassword = string.IsNullOrWhiteSpace(decryptedNewPassword) ? RandomTemporaryCredentialsGeneration() : decryptedNewPassword;
+                        var addNewCredentials = await userManager.AddPasswordAsync(currentUser, newPassword);
+                        if (addNewCredentials.Succeeded)
+                        {
+                            return newPassword;
+                        }
+                        else
+                        {
+                            logger.LogWarning("WARNING inside ChangeCredentialsAsync - Unable to Add Current Users New Credentials.");
+                        }
+                    }
+                    else
+                    {
+                        logger.LogWarning("WARNING inside ChangeCredentialsAsync - Unable to Remove Current Users Credentials.");
+                    }
+                }
+                else
+                {
+                    logger.LogWarning("WARNING inside ChangeCredentialsAsync - userManager.Users did not contain the Current User.");
                 }
             }
             catch (Exception ex)
             {
-                logger.LogWarning("ERROR inside SettingsController.ProfileManagement.HttpPost - User Credential Changing ERROR : " + ex);
+                logger.LogError(ex, "Exception inside ChangeCredentialsAsync.");
             }
-            return false;
+            return string.Empty;
+        }
+
+        private string RandomTemporaryCredentialsGeneration()
+        {
+            var opts = new PasswordOptions()
+            {
+                RequiredLength = 8,
+                RequireDigit = true,
+                RequireLowercase = true,
+                RequireNonAlphanumeric = true,
+                RequireUppercase = true
+            };
+
+            string[] randomChars = new[] { "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "0123456789", "!@#$%^&*" };
+
+            Random rand = new Random(Environment.TickCount);
+            List<char> chars = new List<char>();
+
+            chars.Insert(rand.Next(0, chars.Count), randomChars[0][rand.Next(0, randomChars[0].Length)]);   //RequireUppercase
+            chars.Insert(rand.Next(0, chars.Count), randomChars[1][rand.Next(0, randomChars[1].Length)]);   //RequireLowercase
+            chars.Insert(rand.Next(0, chars.Count), randomChars[2][rand.Next(0, randomChars[2].Length)]);   //RequireDigit
+            chars.Insert(rand.Next(0, chars.Count), randomChars[3][rand.Next(0, randomChars[3].Length)]);   //RequireNonAlphanumeric
+
+            for (int i = chars.Count; i < opts.RequiredLength; i++)
+            {
+                string rcs = randomChars[rand.Next(0, randomChars.Length)];
+                chars.Insert(rand.Next(0, chars.Count),
+                    rcs[rand.Next(0, rcs.Length)]);
+            }
+
+            return new string(chars.ToArray());
         }
 
         #region ENCRYPT/DECRYPT

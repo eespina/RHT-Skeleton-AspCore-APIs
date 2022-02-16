@@ -3,17 +3,17 @@ using AspCoreBase.Data.Entities;
 
 namespace AspCoreBase.Data
 {
-    public class VillageDbContext : DbContext
+    public class ExampleDbContext : DbContext
     {
-        public VillageDbContext(DbContextOptions<VillageDbContext> options) : base(options) { }
+        public ExampleDbContext(DbContextOptions<ExampleDbContext> options) : base(options) { }
         public DbSet<AdminUser> AdminUser { get; set; }
         public DbSet<OwnerUser> OwnerUser { get; set; }
-        public DbSet<Property> Property { get; set; }
-        public DbSet<UserProperty> UserProperty { get; set; }
+        public DbSet<Example> Example { get; set; }
+        public DbSet<UserExample> UserExample { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*	May NOT Need these below as there may NOT be a need to have a bridge table to map/match User and Property
+            /*	May NOT Need these below as there may NOT be a need to have a bridge table to map/match User and Example
 			 *	
 			modelBuilder.Entity<OwnerUser>()
 				.HasOne(p => p.AdminUser)
@@ -26,18 +26,18 @@ namespace AspCoreBase.Data
 				.HasForeignKey(p => p.ModifiedBy)
 				.HasConstraintName("ForeignKey_OwnerUser_AdminUser_ModifiedBy");
 
-			modelBuilder.Entity<UserProperty>()
+			modelBuilder.Entity<UserExample>()
 				.HasOne(p => p.OwnerUser)
-				.WithMany(b => b.UserProperties)
+				.WithMany(b => b.UserExamples)
 				.HasForeignKey(p => p.OwnerUserId)
-				.HasConstraintName("ForeignKey_UserProperty_OwnerUser");
-			modelBuilder.Entity<UserProperty>()
-				.HasOne(p => p.Property)
-				.WithMany(b => b.UserProperties)
-				.HasForeignKey(p => p.PropertyId)
-				.HasConstraintName("ForeignKey_UserProperty_Property");
+				.HasConstraintName("ForeignKey_UserExample_OwnerUser");
+			modelBuilder.Entity<UserExample>()
+				.HasOne(p => p.Example)
+				.WithMany(b => b.UserExamples)
+				.HasForeignKey(p => p.Example)
+				.HasConstraintName("ForeignKey_UserExample_Example");
 
-				END OF - May NOT Need these below as there may NOT be a need to have a bridge table to map/match User and Property */
+				END OF - May NOT Need these below as there may NOT be a need to have a bridge table to map/match User and Example */
 
             /*
 				//SEED data option - usefull if we just want to use test data instead of live data
