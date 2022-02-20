@@ -1,13 +1,13 @@
-using AspCoreApiBase.Controllers;
-using AspCoreBase.Services.Interfaces;
-using AspCoreBase.ViewModels;
+using AspCoreApiTemplate.Controllers;
+using AspCoreApiTemplate.Services.Interfaces;
+using AspCoreApiTemplate.ViewModels;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
 
 
-namespace AspCoreApiBase.Tests
+namespace AspCoreApiTemplate.Tests
 {
     public class ExamplesControllerTest
     {

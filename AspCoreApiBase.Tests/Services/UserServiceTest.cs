@@ -1,7 +1,7 @@
-﻿using AspCoreBase.Data;
-using AspCoreBase.Data.Entities;
-using AspCoreBase.Data.Entities.Authority;
-using AspCoreBase.Services;
+﻿using AspCoreApiTemplate.Data;
+using AspCoreApiTemplate.Data.Entities;
+using AspCoreApiTemplate.Data.Entities.Authority;
+using AspCoreApiTemplate.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ using Moq;
 using System.Collections.Generic;
 using Xunit;
 
-namespace AspCoreApiBase.Tests.Services
+namespace AspCoreApiTemplate.Tests.Services
 {
     public class UserServiceTest
     {
