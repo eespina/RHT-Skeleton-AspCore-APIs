@@ -42,7 +42,7 @@ namespace ExampleApi
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ExampleApi", Version = "v1", Description = "Enrico Espina Background Check company's Example API back end processing API" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ExampleApi", Version = "v1", Description = "Asp .NET Core API's Example API back end processing API" });
             });
         }
 
