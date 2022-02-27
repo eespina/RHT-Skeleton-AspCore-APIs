@@ -10,7 +10,7 @@ namespace AspCoreApiTemplate.Services.Interfaces
 		Task<ExampleViewModel> GetExample(string exampleName);
 		Task<bool> CreateExampleUserConnection(OwnerViewModel u);
 		Task<ExampleViewModel> CreateExample(ExampleViewModel exampleViewModel);
-		Task<bool> UpdateExample(ExampleViewModel exampleViewModel);
+		Task<ExampleViewModel> UpdateExample(ExampleViewModel exampleViewModel);
 		Task<bool> DeleteExample(string exampleId);
 	}
 }

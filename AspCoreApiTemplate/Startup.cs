@@ -119,6 +119,7 @@ namespace AspCoreApiTemplate
             services.AddTransient<IMailService, MailService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IExampleService, ExampleService>(); // Add IAspCoreApiTemplateDbRepository as a service people can use, but use as the implementation AspCoreTemplateDbRepository. perhaps useful in testing
+            services.AddScoped(typeof(IMockIdServerVessel<>), typeof(MockIdServerVessel<>));//This is just a TEMPORARY class/process that mimics requests being sent to the back end using Authorization/Authentication. DELETE when no longer needed
             #endregion
 
             //// adds all the services that the subsystem requires to run ASP.NET MVC and would get rid of an 'IServiceCollection.AddMvc' error
@@ -141,7 +142,7 @@ namespace AspCoreApiTemplate
             //});
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AspCoreApiTemplate", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AspCoreApiTemplate", Version = "Asp .NET Core API's Base back end processing API" });
             });
         }
 

@@ -49,16 +49,11 @@ namespace AspCoreApiTemplate.Controllers
             return Ok(isCreationSuccessful);
         }
 
-        /// <summary>
-        /// This currently does nothing, it just returns mocked data back to the client-side
-        /// </summary>
-        /// <param name="ownerViewModel">material from the client-side application to save over the existing datat for a particular client</param>
-        /// <returns>SHOULD return something, we're currently mocking </returns>
         [HttpPut, Authorize]
         public async Task<IActionResult> Put([FromBody] ExampleViewModel exampleViewModel)
         {
-            var isUpdateSuccessful = await exampleService.UpdateExample(exampleViewModel);
-            return Ok(isUpdateSuccessful);
+            var returnExampleViewModel = await exampleService.UpdateExample(exampleViewModel);
+            return Ok(returnExampleViewModel);
         }
 
         [HttpDelete("{exampleId}"), Authorize]

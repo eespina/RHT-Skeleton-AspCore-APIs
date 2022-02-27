@@ -19,37 +19,22 @@ namespace AspCoreApiTemplate.Services
 		private readonly ILogger<ExampleService> logger;
 		private readonly IExampleDbRepository exampleDbRepository;
 		private readonly IMapper mapper;
+		private readonly IMockIdServerVessel<ExampleViewModel> _mockIdServerVessel;
 
-		public ExampleService(ILogger<ExampleService> logger, IExampleDbRepository exampleDbRepository, IMapper mapper)
+		public ExampleService(ILogger<ExampleService> logger, IExampleDbRepository exampleDbRepository, IMapper mapper, IMockIdServerVessel<ExampleViewModel> mockIdServerVessel)
 		{
 			this.logger = logger;
 			this.exampleDbRepository = exampleDbRepository;
 			this.mapper = mapper;
+			this._mockIdServerVessel = mockIdServerVessel;
 		}
 
 		public async Task<IEnumerable<ExampleViewModel>> GetExamples()
 		{
 			try
 			{
-				var examples = await exampleDbRepository.GetExamples();
-				if (examples != null)
-				{
-					if (examples.Any())
-					{
-						var examplesMapped = mapper.Map<IEnumerable<Example>, IEnumerable<ExampleViewModel>>(examples);
-						return examplesMapped;
-					}
-					else
-					{
-						logger.LogWarning("WARNING inside ExampleService.GetExamples - 0 Examples returned.");
-					}
-				}
-				else
-				{
-					logger.LogWarning("WARNING inside ExampleService.GetExamples - Examples is NULL.");
-				}
-
-				return null;
+				//MOCK the ID server behaviour and just call the Example API
+				return await _mockIdServerVessel.SendMockGetRequest("https://localhost:44372/api/Example");
 			}
 			catch (System.Exception ex)
 			{
@@ -109,7 +94,7 @@ namespace AspCoreApiTemplate.Services
 			return false;
 		}
 
-        public async Task<ExampleViewModel> CreateExample(ExampleViewModel exampleViewModel)
+		public async Task<ExampleViewModel> CreateExample(ExampleViewModel exampleViewModel)
 		{
 			try
 			{
@@ -140,35 +125,22 @@ namespace AspCoreApiTemplate.Services
 			}
 		}
 
-		public async Task<bool> UpdateExample(ExampleViewModel exampleViewModel)
+		public async Task<ExampleViewModel> UpdateExample(ExampleViewModel exampleViewModel)
 		{
 			try
 			{
-				var example = await exampleDbRepository.GetExample(exampleViewModel.ExampleId.ToString());
-				if (example != null)
-				{
-					example.IsActive = exampleViewModel.IsActive;
-					example.ExampleCharacteristic = exampleViewModel.ExampleCharacteristic;
-					example.ModifiedBy = exampleViewModel.ModifiedBy;
-					example.ModifiedDate = exampleViewModel.ModifiedDate;
-
-					return await exampleDbRepository.SaveAllAsync();
-				}
-				else
-				{
-					logger.LogWarning("WARNING inside ExampleService.GetExamples - Examples is NULL.");
-				}
-
-				return false;
+				//TODO - MOCK the ID server behaviour and just call the Example API
+				var mockReturnObject = await _mockIdServerVessel.SendMockPutRequest(exampleViewModel, "https://localhost:44372/api/Example/");
+				return mockReturnObject;
 			}
 			catch (System.Exception ex)
 			{
 				logger.LogError("ERROR inside ExampleService.GetExamples when calling it's Service counterpart - " + ex);
-				return false;
+				return null;
 			}
 		}
 
-        public async Task<bool> DeleteExample(string exampleId)
+		public async Task<bool> DeleteExample(string exampleId)
 		{
 			try
 			{
@@ -192,5 +164,5 @@ namespace AspCoreApiTemplate.Services
 				return false;
 			}
 		}
-    }
+	}
 }
