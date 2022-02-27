@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspCoreApiTemplate.Tests", "AspCoreApiBase.Tests\AspCoreApiTemplate.Tests.csproj", "{D55849B6-E082-4C5C-A062-DD0130E28CF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspCoreApiTemplate", "AspCoreApiTemplate\AspCoreApiTemplate.csproj", "{A89FB576-B09E-4BBA-8FB7-E348DA1F47D6}"
+Project("{A28304E4-205A-4899-96A9-D23ECC620538}") = "AspCoreApiTemplate", "AspCoreApiTemplate\AspCoreApiTemplate.csproj", "{A89FB576-B09E-4BBA-8FB7-E348DA1F47D6}"
+EndProject
+Project("{0694A727-D130-4ED1-9ECE-6E5894D161A1}") = "ExampleApi", "ExampleApi\ExampleApi.csproj", "{A543E56D-8C77-4A70-8336-8F7676365C07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,11 +23,15 @@ Global
 		{A89FB576-B09E-4BBA-8FB7-E348DA1F47D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A89FB576-B09E-4BBA-8FB7-E348DA1F47D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A89FB576-B09E-4BBA-8FB7-E348DA1F47D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A543E56D-8C77-4A70-8336-8F7676365C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A543E56D-8C77-4A70-8336-8F7676365C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A543E56D-8C77-4A70-8336-8F7676365C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A543E56D-8C77-4A70-8336-8F7676365C07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C63C6BB9-0540-4386-84D8-43ECE1261C91}
+		SolutionGuid = {C68FA18D-5470-4B41-B80B-C57F7D5000D0}
 	EndGlobalSection
 EndGlobal
