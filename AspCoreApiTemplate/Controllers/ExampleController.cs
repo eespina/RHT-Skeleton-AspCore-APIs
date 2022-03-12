@@ -30,13 +30,13 @@ namespace AspCoreApiTemplate.Controllers
             errorHandler = _errorHandler;
         }
 
-        [HttpGet, Authorize]
-        public async Task<IEnumerable<ExampleViewModel>> Get()
-        {
-            //var returnList = new string[] { "Example1", "Example2" };
-            var returnList = await exampleService.GetExamples();
-            return returnList;
-        }
+        //[HttpGet, Authorize]
+        //public async Task<IEnumerable<ExampleViewModel>> Get()
+        //{
+        //    //var returnList = new string[] { "Example1", "Example2" };
+        //    var returnList = await exampleService.GetExamples();
+        //    return returnList;
+        //}
 
         //[HttpGet("{exampleId}"), Authorize]
         //public async Task<IActionResult> Get(string exampleId)
@@ -45,28 +45,28 @@ namespace AspCoreApiTemplate.Controllers
         //    return Ok(example);
         //}
 
-        [HttpPost, Authorize]
-        public async Task<IActionResult> Post([FromBody] ExampleViewModel exampleViewModel)
-        {
-            //var isCreationSuccessful = await exampleService.CreateExample(exampleViewModel);
-            //return Ok(isCreationSuccessful);
+        //[HttpPost, Authorize]
+        //public async Task<IActionResult> Post([FromBody] ExampleViewModel exampleViewModel)
+        //{
+        //    //var isCreationSuccessful = await exampleService.CreateExample(exampleViewModel);
+        //    //return Ok(isCreationSuccessful);
 
-            var example = new ExampleViewModel();
-            logger.LogTrace($"inside {MethodBase.GetCurrentMethod().Name}.");
+        //    var example = new ExampleViewModel();
+        //    logger.LogTrace($"inside {MethodBase.GetCurrentMethod().Name}.");
 
-            if (exampleViewModel == null || !ModelState.IsValid)
-            {
-                return UnprocessableEntity(example.Error = new ErrorViewModel
-                {
-                    ErrorMessage = await errorHandler.GetErrorMessage(ModelState)
-                });
-            }
-            else
-            {
-                example = await exampleService.CreateExample(exampleViewModel);
-                return Ok(example);
-            }
-        }
+        //    if (exampleViewModel == null || !ModelState.IsValid)
+        //    {
+        //        return UnprocessableEntity(example.Error = new ErrorViewModel
+        //        {
+        //            ErrorMessage = await errorHandler.GetErrorMessage(ModelState)
+        //        });
+        //    }
+        //    else
+        //    {
+        //        example = await exampleService.CreateExample(exampleViewModel);
+        //        return Ok(example);
+        //    }
+        //}
 
         //[HttpPut, Authorize]
         //public async Task<IActionResult> Put([FromBody] ExampleViewModel exampleViewModel)
@@ -75,11 +75,11 @@ namespace AspCoreApiTemplate.Controllers
         //    return Ok(returnExampleViewModel);
         //}
 
-        [HttpDelete("{exampleId}"), Authorize]
-        public async Task<IActionResult> Delete(string exampleId)
-        {
-            var isDeletionSuccessful = await exampleService.DeleteExample(exampleId);
-            return Ok(isDeletionSuccessful);
-        }
+        //[HttpDelete("{exampleId}"), Authorize]
+        //public async Task<IActionResult> Delete(string exampleId)
+        //{
+        //    var isDeletionSuccessful = await exampleService.DeleteExample(exampleId);
+        //    return Ok(isDeletionSuccessful);
+        //}
     }
 }
