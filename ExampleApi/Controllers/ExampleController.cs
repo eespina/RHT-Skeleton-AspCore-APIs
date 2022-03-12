@@ -1,9 +1,11 @@
 ﻿using ExampleApi.Services.Interfaces;
 using ExampleApi.ViewModels;
+using Extensions;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ExampleApi.Controllers
@@ -18,12 +20,14 @@ namespace ExampleApi.Controllers
     public class ExampleController : Controller
     {
         IExampleService exampleService;
+        IErrorHandler errorHandler;
         private readonly ILogger<ExampleController> logger;
 
-        public ExampleController(ILogger<ExampleController> logger, IExampleService exampleService)
+        public ExampleController(ILogger<ExampleController> logger, IExampleService exampleService, IErrorHandler _errorHandler)
         {
             this.logger = logger;
             this.exampleService = exampleService;
+            errorHandler = _errorHandler;
         }
 
         [HttpGet]
@@ -34,12 +38,49 @@ namespace ExampleApi.Controllers
             return returnList;
         }
 
+        [HttpGet("{exampleId}")]
+        //[HttpGet("{exampleId}"), Authorize]
+        public async Task<IActionResult> Get(string exampleId)
+        {
+            var example = await exampleService.GetExample(exampleId);
+            return Ok(example);
+        }
+
+        [HttpPost]
+        //[HttpPost, Authorize]
+        public async Task<IActionResult> Post([FromBody] ExampleViewModel exampleViewModel)
+        {
+            var example = new ExampleViewModel();
+            logger.LogTrace($"inside {MethodBase.GetCurrentMethod().Name}.");
+
+            if (exampleViewModel == null || !ModelState.IsValid)
+            {
+                return UnprocessableEntity(example.Error = new ErrorViewModel
+                {
+                    ErrorMessage = await errorHandler.GetErrorMessage(ModelState)
+                });
+            }
+            else
+            {
+                example = await exampleService.CreateExample(exampleViewModel);
+                return Ok(example);
+            }
+        }
+
         [HttpPut]
         //[HttpPut, Authorize]
         public async Task<IActionResult> Put([FromBody] ExampleViewModel exampleViewModel)
         {
             var responseExampleModel = await exampleService.UpdateExample(exampleViewModel);
             return Ok(responseExampleModel);
+        }
+
+        [HttpDelete("{exampleId}")]
+        //[HttpDelete("{exampleId}"), Authorize]
+        public async Task<IActionResult> Delete(string exampleId)
+        {
+            var isDeletionSuccessful = await exampleService.DeleteExample(exampleId);
+            return Ok(isDeletionSuccessful);
         }
     }
 }

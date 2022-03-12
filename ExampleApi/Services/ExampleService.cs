@@ -55,6 +55,61 @@ namespace ExampleApi.Services
 			}
 		}
 
+		public async Task<ExampleViewModel> CreateExample(ExampleViewModel exampleViewModel)
+		{
+			try
+			{
+				var newExample = new Example
+				{
+					ExampleId = new Guid(),
+					ExampleCharacteristic = exampleViewModel.ExampleCharacteristic,
+					IsActive = exampleViewModel.IsActive,
+					ModifiedBy = exampleViewModel.CreatedBy,//TODO, next time, make this NULLABLE
+					ModifiedDate = DateTime.Now,//TODO, next time, make this NULLABLE
+					CreatedBy = exampleViewModel.CreatedBy,
+					CreatedDate = DateTime.Now
+				};
+
+				//save the userExample with the ExampleId
+				await exampleDbRepository.AddEntity(newExample);
+
+				await exampleDbRepository.SaveAllAsync();
+
+				exampleViewModel.ExampleId = newExample.ExampleId;
+
+				return exampleViewModel;
+			}
+			catch (Exception ex)
+			{
+				logger.LogError("ERROR inside ExampleService.GetExamples when calling it's Service counterpart - " + ex);
+				return null;
+			}
+		}
+
+		public async Task<ExampleViewModel> GetExample(string exampleId)
+		{
+			try
+			{
+				var example = await exampleDbRepository.GetExample(exampleId);
+				if (example != null)
+				{
+					var exampleMapped = mapper.Map<Example, ExampleViewModel>(example);
+					return exampleMapped;
+				}
+				else
+				{
+					logger.LogWarning("WARNING inside ExampleService.GetExamples - Examples is NULL.");
+				}
+
+				return null;
+			}
+			catch (System.Exception ex)
+			{
+				logger.LogError("ERROR inside ExampleService.GetExamples when calling it's Service counterpart - " + ex);
+				return null;
+			}
+		}
+
 		public async Task<ExampleViewModel> UpdateExample(ExampleViewModel exampleViewModel)
 		{
 			var exampleMapped = new ExampleViewModel();
@@ -86,5 +141,30 @@ namespace ExampleApi.Services
 				return null;
 			}
 		}
-	}
+
+		public async Task<bool> DeleteExample(string exampleId)
+		{
+			try
+			{
+				var example = await exampleDbRepository.GetExample(exampleId);
+				if (example != null)
+				{
+					await exampleDbRepository.DeleteEntityAsync(example);
+
+					return await exampleDbRepository.SaveAllAsync();
+				}
+				else
+				{
+					logger.LogWarning("WARNING inside ExampleService.GetExamples - Examples is NULL.");
+				}
+
+				return false;
+			}
+			catch (System.Exception ex)
+			{
+				logger.LogError("ERROR inside ExampleService.GetExamples when calling it's Service counterpart - " + ex);
+				return false;
+			}
+		}
+    }
 }

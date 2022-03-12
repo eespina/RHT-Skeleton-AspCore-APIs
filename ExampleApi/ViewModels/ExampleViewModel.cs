@@ -11,5 +11,6 @@ namespace ExampleApi.ViewModels
 		public DateTime ModifiedDate { get; set; }//TODO, next time, make this NULLABLE?
 		public Guid CreatedBy { get; set; }
 		public DateTime CreatedDate { get; set; }
+		public ErrorViewModel Error { get; set; }
 	}
 }
