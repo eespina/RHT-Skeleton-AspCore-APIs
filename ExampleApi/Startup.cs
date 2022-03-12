@@ -3,6 +3,7 @@ using ExampleApi.Data;
 using ExampleApi.Models;
 using ExampleApi.Services;
 using ExampleApi.Services.Interfaces;
+using Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,7 @@ namespace ExampleApi
 
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
+            services.AddCors(options => { options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); });
 
             services.AddDbContext<ExampleDbContext>(cfg =>
             {
@@ -37,6 +39,7 @@ namespace ExampleApi
             #region SERVICES
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddScoped<IExampleDbRepository, ExampleDbRepository>();
+            services.AddScoped<IErrorHandler, ErrorHandler>();
             services.AddTransient<IExampleService, ExampleService>();
             #endregion
 
@@ -55,13 +58,10 @@ namespace ExampleApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExampleApi v1"));
             }
-
+            app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             //app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

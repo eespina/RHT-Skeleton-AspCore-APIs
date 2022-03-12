@@ -4,6 +4,7 @@ using AspCoreApiTemplate.Models;
 using AspCoreApiTemplate.Services;
 using AspCoreApiTemplate.Services.Interfaces;
 using AutoMapper;
+using Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -114,7 +115,8 @@ namespace AspCoreApiTemplate
             //example using scoped because the repository should be shared within one scope, usually a request. this way they are not getting constrcuted over and over again
             services.Configure<AppSettings>(config.GetSection("AppSettings"));
             services.AddScoped<IExampleDbRepository, ExampleDbRepository>();
-            services.AddScoped<IAuthorityDbRepository, AuthorityDbRepository>();
+            services.AddScoped<IAuthorityDbRepository, AuthorityDbRepository>(); ;
+            services.AddScoped<IErrorHandler, ErrorHandler>();
             services.AddTransient<IAuthenticateService, AuthenticateService>();
             services.AddTransient<IMailService, MailService>();
             services.AddTransient<IUserService, UserService>();
