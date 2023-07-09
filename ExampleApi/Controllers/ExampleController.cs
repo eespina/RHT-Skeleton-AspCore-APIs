@@ -1,7 +1,7 @@
 ﻿using ExampleApi.Services.Interfaces;
 using ExampleApi.ViewModels;
 using Extensions;
-//using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -30,24 +30,21 @@ namespace ExampleApi.Controllers
             errorHandler = _errorHandler;
         }
 
-        [HttpGet]
-        //[HttpGet, Authorize]
+        [HttpGet, Authorize]
         public async Task<IEnumerable<ExampleViewModel>> Get()
         {
             var returnList = await exampleService.GetExamples();
             return returnList;
         }
 
-        [HttpGet("{exampleId}")]
-        //[HttpGet("{exampleId}"), Authorize]
+        [HttpGet("{exampleId}"), Authorize]
         public async Task<IActionResult> Get(string exampleId)
         {
             var example = await exampleService.GetExample(exampleId);
             return Ok(example);
         }
 
-        [HttpPost]
-        //[HttpPost, Authorize]
+        [HttpPost, Authorize]
         public async Task<IActionResult> Post([FromBody] ExampleViewModel exampleViewModel)
         {
             var example = new ExampleViewModel();
@@ -67,16 +64,14 @@ namespace ExampleApi.Controllers
             }
         }
 
-        [HttpPut]
-        //[HttpPut, Authorize]
+        [HttpPut, Authorize]
         public async Task<IActionResult> Put([FromBody] ExampleViewModel exampleViewModel)
         {
             var responseExampleModel = await exampleService.UpdateExample(exampleViewModel);
             return Ok(responseExampleModel);
         }
 
-        [HttpDelete("{exampleId}")]
-        //[HttpDelete("{exampleId}"), Authorize]
+        [HttpDelete("{exampleId}"), Authorize]
         public async Task<IActionResult> Delete(string exampleId)
         {
             var isDeletionSuccessful = await exampleService.DeleteExample(exampleId);
