@@ -22,7 +22,7 @@ namespace AspCoreApiTemplate.Tests
         {
             //Arrange
             var userServiceMock = _userServiceMock.Setup(f => f.FindUsers()).ReturnsAsync(() => new List<OwnerViewModel>());
-            var examplesControllerMock = new UserController(_userServiceMock.Object, _loggerMock.Object, _exampleServiceMock.Object, _mailServiceMock.Object, _authenticateServiceMock.Object);
+            var examplesControllerMock = new UserController(_userServiceMock.Object, _loggerMock.Object, _mailServiceMock.Object, _authenticateServiceMock.Object);
 
             //Act
             var result = examplesControllerMock.Get();
