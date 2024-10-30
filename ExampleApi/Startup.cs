@@ -1,6 +1,6 @@
 using AutoMapper;
 using ExampleApi.Data;
-using ExampleApi.Models;
+//using ExampleApi.Models;//there's' no more appsettings since i dont think we need them. there's an identityauthrority think ing th appsettings, but i dont think thats needed
 using ExampleApi.Services;
 using ExampleApi.Services.Interfaces;
 using Extensions;
@@ -37,7 +37,7 @@ namespace ExampleApi
             });
 
             #region SERVICES
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            //services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddScoped<IExampleDbRepository, ExampleDbRepository>();
             services.AddScoped<IErrorHandler, ErrorHandler>();
             services.AddTransient<IExampleService, ExampleService>();

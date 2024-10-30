@@ -1,4 +1,4 @@
-﻿namespace AspCoreApiTemplate.ViewModels
+﻿namespace UserApi.ViewModels
 {
     public class UserTypeViewModel
     {

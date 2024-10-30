@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AspCoreApiTemplate\AspCoreApiTemplate.csproj" />
+    <ProjectReference Include="..\UserApi\UserApi.csproj" />
   </ItemGroup>
 
 </Project>

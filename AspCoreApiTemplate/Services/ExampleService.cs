@@ -67,33 +67,6 @@ namespace AspCoreApiTemplate.Services
 			}
 		}
 
-		public async Task<bool> CreateExampleUserConnection(OwnerViewModel user)
-		{
-			//get the example with the existing 'u' UserViewModel
-			var example = await GetExample(user.ExampleName);
-
-			if (example != null)
-			{
-				//save the userExample with the ExampleId
-				await exampleDbRepository.AddEntity(new UserExample
-				{
-					UserExampleId = new Guid(),
-					UserId = user.UserId,
-					UserTypeId = user.UserType.Id,
-					ExampleId = example.ExampleId,
-					ModifiedBy = user.CurrentAdministeringUser,
-					ModifiedDate = DateTime.Now,
-					CreatedBy = user.CurrentAdministeringUser,
-					CreatedDate = DateTime.Now
-				});
-
-				return await exampleDbRepository.SaveAllAsync();
-			}
-
-			logger.LogWarning("ERROR inside ExampleService.CreateExampleUserConnection - Could Not find Example to associate to new User " + user.UserName + "!");
-			return false;
-		}
-
 		public async Task<ExampleViewModel> CreateExample(ExampleViewModel exampleViewModel)
 		{
 			try

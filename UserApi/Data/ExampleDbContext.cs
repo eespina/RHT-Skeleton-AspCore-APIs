@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using AspCoreApiTemplate.Data.Entities;
+using UserApi.Data.Entities;
 
-namespace AspCoreApiTemplate.Data
+namespace UserApi.Data
 {
-    public class ExampleDbContext : DbContext
+    public class UserDbContext : DbContext
     {
-        public ExampleDbContext(DbContextOptions<ExampleDbContext> options) : base(options) { }
-        public DbSet<Example> Example { get; set; }
+        public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) { }
+        public DbSet<AdminUser> AdminUser { get; set; }
+        public DbSet<OwnerUser> OwnerUser { get; set; }
+        public DbSet<UserExample> UserExample { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

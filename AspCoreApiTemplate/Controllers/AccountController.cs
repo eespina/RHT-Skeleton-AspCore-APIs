@@ -30,7 +30,6 @@ namespace AspCoreApiTemplate.Controllers
         [Route("login"), HttpPost]
         public async Task<IActionResult> Login()
         {
-            OwnerViewModel loggedInUser;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -43,10 +42,10 @@ namespace AspCoreApiTemplate.Controllers
                 {
                     var decryptedUserName = await authenticateService.DecryptStringAES(encryptedUserName);
                     var deryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword);
-                    loggedInUser = await authenticateService.CreateToken(decryptedUserName, deryptedPassword);
+                    var loggedInUser = await authenticateService.CreateToken(decryptedUserName, deryptedPassword);
                     if (loggedInUser != null)
                     {
-                        var user = await userService.FindUserByEmail(loggedInUser.Email);
+                        var user = await userService.FindUserByUserName(loggedInUser.UserName);
                         user.tokenHandleViewModel = loggedInUser.tokenHandleViewModel;
                         return Ok(user);
                     }
@@ -69,43 +68,43 @@ namespace AspCoreApiTemplate.Controllers
             return NoContent();
         }
 
-        /// <summary>
-        /// This has not yet been tested thoroughly so I hope it works
-        /// </summary>
-        /// <param name="model">User model from teh client-side</param>
-        /// <returns>Newly created OwnderViewModel to the client</returns>
-        [Authorize]
-        [Route("registeruser"), HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] OwnerViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                var requestHeadersCount = Request.Headers.Count;
-                var requestHeadersPw = Request.Headers["reticulatingsplines"];
-                Request.Headers.TryGetValue("reticulatingsplines", out var encryptedPassword);
-                if (!string.IsNullOrWhiteSpace(encryptedPassword))
-                {
-                    var decryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword); //TODO - THINK about just not keeping an encrypted key in the database instead of going through the process.
-                    OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model, decryptedPassword);
-                    if (newlyCreatedUser != null)
-                    {
-                        return Ok(newlyCreatedUser);
-                    }
-                }
+        ///// <summary>
+        ///// This has not yet been tested thoroughly so I hope it works
+        ///// </summary>
+        ///// <param name="model">User model from teh client-side</param>
+        ///// <returns>Newly created OwnderViewModel to the client</returns>
+        //[Authorize]
+        //[Route("registeruser"), HttpPost]
+        //public async Task<IActionResult> RegisterUser([FromBody] OwnerViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+        //    try
+        //    {
+        //        var requestHeadersCount = Request.Headers.Count;
+        //        var requestHeadersPw = Request.Headers["reticulatingsplines"];
+        //        Request.Headers.TryGetValue("reticulatingsplines", out var encryptedPassword);
+        //        if (!string.IsNullOrWhiteSpace(encryptedPassword))
+        //        {
+        //            var decryptedPassword = await authenticateService.DecryptStringAES(encryptedPassword); //TODO - THINK about just not keeping an encrypted key in the database instead of going through the process.
+        //            OwnerViewModel newlyCreatedUser = await userService.CreateNewUser(model, decryptedPassword);
+        //            if (newlyCreatedUser != null)
+        //            {
+        //                return Ok(newlyCreatedUser);
+        //            }
+        //        }
 
-                return NotFound("USER NOT CREATED");
+        //        return NotFound("USER NOT CREATED");
 
-                //return Ok(new OwnerViewModel {LastName = "LastNameTest", FirstName = "FirstNameTest", UserName = "UserNameTest" });   //just used for Testing where i do NOT want to 
-            }
-            catch (System.Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
-        }
+        //        //return Ok(new OwnerViewModel {LastName = "LastNameTest", FirstName = "FirstNameTest", UserName = "UserNameTest" });   //just used for Testing where i do NOT want to 
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        return BadRequest(ex.ToString());
+        //    }
+        //}
 
         [Authorize]
         [Route("resetusercreds/{userId}"), HttpPut]

@@ -1,8 +1,8 @@
-using AspCoreApiTemplate.ViewModels;
+using UserApi.ViewModels;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AspCoreApiTemplate.ViewModels
+namespace UserApi.ViewModels
 {
     public class OwnerViewModel
 	{
@@ -28,7 +28,7 @@ namespace AspCoreApiTemplate.ViewModels
 		//public string Password { get; set; }
 
         //[Required]
-        //public UserTypeViewModel UserType { get; set; }    //NEEDED in Admin Portal only
+        public UserTypeViewModel UserType { get; set; }    //NEEDED in Admin Portal only
 
         public Guid CurrentAdministeringUser { get; set; }  //this should be null and replaced in the Admin portal
         public string AdministeringUserEmail { get; set; }  //Used mainly fro REGISTRATION of users (trying to get 'User' Claims, but unsucessful)
@@ -39,7 +39,7 @@ namespace AspCoreApiTemplate.ViewModels
 		public bool IsActive { get; set; }
         public bool IsChangingCredentials { get; set; }
 
-        public ExampleViewModel Example { get; set; }
+        //public ExampleViewModel Example { get; set; }
 		public string ExampleName { get; set; }
 		public Guid ExampleId { get; set; }
 		public string TemporaryCredentials { get; set; }

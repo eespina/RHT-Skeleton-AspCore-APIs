@@ -120,7 +120,8 @@ namespace AspCoreApiTemplate
             services.AddTransient<IAuthenticateService, AuthenticateService>();
             services.AddTransient<IMailService, MailService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IExampleService, ExampleService>(); // Add IAspCoreApiTemplateDbRepository as a service people can use, but use as the implementation AspCoreTemplateDbRepository. perhaps useful in testing
+            services.AddScoped<IExampleService, ExampleService>(); // Add IAspCoreApiTemplateDbRepository as a service people can use, but use as the implementation AspCoreTemplateDbRepository. perhaps useful in testing
+            services.AddScoped<ICredentialHandler, CredentialHandler>();
             services.AddScoped(typeof(IMockIdServerVessel<>), typeof(MockIdServerVessel<>));//This is just a TEMPORARY class/process that mimics requests being sent to the back end using Authorization/Authentication. DELETE when no longer needed
             #endregion
 

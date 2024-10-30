@@ -1,7 +1,6 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AspCoreApiTemplate.Data.Entities
+namespace UserApi.Data.Entities
 {
     public class AdminUser  //TODO - inherit from User User (which should act/be an abstract class with, perhaps, an associated Interface)
 	{

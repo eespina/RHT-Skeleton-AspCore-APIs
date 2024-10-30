@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AspCoreApiTemplate.Data.Entities
+namespace UserApi.Data.Entities
 {
 	public class UserExample
 	{
