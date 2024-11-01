@@ -10,14 +10,9 @@ using System.Threading.Tasks;
 
 namespace ExampleApi.Controllers
 {
-    /// <summary>
-    /// IDEALLY, this entire PROJECT would be in another solution, buuuuuuuuut may also be argued that it should all stay within the same
-    /// soluion. I think it's just a matter of how lazy people get when debugging cross api's. Ideally, each api's modification would get
-    /// deployed locally to the local machine's environment.
-    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class ExampleController : Controller
+    public class ExampleController : ControllerBase
     {
         IExampleService exampleService;
         IErrorHandler errorHandler;

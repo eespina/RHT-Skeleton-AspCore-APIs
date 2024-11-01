@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace AspCoreApiTemplate.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> logger;

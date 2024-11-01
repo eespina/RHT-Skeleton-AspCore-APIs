@@ -5,7 +5,9 @@ using UserApi.ViewModels;
 
 namespace UserApi.Controllers
 {
-    public class UserController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UserController : ControllerBase
     {
         IUserService userService;
         //IMailService mailService;//TODO - IF we need this, and I mean "IF", we'll create a Mail/Notification API and move logic there; keeping this reference if the logic applies here

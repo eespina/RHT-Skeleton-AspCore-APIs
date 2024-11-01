@@ -1,17 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UserApi.Data.Entities;
-using System;
 
 namespace UserApi.Data
 {
-	/// <summary>
-	/// This SHOULD be moved into it's own MicroService API including everything alongside it.
-	/// </summary>
-	public class ExampleDbRepository : IExampleDbRepository
+    /// <summary>
+    /// This SHOULD be moved into it's own MicroService API including everything alongside it.
+    /// </summary>
+    public class ExampleDbRepository : IExampleDbRepository
 	{
 		private readonly UserDbContext ctx;
 		private readonly ILogger<ExampleDbRepository> logger;
