@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -13,7 +11,7 @@ namespace Extensions
         Task<HttpResponseMessage> MakeHttpRequestAsync(HttpRequestMessage httpRequestMessage, [CallerMemberName] string callerName = "");
     }
 
-    public class HttpService
+    public class HttpService : IAtsHttpService
     {
         //private readonly ICorrelationContextAccessor _cIdAccessor;
         private readonly HttpClient _httpClient;

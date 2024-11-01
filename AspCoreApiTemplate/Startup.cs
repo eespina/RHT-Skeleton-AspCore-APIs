@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Net.Http;
 using System.Text;
 
 namespace AspCoreApiTemplate
@@ -115,11 +116,13 @@ namespace AspCoreApiTemplate
             //example using scoped because the repository should be shared within one scope, usually a request. this way they are not getting constrcuted over and over again
             services.Configure<AppSettings>(config.GetSection("AppSettings"));
             services.AddScoped<IExampleDbRepository, ExampleDbRepository>();
-            services.AddScoped<IAuthorityDbRepository, AuthorityDbRepository>(); ;
+            services.AddScoped<IAuthorityDbRepository, AuthorityDbRepository>();
             services.AddScoped<IErrorHandler, ErrorHandler>();
             services.AddTransient<IAuthenticateService, AuthenticateService>();
             services.AddTransient<IMailService, MailService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddHttpClient<HttpService>();
+            services.AddScoped<IAtsHttpService, HttpService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IExampleService, ExampleService>(); // Add IAspCoreApiTemplateDbRepository as a service people can use, but use as the implementation AspCoreTemplateDbRepository. perhaps useful in testing
             services.AddScoped<ICredentialHandler, CredentialHandler>();
             services.AddScoped(typeof(IMockIdServerVessel<>), typeof(MockIdServerVessel<>));//This is just a TEMPORARY class/process that mimics requests being sent to the back end using Authorization/Authentication. DELETE when no longer needed
